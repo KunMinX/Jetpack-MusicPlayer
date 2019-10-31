@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package com.kunminx.player.config;
+package com.kunminx.puremusic.data.config;
+
+import com.kunminx.architecture.utils.Utils;
 
 /**
  * Create by KunMinX at 18/9/28
  */
 public class Configs {
 
-    public static String CACHE_PATH;
+    public static String CACHE_PATH = Utils.getApp().getCacheDir().getAbsolutePath();
 
     public static String MUSIC_DOWNLOAD_PATH = CACHE_PATH + "/";
 

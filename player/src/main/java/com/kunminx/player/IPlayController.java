@@ -66,8 +66,6 @@ public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicIte
 
     void requestLastPlayingInfo();
 
-    void requestAlbumCover(String coverUrl, String musicId);
-
     void setSeek(int progress);
 
     String getTrackTime(int progress);

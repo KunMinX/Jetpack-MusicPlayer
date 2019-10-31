@@ -23,7 +23,6 @@ import android.widget.Toast;
 import androidx.lifecycle.MutableLiveData;
 
 import com.danikula.videocache.HttpProxyCacheServer;
-import com.kunminx.player.config.Configs;
 import com.kunminx.player.dto.BaseAlbumItem;
 import com.kunminx.player.dto.BaseMusicItem;
 import com.kunminx.player.dto.ChangeMusic;
@@ -31,11 +30,7 @@ import com.kunminx.player.dto.PlayingMusic;
 import com.kunminx.player.helper.MediaPlayerHelper;
 import com.kunminx.player.helper.PlayerFileNameGenerator;
 import com.kunminx.player.utils.NetworkUtils;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.FileCallback;
-import com.lzy.okgo.model.Response;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -58,8 +53,6 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     private ChangeMusic mChangeMusic = new ChangeMusic();
 
     public void init(Context context) {
-
-        Configs.CACHE_PATH = context.getApplicationContext().getCacheDir().getAbsolutePath();
 
         mPlayingInfoManager.init(context.getApplicationContext());
 
@@ -177,16 +170,6 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         pauseLiveData.setValue(mIsPaused);
     }
 
-    public void requestAlbumCover(String coverUrl, String musicId) {
-        OkGo.<File>get(coverUrl)
-                .execute(new FileCallback(Configs.MUSIC_DOWNLOAD_PATH, musicId + ".jpg") {
-                    @Override
-                    public void onSuccess(Response<File> response) {
-                        startForegroundService.setValue(true);
-                    }
-                });
-    }
-
     public void setSeek(int progress) {
         MediaPlayerHelper.getInstance().getMediaPlayer().seekTo(progress);
     }
@@ -257,7 +240,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         //这里设为true是因为可能通知栏清除后，还可能在页面中点击播放
         resetIsChangingPlayingChapter(context);
         MediaPlayerHelper.getInstance().setProgressInterval(1000).setMediaPlayerHelperCallBack(null);
-        startForegroundService.setValue(true);
+        startForegroundService.setValue(false);
     }
 
     public void resetIsChangingPlayingChapter(Context context) {
