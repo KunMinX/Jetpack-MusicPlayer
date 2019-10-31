@@ -147,8 +147,8 @@ public class HttpRequestManager implements IRemoteRequest {
         Gson gson = new Gson();
         Type type = new TypeToken<TestAlbum>() {
         }.getType();
-        TestAlbum baseAlbumItem = gson.fromJson(Utils.getApp().getString(R.string.free_music_json), type);
+        TestAlbum testAlbum = gson.fromJson(Utils.getApp().getString(R.string.free_music_json), type);
 
-        liveData.setValue(baseAlbumItem);
+        liveData.setValue(testAlbum);
     }
 }

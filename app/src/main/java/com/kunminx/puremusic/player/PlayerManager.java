@@ -54,8 +54,8 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     }
 
     @Override
-    public void resetAlbum(TestAlbum baseAlbumItem, int playIndex) {
-        mController.resetAlbum(mContext, baseAlbumItem, playIndex);
+    public void resetAlbum(TestAlbum musicAlbum, int playIndex) {
+        mController.resetAlbum(mContext, musicAlbum, playIndex);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
     @Override
     public MutableLiveData<Boolean> getStartService() {
-        return mController.getStartService();
+        return mController.getStartForegroundService();
     }
 
     @Override

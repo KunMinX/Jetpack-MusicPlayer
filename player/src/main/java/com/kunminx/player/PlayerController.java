@@ -24,9 +24,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.kunminx.player.config.Configs;
-import com.kunminx.player.dto.ChangeMusic;
-import com.kunminx.player.dto.BaseMusicItem;
 import com.kunminx.player.dto.BaseAlbumItem;
+import com.kunminx.player.dto.BaseMusicItem;
+import com.kunminx.player.dto.ChangeMusic;
 import com.kunminx.player.dto.PlayingMusic;
 import com.kunminx.player.helper.MediaPlayerHelper;
 import com.kunminx.player.helper.PlayerFileNameGenerator;
@@ -52,7 +52,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     private MutableLiveData<ChangeMusic> changeMusicLiveData = new MutableLiveData<>();
     private MutableLiveData<PlayingMusic> playingMusicLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> pauseLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> startService = new MutableLiveData<>();
+    private MutableLiveData<Boolean> startForegroundService = new MutableLiveData<>();
 
     private PlayingMusic mCurrentPlay = new PlayingMusic("00:00", "00:00");
     private ChangeMusic mChangeMusic = new ChangeMusic();
@@ -141,7 +141,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         bindProgressListener(context);
         mIsPaused = false;
         pauseLiveData.setValue(mIsPaused);
-        startService.setValue(true);
+        startForegroundService.setValue(true);
     }
 
     private void bindProgressListener(Context context) {
@@ -182,7 +182,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                 .execute(new FileCallback(Configs.MUSIC_DOWNLOAD_PATH, musicId + ".jpg") {
                     @Override
                     public void onSuccess(Response<File> response) {
-                        startService.setValue(true);
+                        startForegroundService.setValue(true);
                     }
                 });
     }
@@ -236,7 +236,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         MediaPlayerHelper.getInstance().getMediaPlayer().pause();
         mIsPaused = true;
         pauseLiveData.setValue(mIsPaused);
-        startService.setValue(true);
+        startForegroundService.setValue(true);
     }
 
 
@@ -244,7 +244,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         MediaPlayerHelper.getInstance().getMediaPlayer().start();
         mIsPaused = false;
         pauseLiveData.setValue(mIsPaused);
-        startService.setValue(true);
+        startForegroundService.setValue(true);
     }
 
 
@@ -257,7 +257,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         //这里设为true是因为可能通知栏清除后，还可能在页面中点击播放
         resetIsChangingPlayingChapter(context);
         MediaPlayerHelper.getInstance().setProgressInterval(1000).setMediaPlayerHelperCallBack(null);
-        startService.setValue(true);
+        startForegroundService.setValue(true);
     }
 
     public void resetIsChangingPlayingChapter(Context context) {
@@ -320,8 +320,8 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         return mPlayingInfoManager.getCurrentPlayingMusic();
     }
 
-    public MutableLiveData<Boolean> getStartService() {
-        return startService;
+    public MutableLiveData<Boolean> getStartForegroundService() {
+        return startForegroundService;
     }
 
 }

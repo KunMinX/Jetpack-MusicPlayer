@@ -21,7 +21,6 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 
 import com.kunminx.player.dto.BaseAlbumItem;
-import com.kunminx.player.dto.BaseArtistItem;
 import com.kunminx.player.dto.BaseMusicItem;
 import com.kunminx.player.dto.ChangeMusic;
 import com.kunminx.player.dto.PlayingMusic;
