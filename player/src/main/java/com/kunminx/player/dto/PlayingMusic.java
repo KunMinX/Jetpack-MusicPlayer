@@ -20,7 +20,7 @@ package com.kunminx.player.dto;
 /**
  * Create by KunMinX at 18/9/24
  */
-public class PlayingMusic extends ChangeMusic {
+public class PlayingMusic<A extends BaseArtistItem, B extends BaseAlbumItem> extends ChangeMusic {
 
     private String nowTime;
     private String allTime;
@@ -32,14 +32,14 @@ public class PlayingMusic extends ChangeMusic {
         this.allTime = allTime;
     }
 
-    public PlayingMusic(String title, String content, String bookId, String chapterId, String nowTime, String allTime, String img) {
-        super(title, content, bookId, chapterId, img);
+    public PlayingMusic(String title, String summary, String bookId, String chapterId, String nowTime, String allTime, String img, A artist) {
+        super(title, summary, bookId, chapterId, img, artist);
         this.nowTime = nowTime;
         this.allTime = allTime;
     }
 
-    public PlayingMusic(MusicAlbum musicAlbum, int playIndex, String nowTime, String allTime) {
-        super(musicAlbum, playIndex);
+    public PlayingMusic(B baseAlbumItem, int playIndex, String nowTime, String allTime) {
+        super(baseAlbumItem, playIndex);
         this.nowTime = nowTime;
         this.allTime = allTime;
     }

@@ -20,9 +20,10 @@ import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.kunminx.player.dto.BaseAlbumItem;
+import com.kunminx.player.dto.BaseArtistItem;
+import com.kunminx.player.dto.BaseMusicItem;
 import com.kunminx.player.dto.ChangeMusic;
-import com.kunminx.player.dto.FreeMusic;
-import com.kunminx.player.dto.MusicAlbum;
 import com.kunminx.player.dto.PlayingMusic;
 
 import java.util.List;
@@ -30,13 +31,13 @@ import java.util.List;
 /**
  * Create by KunMinX at 18/9/24
  */
-public interface IPlayController<M extends MusicAlbum, F extends FreeMusic> {
+public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicItem> {
 
     //程序启动时就初始化
     void init(Context context);
 
     //切换专辑时。只在从新专辑进入播放页面时切换。
-    void resetAlbum(M musicAlbum, int playIndex);
+    void resetAlbum(B musicAlbum, int playIndex);
 
     void playAudio();
 
@@ -72,9 +73,9 @@ public interface IPlayController<M extends MusicAlbum, F extends FreeMusic> {
 
     String getTrackTime(int progress);
 
-    M getAlbum();
+    B getAlbum();
 
-    List<F> getAlbumMusics();
+    List<M> getAlbumMusics();
 
     void setChangingPlayingMusic(boolean changingPlayingMusic);
 
@@ -92,5 +93,5 @@ public interface IPlayController<M extends MusicAlbum, F extends FreeMusic> {
 
     void togglePlay();
 
-    F getCurrentPlayingMusic();
+    M getCurrentPlayingMusic();
 }

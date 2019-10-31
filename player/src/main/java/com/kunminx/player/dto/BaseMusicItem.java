@@ -17,31 +17,27 @@
 package com.kunminx.player.dto;
 
 /**
- * 无版权音乐实体
+ * 音乐实体，music bean
  * <p>
  * Create by KunMinX at 18/9/24
  */
-public class FreeMusic {
+public class BaseMusicItem<A extends BaseArtistItem> {
 
     private String musicId;
-    // 专辑封面，目前是取用 unsplash 提供的无版权图片作为封面
-    private String img;
-    // 无版权音乐链接，来自 bensound 的提供
+    private String coverImg;
     private String url;
-    // 音乐标题
     private String title;
-    // 音乐来源：bensound.com
-    private String source;
+    private A artist;
 
-    public FreeMusic() {
+    public BaseMusicItem() {
     }
 
-    public FreeMusic(String musicId, String img, String url, String title, String source) {
+    public BaseMusicItem(String musicId, String coverImg, String url, String title, A artist) {
         this.musicId = musicId;
-        this.img = img;
+        this.coverImg = coverImg;
         this.url = url;
         this.title = title;
-        this.source = source;
+        this.artist = artist;
     }
 
     public String getMusicId() {
@@ -52,12 +48,12 @@ public class FreeMusic {
         this.musicId = musicId;
     }
 
-    public String getImg() {
-        return img;
+    public String getCoverImg() {
+        return coverImg;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setCoverImg(String coverImg) {
+        this.coverImg = coverImg;
     }
 
     public String getUrl() {
@@ -76,11 +72,11 @@ public class FreeMusic {
         this.title = title;
     }
 
-    public String getSource() {
-        return source;
+    public A getArtist() {
+        return artist;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setArtist(A artist) {
+        this.artist = artist;
     }
 }

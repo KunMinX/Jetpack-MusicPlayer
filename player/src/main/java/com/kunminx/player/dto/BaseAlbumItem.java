@@ -19,29 +19,29 @@ package com.kunminx.player.dto;
 import java.util.List;
 
 /**
- * 无版权音乐的专辑实体
+ * 音乐的专辑实体, music album bean
  * <p>
  * Create by KunMinX at 18/9/24
  */
-public class MusicAlbum<F extends FreeMusic> {
+public class BaseAlbumItem<M extends BaseMusicItem, A extends BaseArtistItem> {
 
     private String albumId;
     private String title;
     private String summary;
-    private String artist;
+    private A artist;
     private String coverImg;
-    private List<F> freeMusics;
+    private List<M> musics;
 
-    public MusicAlbum() {
+    public BaseAlbumItem() {
     }
 
-    public MusicAlbum(String albumId, String title, String summary, String artist, String coverImg, List<F> freeMusics) {
+    public BaseAlbumItem(String albumId, String title, String summary, A artist, String coverImg, List<M> musics) {
         this.albumId = albumId;
         this.title = title;
         this.summary = summary;
         this.artist = artist;
         this.coverImg = coverImg;
-        this.freeMusics = freeMusics;
+        this.musics = musics;
     }
 
     public String getAlbumId() {
@@ -68,11 +68,11 @@ public class MusicAlbum<F extends FreeMusic> {
         this.summary = summary;
     }
 
-    public String getArtist() {
+    public A getArtist() {
         return artist;
     }
 
-    public void setArtist(String artist) {
+    public void setArtist(A artist) {
         this.artist = artist;
     }
 
@@ -84,12 +84,12 @@ public class MusicAlbum<F extends FreeMusic> {
         this.coverImg = coverImg;
     }
 
-    public List<F> getFreeMusics() {
-        return freeMusics;
+    public List<M> getMusics() {
+        return musics;
     }
 
-    public void setFreeMusics(List<F> freeMusics) {
-        this.freeMusics = freeMusics;
+    public void setMusics(List<M> musics) {
+        this.musics = musics;
     }
 
 }

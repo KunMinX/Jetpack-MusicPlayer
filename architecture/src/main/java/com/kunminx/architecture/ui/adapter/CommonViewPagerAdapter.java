@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.ui.view;
+package com.kunminx.architecture.ui.adapter;
 
 
 import android.view.View;

@@ -25,8 +25,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.kunminx.player.config.Configs;
 import com.kunminx.player.dto.ChangeMusic;
-import com.kunminx.player.dto.FreeMusic;
-import com.kunminx.player.dto.MusicAlbum;
+import com.kunminx.player.dto.BaseMusicItem;
+import com.kunminx.player.dto.BaseAlbumItem;
 import com.kunminx.player.dto.PlayingMusic;
 import com.kunminx.player.helper.MediaPlayerHelper;
 import com.kunminx.player.helper.PlayerFileNameGenerator;
@@ -41,9 +41,9 @@ import java.util.List;
 /**
  * Create by KunMinX at 18/9/25
  */
-public class PlayerController<M extends MusicAlbum, F extends FreeMusic> {
+public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> {
 
-    private PlayingInfoManager<M, F> mPlayingInfoManager = new PlayingInfoManager<>();
+    private PlayingInfoManager<B, M> mPlayingInfoManager = new PlayingInfoManager<>();
     private boolean mIsPaused;
     private boolean mIsChangingPlayingMusic;
 
@@ -73,7 +73,7 @@ public class PlayerController<M extends MusicAlbum, F extends FreeMusic> {
         return mPlayingInfoManager.isInited();
     }
 
-    public void resetAlbum(Context context, M musicAlbum, int albumIndex) {
+    public void resetAlbum(Context context, B musicAlbum, int albumIndex) {
         mPlayingInfoManager.setMusicAlbum(musicAlbum);
         mPlayingInfoManager.setAlbumIndex(albumIndex);
         setChangingPlayingMusic(context, true);
@@ -113,7 +113,7 @@ public class PlayerController<M extends MusicAlbum, F extends FreeMusic> {
 
     private void getUrlAndPlay(Context context) {
         String url = null;
-        F freeMusic = null;
+        M freeMusic = null;
         freeMusic = mPlayingInfoManager.getCurrentPlayingMusic();
         url = freeMusic.getUrl();
 
@@ -269,12 +269,12 @@ public class PlayerController<M extends MusicAlbum, F extends FreeMusic> {
         return mPlayingInfoManager.changeMode();
     }
 
-    public M getAlbum() {
+    public B getAlbum() {
         return mPlayingInfoManager.getMusicAlbum();
     }
 
     //播放列表展示用
-    public List<F> getAlbumMusics() {
+    public List<M> getAlbumMusics() {
         return mPlayingInfoManager.getOriginPlayingList();
     }
 
@@ -316,7 +316,7 @@ public class PlayerController<M extends MusicAlbum, F extends FreeMusic> {
         }
     }
 
-    public F getCurrentPlayingMusic() {
+    public M getCurrentPlayingMusic() {
         return mPlayingInfoManager.getCurrentPlayingMusic();
     }
 

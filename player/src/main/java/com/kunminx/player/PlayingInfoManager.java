@@ -18,8 +18,8 @@ package com.kunminx.player;
 
 import android.content.Context;
 
-import com.kunminx.player.dto.FreeMusic;
-import com.kunminx.player.dto.MusicAlbum;
+import com.kunminx.player.dto.BaseAlbumItem;
+import com.kunminx.player.dto.BaseMusicItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Create by KunMinX at 18/9/24
  */
-public class PlayingInfoManager<M extends MusicAlbum, F extends FreeMusic> {
+public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem> {
 
     private static final String SP_NAME = "KunMinX_Music";
     private static final String REPEAT_MODE = "REPEAT_MODE";
@@ -51,13 +51,13 @@ public class PlayingInfoManager<M extends MusicAlbum, F extends FreeMusic> {
     private int mRepeatMode;
 
     //原始列表
-    private List<F> mOriginPlayingList = new ArrayList<>();
+    private List<M> mOriginPlayingList = new ArrayList<>();
 
     //随机播放列表
-    private List<F> mShufflePlayingList = new ArrayList<>();
+    private List<M> mShufflePlayingList = new ArrayList<>();
 
     //专辑详情
-    private M mMusicAlbum;
+    private B mMusicAlbum;
 
 
     public void init(Context context) {
@@ -98,18 +98,18 @@ public class PlayingInfoManager<M extends MusicAlbum, F extends FreeMusic> {
         return mRepeatMode;
     }
 
-    public M getMusicAlbum() {
+    public B getMusicAlbum() {
         return mMusicAlbum;
     }
 
-    public void setMusicAlbum(M musicAlbum) {
+    public void setMusicAlbum(B musicAlbum) {
         this.mMusicAlbum = musicAlbum;
         mOriginPlayingList.clear();
-        mOriginPlayingList.addAll(mMusicAlbum.getFreeMusics());
+        mOriginPlayingList.addAll(mMusicAlbum.getMusics());
         fitShuffle();
     }
 
-    public List<F> getPlayingList() {
+    public List<M> getPlayingList() {
         if (mRepeatMode == RANDOM) {
             return mShufflePlayingList;
         } else {
@@ -117,11 +117,11 @@ public class PlayingInfoManager<M extends MusicAlbum, F extends FreeMusic> {
         }
     }
 
-    public List<F> getOriginPlayingList() {
+    public List<M> getOriginPlayingList() {
         return mOriginPlayingList;
     }
 
-    public F getCurrentPlayingMusic() {
+    public M getCurrentPlayingMusic() {
         return getPlayingList().get(mPlayIndex);
     }
 

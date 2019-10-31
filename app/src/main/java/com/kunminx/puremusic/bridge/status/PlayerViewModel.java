@@ -23,8 +23,8 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.ViewModel;
 
-import com.kunminx.puremusic.R;
 import com.kunminx.architecture.utils.Utils;
+import com.kunminx.puremusic.R;
 
 /**
  * <p>
@@ -36,7 +36,7 @@ public class PlayerViewModel extends ViewModel {
 
     public final ObservableField<String> artist = new ObservableField<>();
 
-    public final ObservableField<String> img = new ObservableField<>();
+    public final ObservableField<String> coverImg = new ObservableField<>();
 
     public final ObservableField<Drawable> placeHolder = new ObservableField<>();
 

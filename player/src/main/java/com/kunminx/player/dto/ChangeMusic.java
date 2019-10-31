@@ -19,10 +19,11 @@ package com.kunminx.player.dto;
 /**
  * Create by KunMinX at 18/9/24
  */
-public class ChangeMusic<M extends MusicAlbum, F extends FreeMusic> {
+public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A extends BaseArtistItem> {
 
     private String title;
-    private String content;
+    private String summary;
+    private A artist;
     private String albumId;
     private String musicId;
     private String img;
@@ -30,30 +31,32 @@ public class ChangeMusic<M extends MusicAlbum, F extends FreeMusic> {
     public ChangeMusic() {
     }
 
-    public ChangeMusic(String title, String content, String albumId, String musicId, String img) {
+    public ChangeMusic(String title, String summary, String albumId, String musicId, String img, A artist) {
         this.title = title;
-        this.content = content;
+        this.summary = summary;
         this.albumId = albumId;
         this.musicId = musicId;
         this.img = img;
+        this.artist = artist;
     }
 
-    public ChangeMusic(M musicAlbum, int playIndex) {
+    public ChangeMusic(B musicAlbum, int playIndex) {
         this.title = musicAlbum.getTitle();
-        this.content = musicAlbum.getSummary();
+        this.summary = musicAlbum.getSummary();
         this.albumId = musicAlbum.getAlbumId();
-        this.musicId = ((F) musicAlbum.getFreeMusics().get(playIndex)).getMusicId();
+        this.musicId = ((M) musicAlbum.getMusics().get(playIndex)).getMusicId();
         this.img = musicAlbum.getCoverImg();
+        this.artist = (A) musicAlbum.getArtist();
     }
 
-    public void setBaseInfo(M musicAlbum, F freeMusic) {
+    public void setBaseInfo(B musicAlbum, M music) {
         //要用当前实际播放的列表，因为不同模式存在不同的播放列表
-        this.title = freeMusic.getTitle();
-        this.content = musicAlbum.getSummary();
+        this.title = music.getTitle();
+        this.summary = musicAlbum.getSummary();
         this.albumId = musicAlbum.getAlbumId();
-        this.musicId = freeMusic.getMusicId();
-        //TODO 事实上，这里应该 img = musicAlbum.getCoverImg, 此处示例写作 getImg
-        this.img = freeMusic.getImg();
+        this.musicId = music.getMusicId();
+        this.img = music.getCoverImg();
+        this.artist = (A) music.getArtist();
     }
 
     public String getTitle() {
@@ -64,12 +67,12 @@ public class ChangeMusic<M extends MusicAlbum, F extends FreeMusic> {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getSummary() {
+        return summary;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public String getAlbumId() {
@@ -94,5 +97,13 @@ public class ChangeMusic<M extends MusicAlbum, F extends FreeMusic> {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public A getArtist() {
+        return artist;
+    }
+
+    public void setArtist(A artist) {
+        this.artist = artist;
     }
 }
