@@ -1,6 +1,6 @@
 ## 真香警告：即使不用云音乐听曲儿，也请务必收藏好该库！
 
-### [Here is the English guide](https://github.com/KunMinX/Linkage-RecyclerView/blob/master/README_EN.md)
+### [Here is the English guide](https://github.com/KunMinX/Jetpack-MusicPlayer/blob/master/README_EN.md)
 
 &nbsp;
 
@@ -26,6 +26,8 @@ Jetpack-MusicPlayer 的使用十分简单，依托于 设计模式原则 及 JAV
 ### 目标
 
 Jetpack-MusicPlayer 的目标是：**一行代码即可接入 音乐播放控制组件**。
+
+&nbsp;
 
 除了一键接入而省去 99% 不必要的、复杂的、重复的工作外，你还可以从这个开源项目获得的内容包括：
 
