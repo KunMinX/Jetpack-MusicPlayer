@@ -56,7 +56,7 @@ public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicIte
     void clear();
 
     //切换循环模式
-    int changeMode();
+    void changeMode();
 
     boolean isPlaying();
 
@@ -86,7 +86,9 @@ public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicIte
 
     MutableLiveData<Boolean> getStartService();
 
-    int getRepeatMode();
+    MutableLiveData<Enum> getPlayModeLiveData();
+
+    Enum getRepeatMode();
 
     void togglePlay();
 

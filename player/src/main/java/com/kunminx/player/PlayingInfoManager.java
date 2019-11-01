@@ -35,12 +35,12 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     private static final String LAST_CHAPTER_INDEX = "LAST_CHAPTER_INDEX";
     private static final String LAST_BOOK_DETAIL = "LAST_BOOK_DETAIL";
 
-    //单曲循环
+/*    //单曲循环
     public static final int ONE_LOOP = 1 << 1;
     //列表循环
     public static final int LIST_LOOP = 1 << 2;
     //随机播放
-    public static final int RANDOM = 1 << 3;
+    public static final int RANDOM = 1 << 3;*/
 
     //播放使用的当前章节 index
     private int mPlayIndex = 0;
@@ -48,7 +48,11 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     private int mAlbumIndex = 0;
 
     //循环模式
-    private int mRepeatMode;
+    private Enum mRepeatMode;
+
+    public enum RepeatMode {
+        ONE_LOOP, LIST_LOOP, RANDOM
+    }
 
     //原始列表
     private List<M> mOriginPlayingList = new ArrayList<>();
@@ -87,13 +91,13 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
         Collections.shuffle(mShufflePlayingList);
     }
 
-    public int changeMode() {
-        if (mRepeatMode == LIST_LOOP) {
-            mRepeatMode = ONE_LOOP;
-        } else if (mRepeatMode == ONE_LOOP) {
-            mRepeatMode = RANDOM;
+    public Enum changeMode() {
+        if (mRepeatMode == RepeatMode.LIST_LOOP) {
+            mRepeatMode = RepeatMode.ONE_LOOP;
+        } else if (mRepeatMode == RepeatMode.ONE_LOOP) {
+            mRepeatMode = RepeatMode.RANDOM;
         } else {
-            mRepeatMode = LIST_LOOP;
+            mRepeatMode = RepeatMode.LIST_LOOP;
         }
         return mRepeatMode;
     }
@@ -110,7 +114,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     }
 
     public List<M> getPlayingList() {
-        if (mRepeatMode == RANDOM) {
+        if (mRepeatMode == RepeatMode.RANDOM) {
             return mShufflePlayingList;
         } else {
             return mOriginPlayingList;
@@ -125,7 +129,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
         return getPlayingList().get(mPlayIndex);
     }
 
-    public int getRepeatMode() {
+    public Enum getRepeatMode() {
         return mRepeatMode;
     }
 

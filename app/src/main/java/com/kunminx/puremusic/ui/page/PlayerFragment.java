@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.kunminx.player.PlayingInfoManager;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.bridge.status.PlayerViewModel;
 import com.kunminx.puremusic.databinding.FragmentPlayerBinding;
@@ -33,6 +34,8 @@ import com.kunminx.puremusic.player.PlayerManager;
 import com.kunminx.puremusic.ui.base.BaseFragment;
 import com.kunminx.puremusic.ui.view.PlayerSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 /**
  * Create by KunMinX at 19/10/29
@@ -102,6 +105,19 @@ public class PlayerFragment extends BaseFragment {
             }
         });
 
+        PlayerManager.getInstance().getPlayModeLiveData().observe(this, anEnum -> {
+            if (anEnum == PlayingInfoManager.RepeatMode.LIST_LOOP) {
+                mPlayerViewModel.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);
+                showShortToast(R.string.play_repeat);
+            } else if (anEnum == PlayingInfoManager.RepeatMode.ONE_LOOP) {
+                mPlayerViewModel.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT_ONCE);
+                showShortToast(R.string.play_repeat_once);
+            } else {
+                mPlayerViewModel.playModeIcon.set(MaterialDrawableBuilder.IconValue.SHUFFLE);
+                showShortToast(R.string.play_shuffle);
+            }
+        });
+
         mSharedViewModel.closeSlidePanelIfExpanded.observe(this, aBoolean -> {
             if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
                 SlidingUpPanelLayout sliding = (SlidingUpPanelLayout) view.getParent().getParent();
@@ -118,8 +134,8 @@ public class PlayerFragment extends BaseFragment {
 
     public class ClickProxy {
 
-        public void mark() {
-            showShortToast(R.string.unfinished);
+        public void playMode() {
+            PlayerManager.getInstance().changeMode();
         }
 
         public void previous() {
@@ -143,7 +159,6 @@ public class PlayerFragment extends BaseFragment {
         }
 
         public void more() {
-            showShortToast(R.string.unfinished);
         }
     }
 

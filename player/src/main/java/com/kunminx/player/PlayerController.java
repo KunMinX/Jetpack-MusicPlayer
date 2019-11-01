@@ -47,6 +47,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     private MutableLiveData<ChangeMusic> changeMusicLiveData = new MutableLiveData<>();
     private MutableLiveData<PlayingMusic> playingMusicLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> pauseLiveData = new MutableLiveData<>();
+    private MutableLiveData<Enum> playModeLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> startForegroundService = new MutableLiveData<>();
 
     private PlayingMusic mCurrentPlay = new PlayingMusic("00:00", "00:00");
@@ -151,7 +152,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                         if (mCurrentPlay.getAllTime().equals(mCurrentPlay.getNowTime())
                                 //容许两秒内的误差，有的内容它就是会差那么 1 秒
                                 || duration / 1000 - position / 1000 < 2) {
-                            if (getRepeatMode() == PlayingInfoManager.ONE_LOOP) {
+                            if (getRepeatMode() == PlayingInfoManager.RepeatMode.ONE_LOOP) {
                                 playAgain(context);
                                 //联网或有离线的情况才自动切歌，否则提示断网
                             } else if (NetworkUtils.isConnected(context)) {
@@ -248,8 +249,8 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         setChangingPlayingMusic(context, true);
     }
 
-    public int changeMode() {
-        return mPlayingInfoManager.changeMode();
+    public void changeMode() {
+        playModeLiveData.setValue(mPlayingInfoManager.changeMode());
     }
 
     public B getAlbum() {
@@ -287,7 +288,11 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         return pauseLiveData;
     }
 
-    public int getRepeatMode() {
+    public MutableLiveData<Enum> getPlayModeLiveData() {
+        return playModeLiveData;
+    }
+
+    public Enum getRepeatMode() {
         return mPlayingInfoManager.getRepeatMode();
     }
 
