@@ -18,8 +18,8 @@ package com.kunminx.player;
 
 import android.content.Context;
 
-import com.kunminx.player.dto.BaseAlbumItem;
-import com.kunminx.player.dto.BaseMusicItem;
+import com.kunminx.player.bean.base.BaseAlbumItem;
+import com.kunminx.player.bean.base.BaseMusicItem;
 
 import java.util.ArrayList;
 import java.util.Collections;

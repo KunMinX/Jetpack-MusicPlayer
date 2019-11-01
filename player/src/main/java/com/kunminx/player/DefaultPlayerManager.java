@@ -14,36 +14,35 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.player;
+package com.kunminx.player;
 
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.kunminx.player.contract.IPlayController;
-import com.kunminx.player.PlayerController;
+import com.kunminx.player.bean.DefaultAlbum;
 import com.kunminx.player.bean.dto.ChangeMusic;
 import com.kunminx.player.bean.dto.PlayingMusic;
-import com.kunminx.puremusic.data.bean.TestAlbum;
+import com.kunminx.player.contract.IPlayController;
 
 import java.util.List;
 
 /**
  * Create by KunMinX at 19/10/31
  */
-public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestMusic> {
+public class DefaultPlayerManager implements IPlayController<DefaultAlbum, DefaultAlbum.DefaultMusic> {
 
-    private static PlayerManager sManager = new PlayerManager();
+    private static DefaultPlayerManager sManager = new DefaultPlayerManager();
 
-    private PlayerController<TestAlbum, TestAlbum.TestMusic> mController;
+    private PlayerController<DefaultAlbum, DefaultAlbum.DefaultMusic> mController;
 
     private Context mContext;
 
-    private PlayerManager() {
+    private DefaultPlayerManager() {
         mController = new PlayerController<>();
     }
 
-    public static PlayerManager getInstance() {
+    public static DefaultPlayerManager getInstance() {
         return sManager;
     }
 
@@ -54,12 +53,12 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     }
 
     @Override
-    public void initAlbum(TestAlbum musicAlbum) {
+    public void initAlbum(DefaultAlbum musicAlbum) {
         mController.initAlbum(mContext, musicAlbum);
     }
 
     @Override
-    public void resetAlbum(TestAlbum musicAlbum, int playIndex) {
+    public void resetAlbum(DefaultAlbum musicAlbum, int playIndex) {
         mController.resetAlbum(mContext, musicAlbum, playIndex);
     }
 
@@ -139,12 +138,12 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     }
 
     @Override
-    public TestAlbum getAlbum() {
+    public DefaultAlbum getAlbum() {
         return mController.getAlbum();
     }
 
     @Override
-    public List<TestAlbum.TestMusic> getAlbumMusics() {
+    public List<DefaultAlbum.DefaultMusic> getAlbumMusics() {
         return mController.getAlbumMusics();
     }
 
@@ -191,7 +190,7 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     }
 
     @Override
-    public TestAlbum.TestMusic getCurrentPlayingMusic() {
+    public DefaultAlbum.DefaultMusic getCurrentPlayingMusic() {
         return mController.getCurrentPlayingMusic();
     }
 }

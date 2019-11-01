@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-package com.kunminx.player.dto;
+package com.kunminx.player.bean.dto;
+
+import com.kunminx.player.bean.base.BaseAlbumItem;
+import com.kunminx.player.bean.base.BaseArtistItem;
+import com.kunminx.player.bean.base.BaseMusicItem;
 
 /**
  * Create by KunMinX at 18/9/24

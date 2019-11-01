@@ -14,26 +14,22 @@
  * limitations under the License.
  */
 
-package com.kunminx.player;
+package com.kunminx.player.contract;
 
 import android.content.Context;
 
-import androidx.lifecycle.MutableLiveData;
-
-import com.kunminx.player.dto.BaseAlbumItem;
-import com.kunminx.player.dto.BaseMusicItem;
-import com.kunminx.player.dto.ChangeMusic;
-import com.kunminx.player.dto.PlayingMusic;
-
-import java.util.List;
+import com.kunminx.player.bean.base.BaseAlbumItem;
+import com.kunminx.player.bean.base.BaseMusicItem;
 
 /**
  * Create by KunMinX at 18/9/24
  */
-public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicItem> {
+public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicItem> extends ILiveDataNotifier, IPlayInfoManager {
 
     //程序启动时就初始化
     void init(Context context);
+
+    void initAlbum(B musicAlbum);
 
     //切换专辑时。只在从新专辑进入播放页面时切换。
     void resetAlbum(B musicAlbum, int playIndex);
@@ -48,6 +44,8 @@ public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicIte
     void playPrevious();
 
     void playAgain();
+
+    void togglePlay();
 
     void pauseAudio();
 
@@ -64,33 +62,8 @@ public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicIte
 
     boolean isInited();
 
-    void requestLastPlayingInfo();
-
     void setSeek(int progress);
 
     String getTrackTime(int progress);
 
-    B getAlbum();
-
-    List<M> getAlbumMusics();
-
-    void setChangingPlayingMusic(boolean changingPlayingMusic);
-
-    int getAlbumIndex();
-
-    MutableLiveData<ChangeMusic> getChangeMusicLiveData();
-
-    MutableLiveData<PlayingMusic> getPlayingMusicLiveData();
-
-    MutableLiveData<Boolean> getPauseLiveData();
-
-    MutableLiveData<Boolean> getStartService();
-
-    MutableLiveData<Enum> getPlayModeLiveData();
-
-    Enum getRepeatMode();
-
-    void togglePlay();
-
-    M getCurrentPlayingMusic();
 }

@@ -1,4 +1,4 @@
-## 真香警告：就算不用云音乐听曲儿，也请务必收藏好该库！
+## 真香警告：即使不用云音乐听曲儿，也请务必收藏好该库！
 
 ### [Here is the English guide](https://github.com/KunMinX/Linkage-RecyclerView/blob/master/README_EN.md)
 
@@ -15,6 +15,11 @@ Jetpack-MusicPlayer 的使用十分简单，依托于 设计模式原则 及 JAV
 此外，在不设置自定义配置的情况下，Jetpack-MusicPlayer 最少只需 **一行代码即可运行起来**。
 
 &nbsp;
+
+|                          PureMusic                           |                      LiveData Dispatch                       |                        PlayMode Switch                       |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![1231111323.gif](https://upload-images.jianshu.io/upload_images/57036-0a5cdc68f003211a.gif) | ![333.gif](https://upload-images.jianshu.io/upload_images/57036-9a541148ce5bed2e.gif) | ![playmode.gif](https://upload-images.jianshu.io/upload_images/57036-d16c6ff34b08181c.gif) |
+
 
 &nbsp;
 
@@ -83,7 +88,7 @@ implementation 'com.kunminx.player:player:1.0.4'
     }
   ]
 }
-    
+
 ```
 
 3.在 Application 中初始化 多媒体播放控制组件。
@@ -155,26 +160,38 @@ public class TestAlbum extends BaseAlbumItem<TestAlbum.TestMusic, TestAlbum.Test
 
     private String albumMid;
 
-    public String getAlbumMid() { return albumMid; }
+    public String getAlbumMid() {
+        return albumMid;
+    }
 
-    public void setAlbumMid(String albumMid) { this.albumMid = albumMid; }
+    public void setAlbumMid(String albumMid) {
+        this.albumMid = albumMid;
+    }
 
     public static class TestMusic extends BaseMusicItem<TestArtist> {
 
         private String songMid;
 
-        public String getSongMid() { return songMid; }
+        public String getSongMid() {
+            return songMid;
+        }
 
-        public void setSongMid(String songMid) { this.songMid = songMid; }
+        public void setSongMid(String songMid) {
+            this.songMid = songMid;
+        }
     }
 
     public static class TestArtist extends BaseArtistItem {
 
         private String birthday;
 
-        public String getBirthday() { return birthday; }
+        public String getBirthday() {
+            return birthday;
+        }
 
-        public void setBirthday(String birthday) { this.birthday = birthday; }
+        public void setBirthday(String birthday) {
+            this.birthday = birthday;
+        }
     }
 }
 ```
@@ -216,11 +233,11 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     public void initAlbum(TestAlbum musicAlbum) {
         mController.initAlbum(mContext, musicAlbum);
     }
-    
+
     ...
-        
-    //事实上，大可直接 Copy 本类到项目中、修改作为泛型的那几个实体类即可。
-        
+
+    //事实上，你大可直接 Copy 本类到项目中、只需修改作为泛型的那几个实体类即可。
+
 }
 ```
 

@@ -23,10 +23,10 @@ import android.widget.Toast;
 import androidx.lifecycle.MutableLiveData;
 
 import com.danikula.videocache.HttpProxyCacheServer;
-import com.kunminx.player.dto.BaseAlbumItem;
-import com.kunminx.player.dto.BaseMusicItem;
-import com.kunminx.player.dto.ChangeMusic;
-import com.kunminx.player.dto.PlayingMusic;
+import com.kunminx.player.bean.base.BaseAlbumItem;
+import com.kunminx.player.bean.base.BaseMusicItem;
+import com.kunminx.player.bean.dto.ChangeMusic;
+import com.kunminx.player.bean.dto.PlayingMusic;
 import com.kunminx.player.helper.MediaPlayerHelper;
 import com.kunminx.player.helper.PlayerFileNameGenerator;
 import com.kunminx.player.utils.NetworkUtils;
@@ -67,10 +67,18 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         return mPlayingInfoManager.isInited();
     }
 
-    public void resetAlbum(Context context, B musicAlbum, int albumIndex) {
+    public void initAlbum(Context context, B musicAlbum) {
+        setAlbum(context, musicAlbum, 0);
+    }
+
+    private void setAlbum(Context context, B musicAlbum, int albumIndex) {
         mPlayingInfoManager.setMusicAlbum(musicAlbum);
         mPlayingInfoManager.setAlbumIndex(albumIndex);
         setChangingPlayingMusic(context, true);
+    }
+
+    public void resetAlbum(Context context, B musicAlbum, int albumIndex) {
+        setAlbum(context, musicAlbum, albumIndex);
         playAudio(context);
     }
 

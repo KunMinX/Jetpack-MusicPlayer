@@ -14,22 +14,29 @@
  * limitations under the License.
  */
 
-package com.kunminx.player.dto;
+package com.kunminx.player.contract;
+
+import com.kunminx.player.bean.base.BaseAlbumItem;
+import com.kunminx.player.bean.base.BaseMusicItem;
+
+import java.util.List;
 
 /**
- * 作者实体，music artist bean
- * <p>
- * Create by KunMinX at 19/10/31
+ * Create by KunMinX at 19/11/1
  */
-public class BaseArtistItem {
+public interface IPlayInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem> {
 
-    private String name;
+    B getAlbum();
 
-    public String getName() {
-        return name;
-    }
+    List<M> getAlbumMusics();
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    void setChangingPlayingMusic(boolean changingPlayingMusic);
+
+    int getAlbumIndex();
+
+    Enum getRepeatMode();
+
+    M getCurrentPlayingMusic();
+
+    void requestLastPlayingInfo();
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kunminx.player.dto;
+package com.kunminx.player.bean.base;
 
 /**
  * 音乐实体，music bean
