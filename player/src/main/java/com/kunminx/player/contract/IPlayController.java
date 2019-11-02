@@ -29,10 +29,10 @@ public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicIte
     //程序启动时就初始化
     void init(Context context);
 
-    void initAlbum(B musicAlbum);
+    void loadAlbum(B musicAlbum);
 
     //切换专辑时。只在从新专辑进入播放页面时切换。
-    void resetAlbum(B musicAlbum, int playIndex);
+    void loadAlbum(B musicAlbum, int playIndex);
 
     void playAudio();
 

@@ -53,13 +53,13 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
     }
 
     @Override
-    public void initAlbum(DefaultAlbum musicAlbum) {
-        mController.initAlbum(mContext, musicAlbum);
+    public void loadAlbum(DefaultAlbum musicAlbum) {
+        mController.loadAlbum(mContext, musicAlbum);
     }
 
     @Override
-    public void resetAlbum(DefaultAlbum musicAlbum, int playIndex) {
-        mController.resetAlbum(mContext, musicAlbum, playIndex);
+    public void loadAlbum(DefaultAlbum musicAlbum, int playIndex) {
+        mController.loadAlbum(mContext, musicAlbum, playIndex);
     }
 
     @Override

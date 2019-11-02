@@ -44,7 +44,7 @@ If you are thinking about [**how to choose the right architecture for your proje
 1. Add a dependency on the library in build.gradle.
 
 ```groovy
-implementation 'com.kunminx.player:player:1.0.4'
+implementation 'com.kunminx.player:player:1.0.5'
 ```
 
 2. Prepare a string of data according to the structure of the default album entity class `DefaultAlbum`. (The following is JSON as an example).
@@ -98,8 +98,8 @@ DefaultPlayerManager.getInstance().init(this);
 ```java
 DefaultAlbum album = gson.fromJson(...);
 
-//One line of code completes the initialization of the data.
-DefaultPlayerManager.getInstance().initAlbum(album);
+//One line of code completes the load of the data.
+DefaultPlayerManager.getInstance().loadAlbum(album);
 ```
 
 5.Sends a request to change the playback state in the View Controller, and receives a result response from a unique trusted source for unified distribution.
@@ -108,24 +108,24 @@ DefaultPlayerManager.getInstance().initAlbum(album);
 // 1.Send a request anywhere in anywhere of the View Controller.
 
 // 1.1.For example, here is requested to play the next one.
-PlayerManager.getInstance().playNext();
+DefaultPlayerManager.getInstance().playNext();
 
 // 2.Listen to the resulting response from a unique trusted source push in the view controller that is subscribed to the corresponding status notification.
 
 // 2.1.For example, here is the push of the play button status.
-PlayerManager.getInstance().pauseLiveData().observe(this, aBoolean -> {
+DefaultPlayerManager.getInstance().pauseLiveData().observe(this, aBoolean -> {
     mPlayerViewModel.isPlaying.set(!aBoolean);
 });
 
 // 2.2.For example, here is a push for the current song details.
-PlayerManager.getInstance().changeMusicLiveData().observe(this, changeMusic -> {
+DefaultPlayerManager.getInstance().changeMusicLiveData().observe(this, changeMusic -> {
     mPlayerViewModel.title.set(changeMusic.getTitle());
     mPlayerViewModel.artist.set(changeMusic.getSummary());
     mPlayerViewModel.coverImg.set(changeMusic.getImg());
 });
 
 // 2.3.For example, here is a push that responds to the current song playback progress.
-PlayerManager.getInstance().playingMusicLiveData().observe(this, playingMusic -> {
+DefaultPlayerManager.getInstance().playingMusicLiveData().observe(this, playingMusic -> {
     mPlayerViewModel.maxSeekDuration.set(playingMusic.getDuration());
     mPlayerViewModel.currentSeekPosition.set(playingMusic.getPlayerPosition());
 });

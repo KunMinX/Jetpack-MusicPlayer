@@ -48,7 +48,7 @@ Jetpack-MusicPlayer 的目标是：**一行代码即可接入 音乐播放控制
 1.在 build.gradle 中添加对该库的依赖。
 
 ```groovy
-implementation 'com.kunminx.player:player:1.0.4'
+implementation 'com.kunminx.player:player:1.0.5'
 ```
 
 2.依据默认的专辑实体类 `DefaultAlbum` 的结构准备一串数据（以下以  JSON 为例）。
@@ -97,13 +97,13 @@ implementation 'com.kunminx.player:player:1.0.4'
 DefaultPlayerManager.getInstance().init(this);
 ```
 
-4.在得到数据后，最少只需一行代码 即可完成数据的初始化。
+4.在得到数据后，最少只需一行代码 即可完成数据的装载。
 
 ```java
 DefaultAlbum album = gson.fromJson(...);
 
 //一行代码完成数据的初始化。
-DefaultPlayerManager.getInstance().initAlbum(album);
+DefaultPlayerManager.getInstance().loadAlbum(album);
 ```
 
 5.在视图控制器中 发送改变播放状态的请求，并接收来自 唯一可信源 统一分发的结果响应。
@@ -112,7 +112,7 @@ DefaultPlayerManager.getInstance().initAlbum(album);
 // 1.在 任一视图控制器 的 任一处 发送请求
 
 // 1.1.例如 此处请求了 播放下一首
-PlayerManager.getInstance().playNext();
+DefaultPlayerManager.getInstance().playNext();
 
 ```
 
@@ -121,19 +121,19 @@ PlayerManager.getInstance().playNext();
 // 2.在 订阅了对应状态通知 的 视图控制器 中，收听来自 唯一可信源 推送的结果响应。
 
 // 2.1.例如 此处响应了 播放按钮状态 的推送
-PlayerManager.getInstance().pauseLiveData().observe(this, aBoolean -> {
+DefaultPlayerManager.getInstance().pauseLiveData().observe(this, aBoolean -> {
     mPlayerViewModel.isPlaying.set(!aBoolean);
 });
 
 // 2.2.例如 此处响应了 当前歌曲详细信息 的推送
-PlayerManager.getInstance().changeMusicLiveData().observe(this, changeMusic -> {
+DefaultPlayerManager.getInstance().changeMusicLiveData().observe(this, changeMusic -> {
     mPlayerViewModel.title.set(changeMusic.getTitle());
     mPlayerViewModel.artist.set(changeMusic.getSummary());
     mPlayerViewModel.coverImg.set(changeMusic.getImg());
 });
 
 // 2.3.例如 此处响应了 当前歌曲播放进度 的推送
-PlayerManager.getInstance().playingMusicLiveData().observe(this, playingMusic -> {
+DefaultPlayerManager.getInstance().playingMusicLiveData().observe(this, playingMusic -> {
     mPlayerViewModel.maxSeekDuration.set(playingMusic.getDuration());
     mPlayerViewModel.currentSeekPosition.set(playingMusic.getPlayerPosition());
 });

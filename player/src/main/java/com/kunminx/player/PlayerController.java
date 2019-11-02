@@ -67,7 +67,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         return mPlayingInfoManager.isInited();
     }
 
-    public void initAlbum(Context context, B musicAlbum) {
+    public void loadAlbum(Context context, B musicAlbum) {
         setAlbum(context, musicAlbum, 0);
     }
 
@@ -77,7 +77,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         setChangingPlayingMusic(context, true);
     }
 
-    public void resetAlbum(Context context, B musicAlbum, int albumIndex) {
+    public void loadAlbum(Context context, B musicAlbum, int albumIndex) {
         setAlbum(context, musicAlbum, albumIndex);
         playAudio(context);
     }
