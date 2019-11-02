@@ -27,8 +27,6 @@ Jetpack-MusicPlayer 的使用十分简单，依托于 设计模式原则 及 JAV
 
 Jetpack-MusicPlayer 的目标是：**一行代码即可接入 音乐播放控制组件**。
 
-&nbsp;
-
 除了一键接入而省去 99% 不必要的、复杂的、重复的工作外，你还可以从这个开源项目获得的内容包括：
 
 1. 整洁的代码风格 和 标准的资源命名规范。
@@ -116,6 +114,10 @@ DefaultPlayerManager.getInstance().initAlbum(album);
 // 1.1.例如 此处请求了 播放下一首
 PlayerManager.getInstance().playNext();
 
+```
+
+```java
+
 // 2.在 订阅了对应状态通知 的 视图控制器 中，收听来自 唯一可信源 推送的结果响应。
 
 // 2.1.例如 此处响应了 播放按钮状态 的推送
@@ -162,38 +164,26 @@ public class TestAlbum extends BaseAlbumItem<TestAlbum.TestMusic, TestAlbum.Test
 
     private String albumMid;
 
-    public String getAlbumMid() {
-        return albumMid;
-    }
+    public String getAlbumMid() { return albumMid; }
 
-    public void setAlbumMid(String albumMid) {
-        this.albumMid = albumMid;
-    }
+    public void setAlbumMid(String albumMid) { this.albumMid = albumMid; }
 
     public static class TestMusic extends BaseMusicItem<TestArtist> {
 
         private String songMid;
 
-        public String getSongMid() {
-            return songMid;
-        }
+        public String getSongMid() { return songMid; }
 
-        public void setSongMid(String songMid) {
-            this.songMid = songMid;
-        }
+        public void setSongMid(String songMid) { this.songMid = songMid; }
     }
 
     public static class TestArtist extends BaseArtistItem {
 
         private String birthday;
 
-        public String getBirthday() {
-            return birthday;
-        }
+        public String getBirthday() { return birthday; }
 
-        public void setBirthday(String birthday) {
-            this.birthday = birthday;
-        }
+        public void setBirthday(String birthday) { this.birthday = birthday; }
     }
 }
 ```
@@ -250,6 +240,10 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 [material-components-android](https://github.com/material-components/material-components-android)
 
 [AndroidX](https://developer.android.google.cn/jetpack/androidx)
+
+[HDMediaPlayer](https://github.com/yinhaide/HDMediaPlayer)
+
+[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)
 
 &nbsp;
 

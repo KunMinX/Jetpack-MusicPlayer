@@ -233,6 +233,10 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
 [AndroidX](https://developer.android.google.cn/jetpack/androidx)
 
+[HDMediaPlayer](https://github.com/yinhaide/HDMediaPlayer)
+
+[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)
+
 &nbsp;
 
 # My Pages
