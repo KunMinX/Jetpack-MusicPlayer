@@ -48,7 +48,7 @@ dependencies {
 
     implementation project(':architecture')
     implementation project(':player')
-//    implementation 'com.kunminx.player:player:1.0.1'
+//    implementation 'com.kunminx.player:player:1.0.5'
 
     compileOnly 'androidx.appcompat:appcompat:1.1.0'
     compileOnly 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'

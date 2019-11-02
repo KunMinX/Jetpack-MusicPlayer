@@ -18,7 +18,6 @@ package com.kunminx.player;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -162,11 +161,8 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                                 || duration / 1000 - position / 1000 < 2) {
                             if (getRepeatMode() == PlayingInfoManager.RepeatMode.ONE_LOOP) {
                                 playAgain(context);
-                                //联网或有离线的情况才自动切歌，否则提示断网
-                            } else if (NetworkUtils.isConnected(context)) {
-                                playNext(context);
                             } else {
-                                Toast.makeText(context, context.getString(R.string.network_unconnected), Toast.LENGTH_SHORT).show();
+                                playNext(context);
                             }
                         }
                     }

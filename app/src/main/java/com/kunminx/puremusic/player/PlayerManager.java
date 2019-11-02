@@ -49,8 +49,8 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
     @Override
     public void init(Context context) {
-        mController.init(context);
         mContext = context.getApplicationContext();
+        mController.init(mContext);
     }
 
     @Override

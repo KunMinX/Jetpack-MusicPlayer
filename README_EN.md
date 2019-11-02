@@ -44,7 +44,7 @@ If you are thinking about [**how to choose the right architecture for your proje
 1. Add a dependency on the library in build.gradle.
 
 ```groovy
-implementation 'com.kunminx.player:player:1.0.5'
+implementation 'com.kunminx.player:player:1.1.2'
 ```
 
 2. Prepare a string of data according to the structure of the default album entity class `DefaultAlbum`. (The following is JSON as an example).
@@ -209,13 +209,13 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
     @Override
     public void init(Context context) {
-        mController.init(context);
         mContext = context.getApplicationContext();
+        mController.init(mContext);
     }
 
     @Override
-    public void initAlbum(TestAlbum musicAlbum) {
-        mController.initAlbum(mContext, musicAlbum);
+    public void loadAlbum(TestAlbum musicAlbum) {
+        mController.loadAlbum(mContext, musicAlbum);
     }
     
     ...

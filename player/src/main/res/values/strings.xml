@@ -17,13 +17,7 @@
 <resources>
     <string name="app_name">player</string>
 
-    <string name="play">播放</string>
-    <string name="notify_of_play">播放时的通知栏展示</string>
-    <string name="network_unconnected">网络断开了</string>
 
-    <string name="play_repeat">列表循环</string>
-    <string name="play_repeat_once">单曲循环</string>
-    <string name="play_shuffle">随机播放</string>
 
 
 </resources>

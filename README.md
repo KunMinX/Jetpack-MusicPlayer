@@ -48,7 +48,7 @@ Jetpack-MusicPlayer 的目标是：**一行代码即可接入 音乐播放控制
 1.在 build.gradle 中添加对该库的依赖。
 
 ```groovy
-implementation 'com.kunminx.player:player:1.0.5'
+implementation 'com.kunminx.player:player:1.1.2'
 ```
 
 2.依据默认的专辑实体类 `DefaultAlbum` 的结构准备一串数据（以下以  JSON 为例）。
@@ -217,18 +217,18 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
     @Override
     public void init(Context context) {
-        mController.init(context);
         mContext = context.getApplicationContext();
+        mController.init(mContext);
     }
 
     @Override
-    public void initAlbum(TestAlbum musicAlbum) {
-        mController.initAlbum(mContext, musicAlbum);
+    public void loadAlbum(TestAlbum musicAlbum) {
+        mController.loadAlbum(mContext, musicAlbum);
     }
 
     ...
 
-    //事实上，你大可直接 Copy 本类到项目中、只需修改作为泛型的那几个实体类即可。
+    //事实上，大可直接 Copy 本类到项目中、只修改作为泛型的那几个实体类。
 
 }
 ```
