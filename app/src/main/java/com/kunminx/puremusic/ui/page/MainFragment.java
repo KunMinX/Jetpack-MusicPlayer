@@ -16,6 +16,7 @@
 
 package com.kunminx.puremusic.ui.page;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,8 +83,8 @@ public class MainFragment extends BaseFragment {
                 binding.tvArtist.setText(item.getArtist().getName());
                 Glide.with(binding.ivCover.getContext()).load(item.getCoverImg()).into(binding.ivCover);
                 int currentIndex = PlayerManager.getInstance().getAlbumIndex();
-                binding.ivPlayStatus.setIcon(currentIndex == holder.getAdapterPosition()
-                        ? MaterialDrawableBuilder.IconValue.MUSIC_NOTE : null);
+                binding.ivPlayStatus.setColor(currentIndex == holder.getAdapterPosition()
+                        ? getResources().getColor(R.color.gray) : Color.TRANSPARENT);
                 binding.getRoot().setOnClickListener(v -> {
                     PlayerManager.getInstance().playAudio(holder.getAdapterPosition());
                 });
