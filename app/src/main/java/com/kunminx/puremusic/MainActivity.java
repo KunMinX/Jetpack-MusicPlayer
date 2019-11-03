@@ -46,15 +46,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PlayerManager.getInstance().getStartService().observe(this, aBoolean -> {
-            Intent intent = new Intent(getApplicationContext(), PlayerService.class);
-            if (aBoolean) {
-                getApplicationContext().startService(intent);
-            } else {
-                getApplicationContext().stopService(intent);
-            }
-        });
-
         mMainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
@@ -86,9 +77,14 @@ public class MainActivity extends BaseActivity {
         });
 
 
-        if (mBinding.dl != null) {
-            mBinding.dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        }
+        mSharedViewModel.enableSwipeDrawer.observe(this, aBoolean -> {
+
+            if (mBinding.dl != null) {
+                mBinding.dl.setDrawerLockMode(aBoolean
+                        ? DrawerLayout.LOCK_MODE_UNLOCKED
+                        : DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            }
+        });
 
     }
 

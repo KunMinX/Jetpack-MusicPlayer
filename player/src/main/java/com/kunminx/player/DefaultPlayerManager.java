@@ -24,6 +24,7 @@ import com.kunminx.player.bean.DefaultAlbum;
 import com.kunminx.player.bean.dto.ChangeMusic;
 import com.kunminx.player.bean.dto.PlayingMusic;
 import com.kunminx.player.contract.IPlayController;
+import com.kunminx.player.contract.IServiceNotifier;
 
 import java.util.List;
 
@@ -47,9 +48,9 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
     }
 
     @Override
-    public void init(Context context) {
-        mController.init(context);
+    public void init(Context context, IServiceNotifier iServiceNotifier) {
         mContext = context.getApplicationContext();
+        mController.init(mContext, iServiceNotifier);
     }
 
     @Override
@@ -169,10 +170,6 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
         return mController.getPauseLiveData();
     }
 
-    @Override
-    public MutableLiveData<Boolean> getStartService() {
-        return mController.getStartForegroundService();
-    }
 
     @Override
     public MutableLiveData<Enum> getPlayModeLiveData() {

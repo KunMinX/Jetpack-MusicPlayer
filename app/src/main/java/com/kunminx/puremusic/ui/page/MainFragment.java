@@ -45,7 +45,6 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
  */
 public class MainFragment extends BaseFragment {
 
-
     private FragmentMainBinding mBinding;
     private MainViewModel mMainViewModel;
     private MusicRequestViewModel mMusicRequestViewModel;

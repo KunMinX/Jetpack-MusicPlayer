@@ -20,6 +20,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.kunminx.architecture.bridge.callback.UnPeekLiveData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Create by KunMinX at 19/10/16
  */
@@ -33,6 +36,8 @@ public class SharedViewModel extends ViewModel {
 
     public final UnPeekLiveData<Boolean> openOrCloseDrawer = new UnPeekLiveData<>();
 
-    public final UnPeekLiveData<Boolean> enableDrawer = new UnPeekLiveData<>();
+    public final UnPeekLiveData<Boolean> enableSwipeDrawer = new UnPeekLiveData<>();
+
+    public static List<String> tagOfSecondaryPages = new ArrayList<>();
 
 }

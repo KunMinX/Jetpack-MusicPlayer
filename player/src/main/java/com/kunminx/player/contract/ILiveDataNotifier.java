@@ -32,8 +32,6 @@ public interface ILiveDataNotifier {
 
     MutableLiveData<Boolean> getPauseLiveData();
 
-    MutableLiveData<Boolean> getStartService();
-
     MutableLiveData<Enum> getPlayModeLiveData();
 
 }
