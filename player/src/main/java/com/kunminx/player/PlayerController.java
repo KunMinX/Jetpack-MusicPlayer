@@ -18,6 +18,7 @@ package com.kunminx.player;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -54,7 +55,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     private PlayingMusic mCurrentPlay = new PlayingMusic("00:00", "00:00");
     private ChangeMusic mChangeMusic = new ChangeMusic();
 
-    public void init(Context context, IServiceNotifier iServiceNotifier) {
+    public void init(Context context, List<String> extraFormatList, IServiceNotifier iServiceNotifier) {
 
         mPlayingInfoManager.init(context.getApplicationContext());
 
@@ -64,6 +65,10 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                 .build();
 
         mIServiceNotifier = iServiceNotifier;
+
+        if (extraFormatList != null) {
+            MediaPlayerHelper.getInstance().getFormatList().addAll(extraFormatList);
+        }
     }
 
     public boolean isInited() {
@@ -125,19 +130,20 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         if (TextUtils.isEmpty(url)) {
             pauseAudio();
         } else {
-
-            if ((url.contains("http:") || url.contains("ftp:") || url.contains("https:"))
-                    && NetworkUtils.isConnected(context)) {
-                MediaPlayerHelper.getInstance().play(proxy.getProxyUrl(url));
-//                MediaPlayerHelper.getInstance().play(url);
-
+            if ((url.contains("http:") || url.contains("ftp:") || url.contains("https:"))) {
+                if (NetworkUtils.isConnected(context)) {
+                    MediaPlayerHelper.getInstance().play(proxy.getProxyUrl(url));
+                    afterPlay(context);
+                } else {
+                    Toast.makeText(context, R.string.unconnnect, Toast.LENGTH_SHORT).show();
+                }
             } else if (url.contains("storage")) {
                 MediaPlayerHelper.getInstance().play(url);
-
+                afterPlay(context);
             } else {
                 MediaPlayerHelper.getInstance().playAsset(context, url);
+                afterPlay(context);
             }
-            afterPlay(context);
         }
     }
 

@@ -50,7 +50,7 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
     @Override
     public void init(Context context, IServiceNotifier iServiceNotifier) {
         mContext = context.getApplicationContext();
-        mController.init(mContext, iServiceNotifier);
+        mController.init(mContext, null, iServiceNotifier);
     }
 
     @Override

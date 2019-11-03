@@ -17,7 +17,7 @@
 <resources>
     <string name="app_name">player</string>
 
-
+    <string name="unconnnect">网络未连接</string>
 
 
 </resources>

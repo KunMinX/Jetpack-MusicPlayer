@@ -15,6 +15,14 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+def build_versions = [:]
+
+build_versions.versionCode = 10102
+build_versions.versionName = "1.1.2"
+
+ext.build_versions = build_versions
 
 android {
     compileSdkVersion 29
@@ -24,8 +32,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode build_versions.versionCode
+        versionName build_versions.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -56,4 +64,14 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation "androidx.lifecycle:lifecycle-livedata:2.1.0"
     implementation 'com.danikula:videocache:2.7.1'
+}
+
+publish {
+    userOrg = 'jetpackmusicplayer'
+    groupId = 'com.kunminx.player'
+    artifactId = 'player'
+    publishVersion = build_versions.versionName
+    desc = 'Jetpack MusicPlayer Library for android'
+    website = ''
+    licences = ['Apache-2.0']
 }

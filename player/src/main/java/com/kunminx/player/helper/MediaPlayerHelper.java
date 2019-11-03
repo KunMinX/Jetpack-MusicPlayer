@@ -32,21 +32,35 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdateListener, OnErrorListener, OnInfoListener,
         OnPreparedListener, OnSeekCompleteListener, OnVideoSizeChangedListener, SurfaceHolder.Callback {
     public static final String TAG = "MediaPlayerHelper";
 
     //定义我们支持的文件格式
     private String[] ext = {
-            ".m4a", ".M4A",
-            ".3gp", ".3GP",
-            ".mp4", ".MP4",
-            ".mp3", ".MP3",
-            ".wma", ".WMA",
-            ".ogg", ".OGG",
-            ".wav", ".WAV",
-            ".mid", ".MID"
+            ".m4a",
+            ".3gp",
+            ".mp4",
+            ".mp3",
+            ".wma",
+            ".ogg",
+            ".wav",
+            ".mid"
     };
+
+    private List<String> formatList = new ArrayList<>();
+
+    public List<String> getFormatList() {
+        return formatList;
+    }
+
+    {
+        formatList.addAll(Arrays.asList(ext));
+    }
 
     public Holder uiHolder;
     private MediaPlayerHelperCallBack MediaPlayerHelperCallBack = null;
@@ -233,7 +247,7 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
     private boolean checkAvalable(String path) {
         boolean surport = false;
         for (int i = 0; i < ext.length; i++) {
-            if (path.endsWith(ext[i])) {
+            if (path.toLowerCase().endsWith(ext[i])) {
                 surport = true;
             }
         }

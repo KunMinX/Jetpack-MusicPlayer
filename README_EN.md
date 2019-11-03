@@ -44,7 +44,7 @@ If you are thinking about [**how to choose the right architecture for your proje
 1. Add a dependency on the library in build.gradle.
 
 ```groovy
-implementation 'com.kunminx.player:player:1.1.2'
+implementation 'com.kunminx.player:player:1.1.6'
 ```
 
 2. Prepare a string of data according to the structure of the default album entity class `DefaultAlbum`. (The following is JSON as an example).

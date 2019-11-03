@@ -57,7 +57,7 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     @Override
     public void init(Context context, IServiceNotifier iServiceNotifier) {
         mContext = context.getApplicationContext();
-        mController.init(mContext, startOrStop -> {
+        mController.init(mContext, null, startOrStop -> {
             Intent intent = new Intent(mContext, PlayerService.class);
             if (startOrStop) {
                 mContext.startService(intent);
