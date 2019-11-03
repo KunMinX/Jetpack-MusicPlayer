@@ -28,9 +28,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.kunminx.puremusic.App;
+import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.bridge.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.page.MainFragment;
 
 
 /**
@@ -65,7 +70,7 @@ public class BaseFragment extends Fragment {
             if (mInitDataCame) {
                 loadInitData();
             }
-        }, 250);
+        }, 280);
         return super.onCreateAnimation(transit, enter, nextAnim);
     }
 
@@ -96,6 +101,10 @@ public class BaseFragment extends Fragment {
 
     protected ViewModelProvider getAppViewModelProvider() {
         return ((App) mActivity.getApplicationContext()).getAppViewModelProvider(mActivity);
+    }
+
+    protected NavController nav() {
+        return NavHostFragment.findNavController(this);
     }
 
 }

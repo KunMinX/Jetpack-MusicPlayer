@@ -48,7 +48,7 @@ dependencies {
 
     implementation project(':architecture')
     implementation project(':player')
-//    implementation 'com.kunminx.player:player:1.0.5'
+//    implementation 'com.kunminx.player:player:1.1.2'
 
     compileOnly 'androidx.appcompat:appcompat:1.1.0'
     compileOnly 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
@@ -62,10 +62,11 @@ dependencies {
     compileOnly "androidx.lifecycle:lifecycle-livedata:2.1.0"
 //    compileOnly "androidx.paging:paging-runtime:2.1.0"
 
+    compileOnly 'androidx.navigation:navigation-runtime:2.1.0'
     compileOnly 'com.lwjlol.navigation:keep-fragmentstate:0.0.1'
 
-    compileOnly 'io.reactivex.rxjava2:rxjava:2.2.13'
-    compileOnly 'io.reactivex.rxjava2:rxandroid:2.1.1'
+//    compileOnly 'io.reactivex.rxjava2:rxjava:2.2.13'
+//    compileOnly 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     compileOnly 'com.github.bumptech.glide:glide:4.10.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
@@ -77,8 +78,6 @@ dependencies {
     compileOnly 'com.lzy.net:okserver:2.0.5'
 
     compileOnly 'com.google.code.gson:gson:2.8.6'
-
-    compileOnly 'com.danikula:videocache:2.7.1'
 
     implementation(name: 'slidinguppanel', ext: 'aar')
     implementation(name: 'materialiconlib', ext: 'aar')

@@ -172,8 +172,8 @@ public class PlayerService extends Service {
                 notification.bigContentView.setImageViewBitmap(R.id.player_album_art, bitmap);
             } else {
                 requestAlbumCover(testMusic.getCoverImg(), testMusic.getMusicId());
-                notification.contentView.setImageViewResource(R.id.player_album_art, R.drawable.bg_default);
-                notification.bigContentView.setImageViewResource(R.id.player_album_art, R.drawable.bg_default);
+                notification.contentView.setImageViewResource(R.id.player_album_art, R.drawable.bg_album_default);
+                notification.bigContentView.setImageViewResource(R.id.player_album_art, R.drawable.bg_album_default);
             }
 
             startForeground(5, notification);

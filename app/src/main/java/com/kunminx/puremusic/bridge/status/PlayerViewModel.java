@@ -31,7 +31,6 @@ import com.kunminx.puremusic.player.PlayerManager;
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 /**
- * <p>
  * Create by KunMinX at 19/10/29
  */
 public class PlayerViewModel extends ViewModel {

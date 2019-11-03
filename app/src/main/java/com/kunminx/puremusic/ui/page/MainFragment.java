@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.kunminx.architecture.ui.adapter.SimpleBaseBindingAdapter;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.bridge.request.MusicRequestViewModel;
 import com.kunminx.puremusic.bridge.status.MainViewModel;
@@ -35,7 +36,8 @@ import com.kunminx.puremusic.databinding.AdapterPlayItemBinding;
 import com.kunminx.puremusic.databinding.FragmentMainBinding;
 import com.kunminx.puremusic.player.PlayerManager;
 import com.kunminx.puremusic.ui.base.BaseFragment;
-import com.kunminx.architecture.ui.adapter.SimpleBaseBindingAdapter;
+
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 /**
  * Create by KunMinX at 19/10/29
@@ -71,6 +73,8 @@ public class MainFragment extends BaseFragment {
 
         mMainViewModel.initTabAndPage.set(true);
 
+        mMainViewModel.pageAssetPath.set("summary.html");
+
         mAdapter = new SimpleBaseBindingAdapter<TestAlbum.TestMusic, AdapterPlayItemBinding>(getContext(), R.layout.adapter_play_item) {
             @Override
             protected void onSimpleBindItem(AdapterPlayItemBinding binding, TestAlbum.TestMusic item, RecyclerView.ViewHolder holder) {
@@ -78,8 +82,8 @@ public class MainFragment extends BaseFragment {
                 binding.tvArtist.setText(item.getArtist().getName());
                 Glide.with(binding.ivCover.getContext()).load(item.getCoverImg()).into(binding.ivCover);
                 int currentIndex = PlayerManager.getInstance().getAlbumIndex();
-                binding.ivPlayStatus.setImageDrawable(getResources().getDrawable(
-                        currentIndex == holder.getAdapterPosition() ? R.drawable.ic_music_gray_48dp : R.color.transparent));
+                binding.ivPlayStatus.setIcon(currentIndex == holder.getAdapterPosition()
+                        ? MaterialDrawableBuilder.IconValue.MUSIC_NOTE : null);
                 binding.getRoot().setOnClickListener(v -> {
                     PlayerManager.getInstance().playAudio(holder.getAdapterPosition());
                 });
@@ -119,7 +123,7 @@ public class MainFragment extends BaseFragment {
         }
 
         public void search() {
-
+            nav().navigate(R.id.action_mainFragment_to_searchFragment);
         }
     }
 

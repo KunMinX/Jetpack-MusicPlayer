@@ -88,23 +88,6 @@ public class PlayerFragment extends BaseFragment {
             mPlayerViewModel.isPlaying.set(!aBoolean);
         });
 
-        mBinding.seekBottom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                PlayerManager.getInstance().setSeek(seekBar.getProgress());
-            }
-        });
-
         PlayerManager.getInstance().getPlayModeLiveData().observe(this, anEnum -> {
             if (anEnum == PlayingInfoManager.RepeatMode.LIST_LOOP) {
                 mPlayerViewModel.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);
@@ -132,7 +115,7 @@ public class PlayerFragment extends BaseFragment {
 
     }
 
-    public class ClickProxy {
+    public class ClickProxy implements SeekBar.OnSeekBarChangeListener {
 
         public void playMode() {
             PlayerManager.getInstance().changeMode();
@@ -159,6 +142,21 @@ public class PlayerFragment extends BaseFragment {
         }
 
         public void more() {
+        }
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            PlayerManager.getInstance().setSeek(seekBar.getProgress());
         }
     }
 

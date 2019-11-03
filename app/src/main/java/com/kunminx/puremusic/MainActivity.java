@@ -21,7 +21,10 @@ import android.os.Bundle;
 
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.kunminx.puremusic.bridge.status.MainActivityViewModel;
 import com.kunminx.puremusic.databinding.ActivityMainBinding;
@@ -58,7 +61,18 @@ public class MainActivity extends BaseActivity {
         mBinding.setVm(mMainActivityViewModel);
 
         mSharedViewModel.activityCanBeClosedDirectly.observe(this, aBoolean -> {
-            finish();
+            NavController nav = Navigation.findNavController(this, R.id.main_fragment_host);
+            if (nav.getCurrentDestination() != null && nav.getCurrentDestination().getId() != R.id.mainFragment) {
+                nav.navigateUp();
+
+                //TODO tip 6: ͬ tip 5.
+
+            } else if (mBinding.dl != null && mBinding.dl.isDrawerOpen(GravityCompat.START)) {
+                mBinding.dl.closeDrawer(GravityCompat.START);
+
+            } else {
+                super.onBackPressed();
+            }
         });
 
         mSharedViewModel.openOrCloseDrawer.observe(this, aBoolean -> {
@@ -70,6 +84,12 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+
+
+        if (mBinding.dl != null) {
+            mBinding.dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
+
     }
 
     @Override

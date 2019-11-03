@@ -44,7 +44,8 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
             ".mp3", ".MP3",
             ".wma", ".WMA",
             ".ogg", ".OGG",
-            ".wav", ".WAV"
+            ".wav", ".WAV",
+            ".mid", ".MID"
     };
 
     public Holder uiHolder;
