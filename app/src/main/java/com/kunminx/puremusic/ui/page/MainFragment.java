@@ -31,14 +31,12 @@ import com.bumptech.glide.Glide;
 import com.kunminx.architecture.ui.adapter.SimpleBaseBindingAdapter;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.bridge.request.MusicRequestViewModel;
-import com.kunminx.puremusic.bridge.status.MainViewModel;
+import com.kunminx.puremusic.bridge.state.MainViewModel;
 import com.kunminx.puremusic.data.bean.TestAlbum;
 import com.kunminx.puremusic.databinding.AdapterPlayItemBinding;
 import com.kunminx.puremusic.databinding.FragmentMainBinding;
 import com.kunminx.puremusic.player.PlayerManager;
 import com.kunminx.puremusic.ui.base.BaseFragment;
-
-import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 /**
  * Create by KunMinX at 19/10/29

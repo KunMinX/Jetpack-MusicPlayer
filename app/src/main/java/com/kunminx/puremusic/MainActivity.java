@@ -16,7 +16,6 @@
 
 package com.kunminx.puremusic;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.view.GravityCompat;
@@ -26,10 +25,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.kunminx.puremusic.bridge.status.MainActivityViewModel;
+import com.kunminx.puremusic.bridge.state.MainActivityViewModel;
 import com.kunminx.puremusic.databinding.ActivityMainBinding;
-import com.kunminx.puremusic.player.PlayerManager;
-import com.kunminx.puremusic.player.notification.PlayerService;
 import com.kunminx.puremusic.ui.base.BaseActivity;
 
 /**

@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.bridge.status;
+package com.kunminx.puremusic.bridge.state;
 
-import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.ViewModel;
 
 /**
+ * <p>
  * Create by KunMinX at 19/10/29
  */
-public class MainActivityViewModel extends ViewModel {
+public class SearchViewModel extends ViewModel {
 
-    public final ObservableBoolean openDrawer = new ObservableBoolean();
 
-    public final ObservableBoolean allowDrawerOpen = new ObservableBoolean();
-
-    {
-        allowDrawerOpen.set(true);
-    }
 }
