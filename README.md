@@ -18,7 +18,7 @@ Jetpack-MusicPlayer 的使用十分简单，依托于 设计模式原则 及 JAV
 
 |                          PureMusic                           |                      LiveData Dispatch                       |                        PlayMode Switch                       |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![1231111323.gif](https://upload-images.jianshu.io/upload_images/57036-0a5cdc68f003211a.gif) | ![333.gif](https://upload-images.jianshu.io/upload_images/57036-9a541148ce5bed2e.gif) | ![playmode.gif](https://upload-images.jianshu.io/upload_images/57036-d16c6ff34b08181c.gif) |
+| ![5.gif](https://upload-images.jianshu.io/upload_images/57036-eeaa9ea7399d90d5.gif) | ![4.gif](https://upload-images.jianshu.io/upload_images/57036-a9b1831b428993b0.gif) | ![3.gif](https://upload-images.jianshu.io/upload_images/57036-466fe782f7170a44.gif) |
 
 
 &nbsp;
@@ -232,6 +232,14 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
 }
 ```
+
+&nbsp;
+
+# Download
+
+即日起，可在 应用商店 下载体验！
+
+[![google-play1.png](https://upload-images.jianshu.io/upload_images/57036-f9dbd7810d38ae95.png)](https://www.coolapk.com/apk/247826) [![coolapk1.png](https://upload-images.jianshu.io/upload_images/57036-6cf24d0c9efe8362.png)](https://www.coolapk.com/apk/247826)
 
 &nbsp;
 

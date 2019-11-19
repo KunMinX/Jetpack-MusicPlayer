@@ -227,6 +227,14 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
 &nbsp;
 
+# Download
+
+From now on, you can download the experience in the app store!
+
+[![google-play1.png](https://upload-images.jianshu.io/upload_images/57036-f9dbd7810d38ae95.png)](https://www.coolapk.com/apk/247826) [![coolapk1.png](https://upload-images.jianshu.io/upload_images/57036-6cf24d0c9efe8362.png)](https://www.coolapk.com/apk/247826)
+
+&nbsp;
+
 # Thanks to
 
 [material-components-android](https://github.com/material-components/material-components-android)
