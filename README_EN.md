@@ -28,7 +28,7 @@ The goal of Jetpack-MusicPlayer is to access the Multimedia playback controller 
 In addition to one-line access and eliminating 99% of unnecessary, complex, and repetitive tasks, what extra you can get from this open source project include:
 
 1. Neat code style and standard resource naming conventions.
-2. **The best practice for writing third-party libraries by Jetpack MVVM architecture: Use LiveData with a singleton as the only trusted source to properly distribute the full application-wide playback state **to avoid unpredictable errors that occur in the context of software engineering**.
+2. **The best practice for writing third-party libraries by Jetpack MVVM architecture**: Use LiveData with a singleton as the only trusted source to properly distribute the full application-wide playback state **to avoid unpredictable errors that occur in the context of software engineering**.
 3. Excellent code layering and encapsulation ideas, one line of code can be accessed without any personalized configuration.
 4. The main project is based on the cutting-edge, software engineering security JetPack MVVM architecture.
 5. Full use of AndroidX and Material Design 2.
