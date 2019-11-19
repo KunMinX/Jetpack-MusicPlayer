@@ -16,7 +16,7 @@ In addition, Jetpack-MusicPlayer can be **extreme ran by only one line of code**
 
 |                          PureMusic                           |                      LiveData Dispatch                       |                        PlayMode Switch                       |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![333.gif](https://i.loli.net/2019/11/02/yMhiVuHngAwaCSf.gif) | ![3333.gif](https://i.loli.net/2019/11/02/YkJuRQmTDvniMoG.gif) | ![playmode.gif](![播放模式.gif](https://i.loli.net/2019/11/02/QxyAXYN7BtasGl8.gif)) |
+| ![333.gif](https://i.loli.net/2019/11/19/4h7Oa9IVQ85A3oP.gif) | ![3333.gif](https://i.loli.net/2019/11/19/u8BaOzGE1nHAvXj.gif) | ![playmode.gif](https://i.loli.net/2019/11/19/zivSDcRAPeFQBwd.gif) |
 
 
 &nbsp;
