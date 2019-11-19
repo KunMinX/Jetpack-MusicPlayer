@@ -53,8 +53,6 @@ public class MainActivity extends BaseActivity {
             if (nav.getCurrentDestination() != null && nav.getCurrentDestination().getId() != R.id.mainFragment) {
                 nav.navigateUp();
 
-                //TODO tip 6: ͬ tip 5.
-
             } else if (mBinding.dl != null && mBinding.dl.isDrawerOpen(GravityCompat.START)) {
                 mBinding.dl.closeDrawer(GravityCompat.START);
 
@@ -64,6 +62,11 @@ public class MainActivity extends BaseActivity {
         });
 
         mSharedViewModel.openOrCloseDrawer.observe(this, aBoolean -> {
+
+            //TODO bindingAdapter just working well once here
+
+//            mMainActivityViewModel.openDrawer.set(aBoolean);
+
             if (mBinding.dl != null) {
                 if (aBoolean && !mBinding.dl.isDrawerOpen(GravityCompat.START)) {
                     mBinding.dl.openDrawer(GravityCompat.START);
