@@ -37,6 +37,7 @@ import com.kunminx.puremusic.databinding.AdapterPlayItemBinding;
 import com.kunminx.puremusic.databinding.FragmentMainBinding;
 import com.kunminx.puremusic.player.PlayerManager;
 import com.kunminx.puremusic.ui.base.BaseFragment;
+import com.kunminx.puremusic.ui.helper.DrawerCoordinateHelper;
 
 /**
  * Create by KunMinX at 19/10/29
@@ -47,6 +48,7 @@ public class MainFragment extends BaseFragment {
     private MainViewModel mMainViewModel;
     private MusicRequestViewModel mMusicRequestViewModel;
     private SimpleBaseBindingAdapter<TestAlbum.TestMusic, AdapterPlayItemBinding> mAdapter;
+    private ClickProxy mClickProxy;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class MainFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         mBinding = FragmentMainBinding.bind(view);
-        mBinding.setClick(new ClickProxy());
+        mBinding.setClick(mClickProxy = new ClickProxy());
         mBinding.setVm(mMainViewModel);
         return view;
     }
@@ -112,6 +114,10 @@ public class MainFragment extends BaseFragment {
             mAdapter.setList(PlayerManager.getInstance().getAlbum().getMusics());
             mAdapter.notifyDataSetChanged();
         }
+
+        DrawerCoordinateHelper.getInstance().openDrawer.observe(this, aBoolean -> {
+            mSharedViewModel.openOrCloseDrawer.setValue(true);
+        });
     }
 
     public class ClickProxy {
