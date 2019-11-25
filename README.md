@@ -43,6 +43,12 @@ Jetpack-MusicPlayer 的目标是：**一行代码即可接入 音乐播放控制
 
 &nbsp;
 
+# Download
+
+[![google-play1.png](https://upload-images.jianshu.io/upload_images/57036-f9dbd7810d38ae95.png)](https://www.coolapk.com/apk/247826) [![coolapk1.png](https://upload-images.jianshu.io/upload_images/57036-6cf24d0c9efe8362.png)](https://www.coolapk.com/apk/247826)
+
+&nbsp;
+
 ### 简单使用：
 
 1.在 build.gradle 中添加对该库的依赖。
@@ -232,14 +238,6 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
 }
 ```
-
-&nbsp;
-
-# Download
-
-即日起，可在 应用商店 下载体验！
-
-[![google-play1.png](https://upload-images.jianshu.io/upload_images/57036-f9dbd7810d38ae95.png)](https://www.coolapk.com/apk/247826) [![coolapk1.png](https://upload-images.jianshu.io/upload_images/57036-6cf24d0c9efe8362.png)](https://www.coolapk.com/apk/247826)
 
 &nbsp;
 
