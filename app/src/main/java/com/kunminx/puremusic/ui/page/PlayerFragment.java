@@ -135,6 +135,8 @@ public class PlayerFragment extends BaseFragment {
                 } else {
                     mSharedViewModel.activityCanBeClosedDirectly.setValue(true);
                 }
+            } else {
+                mSharedViewModel.activityCanBeClosedDirectly.setValue(true);
             }
         });
 
