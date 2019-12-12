@@ -34,6 +34,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
+import com.kunminx.architecture.utils.ClickUtils;
 import com.kunminx.architecture.utils.Utils;
 import com.kunminx.puremusic.R;
 import com.kunminx.architecture.ui.adapter.CommonViewPagerAdapter;
@@ -163,5 +164,9 @@ public class AdapterBinding {
         webView.loadUrl(loadPage);
     }
 
+    @BindingAdapter(value = {"onClickWithDebouncing"}, requireAll = false)
+    public static void onClickWithDebouncing(View view, View.OnClickListener clickListener) {
+        ClickUtils.applySingleDebouncing(view, clickListener);
+    }
 
 }
