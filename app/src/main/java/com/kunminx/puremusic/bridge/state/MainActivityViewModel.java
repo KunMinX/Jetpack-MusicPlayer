@@ -16,7 +16,7 @@
 
 package com.kunminx.puremusic.bridge.state;
 
-import androidx.databinding.ObservableBoolean;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 /**
@@ -24,11 +24,11 @@ import androidx.lifecycle.ViewModel;
  */
 public class MainActivityViewModel extends ViewModel {
 
-    public final ObservableBoolean openDrawer = new ObservableBoolean();
+    public final MutableLiveData<Boolean> openDrawer = new MutableLiveData<>();
 
-    public final ObservableBoolean allowDrawerOpen = new ObservableBoolean();
+    public final MutableLiveData<Boolean> allowDrawerOpen = new MutableLiveData<>();
 
     {
-        allowDrawerOpen.set(true);
+        allowDrawerOpen.setValue(true);
     }
 }

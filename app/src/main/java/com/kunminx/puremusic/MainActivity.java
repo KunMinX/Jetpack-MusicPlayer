@@ -62,28 +62,11 @@ public class MainActivity extends BaseActivity {
         });
 
         mSharedViewModel.openOrCloseDrawer.observe(this, aBoolean -> {
-
-            //TODO bindingAdapter just working well once here
-
-//            mMainActivityViewModel.openDrawer.set(aBoolean);
-
-            if (mBinding.dl != null) {
-                if (aBoolean && !mBinding.dl.isDrawerOpen(GravityCompat.START)) {
-                    mBinding.dl.openDrawer(GravityCompat.START);
-                } else {
-                    mBinding.dl.closeDrawer(GravityCompat.START);
-                }
-            }
+            mMainActivityViewModel.openDrawer.setValue(aBoolean);
         });
 
-
         mSharedViewModel.enableSwipeDrawer.observe(this, aBoolean -> {
-
-            if (mBinding.dl != null) {
-                mBinding.dl.setDrawerLockMode(aBoolean
-                        ? DrawerLayout.LOCK_MODE_UNLOCKED
-                        : DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            }
+            mMainActivityViewModel.allowDrawerOpen.setValue(aBoolean);
         });
 
     }
