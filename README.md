@@ -4,6 +4,9 @@
 
 &nbsp;
 
+> ⚠️ 提示：本库的存在主要是为了提供 基于设计模式和 LiveData 实现的 软件工程安全的 音乐播放器的示例，欢迎就库中的封装思想学习和参考。
+考虑到库中使用的是原生的 MediaPlayer，存在不可预期的兼容性问题，请勿用于生产环境。
+
 ### 由来
 
 Jetpack-MusicPlayer 是一款基于 Jetpack MVVM 架构开发的 音乐播放控制组件，它是因 [“Jetpack-MVVM-Best-Practice”](https://github.com/KunMinX/Jetpack-MVVM-Best-Practice) 这个项目的需求而存在。
