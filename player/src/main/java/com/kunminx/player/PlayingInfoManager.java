@@ -126,6 +126,9 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     }
 
     public M getCurrentPlayingMusic() {
+        if (getPlayingList().isEmpty()) {
+            return null;
+        }
         return getPlayingList().get(mPlayIndex);
     }
 
