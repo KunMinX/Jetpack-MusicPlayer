@@ -52,7 +52,7 @@ Jetpack-MusicPlayer 的目标是：**一行代码即可接入 音乐播放控制
 
 &nbsp;
 
-如果你正在思考 [**如何为项目挑选合适的架构**](https://juejin.im/post/5dafc49b6fb9a04e17209922) 的话，这个项目值得你参考！
+如果你正在思考 [**如何为项目挑选合适的架构**](https://juejin.im/post/6846687603547176974) 的话，这个项目值得你参考！
 
 &nbsp;
 
@@ -70,43 +70,41 @@ Jetpack-MusicPlayer 的目标是：**一行代码即可接入 音乐播放控制
 implementation 'com.kunminx.player:player:1.1.6'
 ```
 
-2.依据默认的专辑实体类 `DefaultAlbum` 的结构准备一串数据（以下以  JSON 为例）。
+2.依据默认的专辑实体类 `DefaultAlbum` 的结构准备一串数据。
 
 ```java
 // DefaultAlbum 包含 DefaultMusic 和 DefaultArtist 两个子类：
 // 三者的字段可详见 BaseAlbumItem、BaseMusicItem 和 BaseArtistItem。
 ```
 
-```json
-{
-  "albumId": "001",
-  "title": "Cute",
-  "summary": "BenSound",
-  "artist": {
-    "name": "Linda"
-  },
-  "coverImg": "https://images.io/055ef18.png",
-  "musics": [
-    {
-      "musicId": "001",
-      "title": "Tomorrow",
-      "artist": {
-        "name": "Mike"
-      },
-      "coverImg": "https://images.io/055ef19.png",
-      "url": "https://bensound.com/sunny.mp3"
-    },
-    {
-      "musicId": "002",
-      "title": "Sunny",
-      "artist": {
-        "name": "Jackson"
-      },
-      "coverImg": "https://images.io/055ef20.png",
-      "url": "https://bensound.com/cute.mp3"
-    }
-  ]
-}
+```java
+
+//创建专辑实例
+DefaultAlbum album = new DefaultAlbum("001", "Cute", "BenSound");
+
+//为专辑添加作者
+List<DefaultArtist> artists = new ArrayList<>();
+artists.addArtists(new DefaultArtist("Linda"));
+album.setArtist(artists);
+
+//为专辑添加封面
+album.setCoverImg("https://images.io/055ef18.png");
+
+//创建音乐实例
+List<DefaultMusic> musics = new ArrayList<>();
+
+DefaultMusic music = new DefaultMusic("001", "Tomorrow", artists);
+music.setCoverImg("https://images.io/055ef19.png");
+music.setUrl("https://bensound.com/sunny.mp3");
+musics.add(music);
+
+DefaultMusic music1 = new DefaultMusic("002", "Sunny", artists);
+music1.setCoverImg("https://images.io/055ef20.png");
+music1.setUrl("https://bensound.com/cute.mp3");
+musics.add(music1);
+
+//将音乐添加到专辑
+album.setMusics(musics);
 
 ```
 
@@ -119,39 +117,42 @@ DefaultPlayerManager.getInstance().init(this);
 4.在得到数据后，最少只需一行代码 即可完成数据的装载。
 
 ```java
-DefaultAlbum album = gson.fromJson(...);
-
 //一行代码完成数据的初始化。
 DefaultPlayerManager.getInstance().loadAlbum(album);
 ```
 
 5.在视图控制器中 发送改变播放状态的请求，并接收来自 唯一可信源 统一分发的结果响应。
 
-```java
-// 1.在 任一视图控制器 的 任一处 发送请求
+5.1.在 任一视图控制器 的 任一处 发送请求，例如 此处请求了 播放下一首
 
-// 1.1.例如 此处请求了 播放下一首
+```java
 DefaultPlayerManager.getInstance().playNext();
 
 ```
 
+5.2.在 订阅了对应状态通知 的 视图控制器 中，收听来自 唯一可信源 推送的结果响应。
+
+5.2.1.例如 此处响应了 播放按钮状态 的推送
+
 ```java
-
-// 2.在 订阅了对应状态通知 的 视图控制器 中，收听来自 唯一可信源 推送的结果响应。
-
-// 2.1.例如 此处响应了 播放按钮状态 的推送
 DefaultPlayerManager.getInstance().pauseLiveData().observe(this, aBoolean -> {
     mPlayerViewModel.isPlaying.set(!aBoolean);
 });
+```
 
-// 2.2.例如 此处响应了 当前歌曲详细信息 的推送
+5.2.2.例如 此处响应了 当前歌曲详细信息 的推送
+
+```java
 DefaultPlayerManager.getInstance().changeMusicLiveData().observe(this, changeMusic -> {
     mPlayerViewModel.title.set(changeMusic.getTitle());
     mPlayerViewModel.artist.set(changeMusic.getSummary());
     mPlayerViewModel.coverImg.set(changeMusic.getImg());
 });
+```
 
-// 2.3.例如 此处响应了 当前歌曲播放进度 的推送
+5.2.3.例如 此处响应了 当前歌曲播放进度 的推送
+
+```java
 DefaultPlayerManager.getInstance().playingMusicLiveData().observe(this, playingMusic -> {
     mPlayerViewModel.maxSeekDuration.set(playingMusic.getDuration());
     mPlayerViewModel.currentSeekPosition.set(playingMusic.getPlayerPosition());
