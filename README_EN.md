@@ -53,44 +53,42 @@ If you are thinking about [**how to choose the right architecture for your proje
 implementation 'com.kunminx.player:player:1.1.6'
 ```
 
-2. Prepare a string of data according to the structure of the default album entity class `DefaultAlbum`. (The following is JSON as an example).
+2. Prepare a string of data according to the structure of the default album entity class `DefaultAlbum`.
 
 ```java
 // DefaultAlbum contains two subclasses, DefaultMusic and DefaultArtist:
 // The fields of the three are detailed in BaseAlbumItem, BaseMusicItem, and BaseArtistItem.
 ```
 
-```json
-{
-  "albumId": "001",
-  "title": "Cute",
-  "summary": "BenSound",
-  "artist": {
-    "name": "Linda"
-  },
-  "coverImg": "https://images.io/055ef18.png",
-  "musics": [
-    {
-      "musicId": "001",
-      "title": "Tomorrow",
-      "artist": {
-        "name": "Mike"
-      },
-      "coverImg": "https://images.io/055ef19.png",
-      "url": "https://bensound.com/sunny.mp3"
-    },
-    {
-      "musicId": "002",
-      "title": "Sunny",
-      "artist": {
-        "name": "Jackson"
-      },
-      "coverImg": "https://images.io/055ef20.png",
-      "url": "https://bensound.com/cute.mp3"
-    }
-  ]
-}
-    
+```java
+
+//create album entity
+DefaultAlbum album = new DefaultAlbum("001", "Cute", "BenSound");
+
+//add artist for album
+List<DefaultArtist> artists = new ArrayList<>();
+artists.addArtists(new DefaultArtist("Linda"));
+album.setArtist(artists);
+
+//add cover for album
+album.setCoverImg("https://images.io/055ef18.png");
+
+//create music entities
+List<DefaultMusic> musics = new ArrayList<>();
+
+DefaultMusic music = new DefaultMusic("001", "Tomorrow", artists);
+music.setCoverImg("https://images.io/055ef19.png");
+music.setUrl("https://bensound.com/sunny.mp3");
+musics.add(music);
+
+DefaultMusic music1 = new DefaultMusic("002", "Sunny", artists);
+music1.setCoverImg("https://images.io/055ef20.png");
+music1.setUrl("https://bensound.com/cute.mp3");
+musics.add(music1);
+
+//add music list for album
+album.setMusics(musics);
+
 ```
 
 3.Initialize the multimedia playback controll component in the Application class.
@@ -102,35 +100,40 @@ DefaultPlayerManager.getInstance().init(this);
 4.Once the data is available, the data can be initialized with a minimum of one line of code.
 
 ```java
-DefaultAlbum album = gson.fromJson(...);
-
-//One line of code completes the load of the data.
 DefaultPlayerManager.getInstance().loadAlbum(album);
 ```
 
 5.Sends a request to change the playback state in the View Controller, and receives a result response from a unique trusted source for unified distribution.
 
+5.1.Send a request anywhere in anywhere of the View Controller.For example, here is requested to play the next one.
+
 ```java
-// 1.Send a request anywhere in anywhere of the View Controller.
-
-// 1.1.For example, here is requested to play the next one.
 DefaultPlayerManager.getInstance().playNext();
+```
 
-// 2.Listen to the resulting response from a unique trusted source push in the view controller that is subscribed to the corresponding status notification.
+5.2.Listen to the resulting response from a unique trusted source push in the view controller that is subscribed to the corresponding status notification.
 
-// 2.1.For example, here is the push of the play button status.
+5.2.1.For example, here is the push of the play button status.
+
+```java
 DefaultPlayerManager.getInstance().pauseLiveData().observe(this, aBoolean -> {
     mPlayerViewModel.isPlaying.set(!aBoolean);
 });
+```
 
-// 2.2.For example, here is a push for the current song details.
+5.2.2.For example, here is a push for the current song details.
+
+```java
 DefaultPlayerManager.getInstance().changeMusicLiveData().observe(this, changeMusic -> {
     mPlayerViewModel.title.set(changeMusic.getTitle());
     mPlayerViewModel.artist.set(changeMusic.getSummary());
     mPlayerViewModel.coverImg.set(changeMusic.getImg());
 });
+```
 
-// 2.3.For example, here is a push that responds to the current song playback progress.
+5.2.3.For example, here is a push that responds to the current song playback progress.
+
+```java
 DefaultPlayerManager.getInstance().playingMusicLiveData().observe(this, playingMusic -> {
     mPlayerViewModel.maxSeekDuration.set(playingMusic.getDuration());
     mPlayerViewModel.currentSeekPosition.set(playingMusic.getPlayerPosition());
