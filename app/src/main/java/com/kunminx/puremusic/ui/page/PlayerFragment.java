@@ -109,10 +109,10 @@ public class PlayerFragment extends BaseFragment {
 
         PlayerManager.getInstance().getPlayModeLiveData().observe(this, anEnum -> {
             int tip = 0;
-            if (anEnum == PlayingInfoManager.RepeatMode.LIST_LOOP) {
+            if (anEnum == PlayingInfoManager.RepeatMode.LIST_CYCLE) {
                 mPlayerViewModel.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);
                 tip = R.string.play_repeat;
-            } else if (anEnum == PlayingInfoManager.RepeatMode.ONE_LOOP) {
+            } else if (anEnum == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) {
                 mPlayerViewModel.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT_ONCE);
                 tip = R.string.play_repeat_once;
             } else {

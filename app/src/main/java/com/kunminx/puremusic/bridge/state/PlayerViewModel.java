@@ -56,9 +56,9 @@ public class PlayerViewModel extends ViewModel {
         artist.set(Utils.getApp().getString(R.string.app_name));
         placeHolder.set(Utils.getApp().getResources().getDrawable(R.drawable.bg_album_default));
 
-        if (PlayerManager.getInstance().getRepeatMode() == PlayingInfoManager.RepeatMode.LIST_LOOP) {
+        if (PlayerManager.getInstance().getRepeatMode() == PlayingInfoManager.RepeatMode.LIST_CYCLE) {
             playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);
-        } else if (PlayerManager.getInstance().getRepeatMode() == PlayingInfoManager.RepeatMode.ONE_LOOP) {
+        } else if (PlayerManager.getInstance().getRepeatMode() == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) {
             playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT_ONCE);
         } else {
             playModeIcon.set(MaterialDrawableBuilder.IconValue.SHUFFLE);

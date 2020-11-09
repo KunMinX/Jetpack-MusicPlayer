@@ -16,7 +16,7 @@
 
 package com.kunminx.player.contract;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
 
 import com.kunminx.player.bean.dto.ChangeMusic;
 import com.kunminx.player.bean.dto.PlayingMusic;
@@ -26,12 +26,12 @@ import com.kunminx.player.bean.dto.PlayingMusic;
  */
 public interface ILiveDataNotifier {
 
-    MutableLiveData<ChangeMusic> getChangeMusicLiveData();
+    LiveData<ChangeMusic> getChangeMusicLiveData();
 
-    MutableLiveData<PlayingMusic> getPlayingMusicLiveData();
+    LiveData<PlayingMusic> getPlayingMusicLiveData();
 
-    MutableLiveData<Boolean> getPauseLiveData();
+    LiveData<Boolean> getPauseLiveData();
 
-    MutableLiveData<Enum> getPlayModeLiveData();
+    LiveData<Enum> getPlayModeLiveData();
 
 }

@@ -30,28 +30,19 @@ import java.util.List;
  */
 public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem> {
 
-    private static final String SP_NAME = "KunMinX_Music";
-    private static final String REPEAT_MODE = "REPEAT_MODE";
-    private static final String LAST_CHAPTER_INDEX = "LAST_CHAPTER_INDEX";
-    private static final String LAST_BOOK_DETAIL = "LAST_BOOK_DETAIL";
-
-/*    //单曲循环
-    public static final int ONE_LOOP = 1 << 1;
-    //列表循环
-    public static final int LIST_LOOP = 1 << 2;
-    //随机播放
-    public static final int RANDOM = 1 << 3;*/
-
-    //播放使用的当前章节 index
+    //index of current playing which maybe Shuffled
     private int mPlayIndex = 0;
-    //列表展示的当前章节 index
+
+    //index of current playing which user see in the list
     private int mAlbumIndex = 0;
 
     //循环模式
     private Enum mRepeatMode;
 
     public enum RepeatMode {
-        ONE_LOOP, LIST_LOOP, RANDOM
+        SINGLE_CYCLE,
+        LIST_CYCLE,
+        RANDOM
     }
 
     //原始列表
@@ -65,20 +56,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
 
 
     public void init(Context context) {
-        /*SharedPreferences sp = context.getSharedPreferences(
-                SP_NAME, Context.MODE_PRIVATE);
 
-        String musicAlbum = sp.getString(LAST_BOOK_DETAIL, "");
-        mPlayIndex = sp.getInt(LAST_CHAPTER_INDEX, 0);
-        mRepeatMode = sp.getInt(REPEAT_MODE, LIST_LOOP);
-        if (!TextUtils.isEmpty(musicAlbum)) {
-            Gson gson = new Gson();
-            Type genType = getClass().getSuperclass();
-            Type type = ((ParameterizedType) genType).getActualTypeArguments()[0];
-            M data = gson.fromJson(musicAlbum, type);
-            setMusicAlbum(data);
-            mAlbumIndex = mOriginPlayingList.indexOf(getCurrentPlayingMusic());
-        }*/
     }
 
     public boolean isInited() {
@@ -92,12 +70,12 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     }
 
     public Enum changeMode() {
-        if (mRepeatMode == RepeatMode.LIST_LOOP) {
-            mRepeatMode = RepeatMode.ONE_LOOP;
-        } else if (mRepeatMode == RepeatMode.ONE_LOOP) {
+        if (mRepeatMode == RepeatMode.LIST_CYCLE) {
+            mRepeatMode = RepeatMode.SINGLE_CYCLE;
+        } else if (mRepeatMode == RepeatMode.SINGLE_CYCLE) {
             mRepeatMode = RepeatMode.RANDOM;
         } else {
-            mRepeatMode = RepeatMode.LIST_LOOP;
+            mRepeatMode = RepeatMode.LIST_CYCLE;
         }
         return mRepeatMode;
     }
@@ -168,12 +146,6 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     }
 
     public void saveRecords(Context context) {
-        /*Gson gson = new Gson();
 
-        SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
-
-        sp.edit().putString(LAST_BOOK_DETAIL, gson.toJson(mMusicAlbum)).apply();
-        sp.edit().putInt(LAST_CHAPTER_INDEX, mPlayIndex).apply();
-        sp.edit().putInt(REPEAT_MODE, mRepeatMode).apply();*/
     }
 }

@@ -18,6 +18,7 @@ package com.kunminx.player;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.kunminx.player.bean.DefaultAlbum;
@@ -158,21 +159,21 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
         return mController.getAlbumIndex();
     }
 
-    public MutableLiveData<ChangeMusic> getChangeMusicLiveData() {
+    public LiveData<ChangeMusic> getChangeMusicLiveData() {
         return mController.getChangeMusicLiveData();
     }
 
-    public MutableLiveData<PlayingMusic> getPlayingMusicLiveData() {
+    public LiveData<PlayingMusic> getPlayingMusicLiveData() {
         return mController.getPlayingMusicLiveData();
     }
 
-    public MutableLiveData<Boolean> getPauseLiveData() {
+    public LiveData<Boolean> getPauseLiveData() {
         return mController.getPauseLiveData();
     }
 
 
     @Override
-    public MutableLiveData<Enum> getPlayModeLiveData() {
+    public LiveData<Enum> getPlayModeLiveData() {
         return mController.getPlayModeLiveData();
     }
 

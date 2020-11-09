@@ -20,6 +20,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -171,7 +172,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                         if (mCurrentPlay.getAllTime().equals(mCurrentPlay.getNowTime())
                                 //容许两秒内的误差，有的内容它就是会差那么 1 秒
                                 || duration / 1000 - position / 1000 < 2) {
-                            if (getRepeatMode() == PlayingInfoManager.RepeatMode.ONE_LOOP) {
+                            if (getRepeatMode() == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) {
                                 playAgain(context);
                             } else {
                                 playNext(context);
@@ -298,19 +299,19 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         return mPlayingInfoManager.getAlbumIndex();
     }
 
-    public MutableLiveData<ChangeMusic> getChangeMusicLiveData() {
+    public LiveData<ChangeMusic> getChangeMusicLiveData() {
         return changeMusicLiveData;
     }
 
-    public MutableLiveData<PlayingMusic> getPlayingMusicLiveData() {
+    public LiveData<PlayingMusic> getPlayingMusicLiveData() {
         return playingMusicLiveData;
     }
 
-    public MutableLiveData<Boolean> getPauseLiveData() {
+    public LiveData<Boolean> getPauseLiveData() {
         return pauseLiveData;
     }
 
-    public MutableLiveData<Enum> getPlayModeLiveData() {
+    public LiveData<Enum> getPlayModeLiveData() {
         return playModeLiveData;
     }
 

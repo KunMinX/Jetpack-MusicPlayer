@@ -21,6 +21,8 @@ import com.kunminx.player.bean.base.BaseArtistItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
 
 /**
+ * provide music info when music changed
+ *
  * Create by KunMinX at 18/9/24
  */
 public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A extends BaseArtistItem> {
