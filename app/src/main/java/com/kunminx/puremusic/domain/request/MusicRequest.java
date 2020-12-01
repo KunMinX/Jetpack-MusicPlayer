@@ -30,7 +30,7 @@ import com.kunminx.puremusic.data.repository.DataRepository;
  */
 public class MusicRequest extends BaseRequest {
 
-    private MutableLiveData<DataResult<TestAlbum>> mFreeMusicsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<DataResult<TestAlbum>> mFreeMusicsLiveData = new MutableLiveData<>();
 
     public LiveData<DataResult<TestAlbum>> getFreeMusicsLiveData() {
         return mFreeMusicsLiveData;
