@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 KunMinX
+ * Copyright 2018-present KunMinX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,90 +16,58 @@
 
 package com.kunminx.puremusic.ui.page;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.kunminx.architecture.ui.adapter.SimpleBaseBindingAdapter;
+import com.kunminx.architecture.ui.page.BaseFragment;
+import com.kunminx.architecture.ui.page.DataBindingConfig;
+import com.kunminx.puremusic.BR;
 import com.kunminx.puremusic.R;
-import com.kunminx.puremusic.bridge.request.MusicRequestViewModel;
-import com.kunminx.puremusic.bridge.state.MainViewModel;
 import com.kunminx.puremusic.data.bean.TestAlbum;
-import com.kunminx.puremusic.databinding.AdapterPlayItemBinding;
-import com.kunminx.puremusic.databinding.FragmentMainBinding;
 import com.kunminx.puremusic.player.PlayerManager;
-import com.kunminx.puremusic.ui.base.BaseFragment;
-import com.kunminx.puremusic.ui.helper.DrawerCoordinateHelper;
+import com.kunminx.puremusic.ui.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.page.adapter.PlaylistAdapter;
+import com.kunminx.puremusic.ui.state.MainViewModel;
 
 /**
  * Create by KunMinX at 19/10/29
  */
 public class MainFragment extends BaseFragment {
 
-    private FragmentMainBinding mBinding;
-    private MainViewModel mMainViewModel;
-    private MusicRequestViewModel mMusicRequestViewModel;
-    private SimpleBaseBindingAdapter<TestAlbum.TestMusic, AdapterPlayItemBinding> mAdapter;
-    private ClickProxy mClickProxy;
+    private MainViewModel mState;
+    private SharedViewModel mPageCallback;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        mMusicRequestViewModel = ViewModelProviders.of(this).get(MusicRequestViewModel.class);
+    protected void initViewModel() {
+        mState = getFragmentScopeViewModel(MainViewModel.class);
+        mPageCallback = getApplicationScopeViewModel(SharedViewModel.class);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        mBinding = FragmentMainBinding.bind(view);
-        mBinding.setClick(mClickProxy = new ClickProxy());
-        mBinding.setVm(mMainViewModel);
-        return view;
+    protected DataBindingConfig getDataBindingConfig() {
+        return new DataBindingConfig(R.layout.fragment_main, BR.vm, mState)
+                .addBindingParam(BR.click, new ClickProxy())
+                .addBindingParam(BR.adapter, new PlaylistAdapter(getContext()));
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mMainViewModel.initTabAndPage.set(true);
-
-        mMainViewModel.pageAssetPath.set("summary.html");
-
-        mAdapter = new SimpleBaseBindingAdapter<TestAlbum.TestMusic, AdapterPlayItemBinding>(getContext(), R.layout.adapter_play_item) {
-            @Override
-            protected void onSimpleBindItem(AdapterPlayItemBinding binding, TestAlbum.TestMusic item, RecyclerView.ViewHolder holder) {
-                binding.tvTitle.setText(item.getTitle());
-                binding.tvArtist.setText(item.getArtist().getName());
-                Glide.with(binding.ivCover.getContext()).load(item.getCoverImg()).into(binding.ivCover);
-                int currentIndex = PlayerManager.getInstance().getAlbumIndex();
-                binding.ivPlayStatus.setColor(currentIndex == holder.getAdapterPosition()
-                        ? getResources().getColor(R.color.gray) : Color.TRANSPARENT);
-                binding.getRoot().setOnClickListener(v -> {
-                    PlayerManager.getInstance().playAudio(holder.getAdapterPosition());
-                });
-            }
-        };
-
-        mBinding.rv.setAdapter(mAdapter);
-
-        PlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
-            mAdapter.notifyDataSetChanged();
+        PlayerManager.getInstance().getChangeMusicLiveData().observe(getViewLifecycleOwner(), changeMusic -> {
+            mState.notifyCurrentListChanged.setValue(true);
         });
 
-        mMusicRequestViewModel.getFreeMusicsLiveData().observe(this, musicAlbum -> {
+        mState.musicRequest.getFreeMusicsLiveData().observe(getViewLifecycleOwner(), dataResult -> {
+            if (!dataResult.getResultState().isSuccess()) return;
+
+            TestAlbum musicAlbum = dataResult.getResult();
+
             if (musicAlbum != null && musicAlbum.getMusics() != null) {
-                mAdapter.setList(musicAlbum.getMusics());
-                mAdapter.notifyDataSetChanged();
+                mState.list.setValue(musicAlbum.getMusics());
 
                 if (PlayerManager.getInstance().getAlbum() == null ||
                         !PlayerManager.getInstance().getAlbum().getAlbumId().equals(musicAlbum.getAlbumId())) {
@@ -109,26 +77,24 @@ public class MainFragment extends BaseFragment {
         });
 
         if (PlayerManager.getInstance().getAlbum() == null) {
-            mMusicRequestViewModel.requestFreeMusics();
+            mState.musicRequest.requestFreeMusics();
         } else {
-            mAdapter.setList(PlayerManager.getInstance().getAlbum().getMusics());
-            mAdapter.notifyDataSetChanged();
+            mState.list.setValue(PlayerManager.getInstance().getAlbum().getMusics());
         }
-
-        DrawerCoordinateHelper.getInstance().openDrawer.observe(this, aBoolean -> {
-            mSharedViewModel.openOrCloseDrawer.setValue(true);
-        });
     }
 
     public class ClickProxy {
 
         public void openMenu() {
-            mSharedViewModel.openOrCloseDrawer.setValue(true);
+            mPageCallback.requestToOpenOrCloseDrawer(true);
+        }
+
+        public void login() {
         }
 
         public void search() {
-            nav().navigate(R.id.action_mainFragment_to_searchFragment);
         }
+
     }
 
 }

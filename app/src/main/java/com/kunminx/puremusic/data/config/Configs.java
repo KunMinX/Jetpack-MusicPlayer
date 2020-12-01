@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 KunMinX
+ * Copyright 2018-present KunMinX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.kunminx.puremusic.data.config;
 
+import android.os.Environment;
+
 import com.kunminx.architecture.utils.Utils;
 
 /**
@@ -23,9 +25,8 @@ import com.kunminx.architecture.utils.Utils;
  */
 public class Configs {
 
-    public static String CACHE_PATH = Utils.getApp().getCacheDir().getAbsolutePath();
+    public static final String COVER_PATH = Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
 
-    public static String MUSIC_DOWNLOAD_PATH = CACHE_PATH + "/";
-
+    public static final String TOKEN = "token";
 
 }

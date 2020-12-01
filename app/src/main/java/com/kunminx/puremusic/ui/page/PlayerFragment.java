@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 KunMinX
+ * Copyright 2018-present KunMinX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,22 @@
 package com.kunminx.puremusic.ui.page;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProviders;
 
+import com.kunminx.architecture.ui.page.BaseFragment;
+import com.kunminx.architecture.ui.page.DataBindingConfig;
 import com.kunminx.player.PlayingInfoManager;
+import com.kunminx.puremusic.BR;
 import com.kunminx.puremusic.R;
-import com.kunminx.puremusic.bridge.callback.SharedViewModel;
-import com.kunminx.puremusic.bridge.state.PlayerViewModel;
 import com.kunminx.puremusic.databinding.FragmentPlayerBinding;
 import com.kunminx.puremusic.player.PlayerManager;
-import com.kunminx.puremusic.ui.base.BaseFragment;
+import com.kunminx.puremusic.ui.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.helper.DrawerCoordinateHelper;
+import com.kunminx.puremusic.ui.state.PlayerViewModel;
 import com.kunminx.puremusic.ui.view.PlayerSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -43,34 +43,30 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
  */
 public class PlayerFragment extends BaseFragment {
 
-    private FragmentPlayerBinding mBinding;
-    private PlayerViewModel mPlayerViewModel;
+    private PlayerViewModel mState;
+    private SharedViewModel mPageCallback;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPlayerViewModel = ViewModelProviders.of(this).get(PlayerViewModel.class);
+    protected void initViewModel() {
+        mState = getFragmentScopeViewModel(PlayerViewModel.class);
+        mPageCallback = getApplicationScopeViewModel(SharedViewModel.class);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_player, container, false);
-
-        mBinding = FragmentPlayerBinding.bind(view);
-        mBinding.setClick(new ClickProxy());
-        mBinding.setVm(mPlayerViewModel);
-        return view;
+    protected DataBindingConfig getDataBindingConfig() {
+        return new DataBindingConfig(R.layout.fragment_player, BR.vm, mState)
+                .addBindingParam(BR.click, new ClickProxy())
+                .addBindingParam(BR.event, new EventHandler());
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSharedViewModel.timeToAddSlideListener.observe(this, aBoolean -> {
+        mPageCallback.isToAddSlideListener().observeInFragment(this, aBoolean -> {
             if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
                 SlidingUpPanelLayout sliding = (SlidingUpPanelLayout) view.getParent().getParent();
-                sliding.addPanelSlideListener(new PlayerSlideListener(mBinding, sliding));
+                sliding.addPanelSlideListener(new PlayerSlideListener((FragmentPlayerBinding) getBinding(), sliding));
                 sliding.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
                     @Override
                     public void onPanelSlide(View view, float v) {
@@ -81,42 +77,40 @@ public class PlayerFragment extends BaseFragment {
                     public void onPanelStateChanged(View view, SlidingUpPanelLayout.PanelState panelState,
                                                     SlidingUpPanelLayout.PanelState panelState1) {
 
-                        if (panelState1 == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                            SharedViewModel.tagOfSecondaryPages.add(this.getClass().getSimpleName());
-                        } else {
-                            SharedViewModel.tagOfSecondaryPages.remove(this.getClass().getSimpleName());
-                        }
-                        mSharedViewModel.enableSwipeDrawer.setValue(SharedViewModel.tagOfSecondaryPages.size() == 0);
+                        DrawerCoordinateHelper.getInstance().requestToUpdateDrawerMode(
+                                panelState1 == SlidingUpPanelLayout.PanelState.EXPANDED,
+                                this.getClass().getSimpleName()
+                        );
                     }
                 });
             }
         });
 
-        PlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
-            mPlayerViewModel.title.set(changeMusic.getTitle());
-            mPlayerViewModel.artist.set(changeMusic.getSummary());
-            mPlayerViewModel.coverImg.set(changeMusic.getImg());
+        PlayerManager.getInstance().getChangeMusicLiveData().observe(getViewLifecycleOwner(), changeMusic -> {
+            mState.title.set(changeMusic.getTitle());
+            mState.artist.set(changeMusic.getSummary());
+            mState.coverImg.set(changeMusic.getImg());
         });
 
-        PlayerManager.getInstance().getPlayingMusicLiveData().observe(this, playingMusic -> {
-            mPlayerViewModel.maxSeekDuration.set(playingMusic.getDuration());
-            mPlayerViewModel.currentSeekPosition.set(playingMusic.getPlayerPosition());
+        PlayerManager.getInstance().getPlayingMusicLiveData().observe(getViewLifecycleOwner(), playingMusic -> {
+            mState.maxSeekDuration.set(playingMusic.getDuration());
+            mState.currentSeekPosition.set(playingMusic.getPlayerPosition());
         });
 
-        PlayerManager.getInstance().getPauseLiveData().observe(this, aBoolean -> {
-            mPlayerViewModel.isPlaying.set(!aBoolean);
+        PlayerManager.getInstance().getPauseLiveData().observe(getViewLifecycleOwner(), aBoolean -> {
+            mState.isPlaying.set(!aBoolean);
         });
 
-        PlayerManager.getInstance().getPlayModeLiveData().observe(this, anEnum -> {
-            int tip = 0;
+        PlayerManager.getInstance().getPlayModeLiveData().observe(getViewLifecycleOwner(), anEnum -> {
+            int tip;
             if (anEnum == PlayingInfoManager.RepeatMode.LIST_CYCLE) {
-                mPlayerViewModel.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);
+                mState.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);
                 tip = R.string.play_repeat;
             } else if (anEnum == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) {
-                mPlayerViewModel.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT_ONCE);
+                mState.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT_ONCE);
                 tip = R.string.play_repeat_once;
             } else {
-                mPlayerViewModel.playModeIcon.set(MaterialDrawableBuilder.IconValue.SHUFFLE);
+                mState.playModeIcon.set(MaterialDrawableBuilder.IconValue.SHUFFLE);
                 tip = R.string.play_shuffle;
             }
             if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
@@ -127,23 +121,25 @@ public class PlayerFragment extends BaseFragment {
             }
         });
 
-        mSharedViewModel.closeSlidePanelIfExpanded.observe(this, aBoolean -> {
+        mPageCallback.isToCloseSlidePanelIfExpanded().observeInFragment(this, aBoolean -> {
+
             if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
+
                 SlidingUpPanelLayout sliding = (SlidingUpPanelLayout) view.getParent().getParent();
+
                 if (sliding.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     sliding.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 } else {
-                    mSharedViewModel.activityCanBeClosedDirectly.setValue(true);
+                    mPageCallback.requestToCloseActivityIfAllowed(true);
                 }
             } else {
-                mSharedViewModel.activityCanBeClosedDirectly.setValue(true);
+                mPageCallback.requestToCloseActivityIfAllowed(true);
             }
         });
 
-
     }
 
-    public class ClickProxy implements SeekBar.OnSeekBarChangeListener {
+    public class ClickProxy {
 
         public void playMode() {
             PlayerManager.getInstance().changeMode();
@@ -166,11 +162,14 @@ public class PlayerFragment extends BaseFragment {
         }
 
         public void slideDown() {
-            mSharedViewModel.closeSlidePanelIfExpanded.setValue(true);
+            mPageCallback.requestToCloseSlidePanelIfExpanded(true);
         }
 
         public void more() {
         }
+    }
+
+    public static class EventHandler implements SeekBar.OnSeekBarChangeListener {
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

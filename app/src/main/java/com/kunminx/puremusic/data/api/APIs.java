@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 KunMinX
+ * Copyright 2018-present KunMinX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,10 @@ package com.kunminx.puremusic.data.api;
 /**
  * Create by KunMinX at 19/10/29
  */
+@SuppressWarnings("unused")
 public class APIs {
 
-    // TODO - tip：为保护资源方的权益，已对 APIs 的内容做了删除：
+    // TODO - tip 1：为保护资源方的权益，已对 APIs 的内容做了删除：
 
     public final static String SEARCH_SONG = "xxxxx";
 

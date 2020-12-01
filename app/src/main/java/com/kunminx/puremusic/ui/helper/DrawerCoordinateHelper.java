@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 KunMinX
+ * Copyright 2018-present KunMinX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,96 +16,63 @@
 
 package com.kunminx.puremusic.ui.helper;
 
-import android.view.MotionEvent;
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.kunminx.architecture.bridge.callback.UnPeekLiveData;
-import com.kunminx.puremusic.bridge.callback.SharedViewModel;
-import com.kunminx.puremusic.ui.base.BaseFragment;
+import com.kunminx.architecture.ui.callback.ProtectedUnPeekLiveData;
+import com.kunminx.architecture.ui.callback.UnPeekLiveData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * TODO tip：通过 Lifecycle 来解决抽屉侧滑禁用与否的判断的 一致性问题，
- * <p>
- * 每个需要注册和监听生命周期来判断的视图控制器，无需在各自内部手动书写解绑等操作。
- * 如果这样说还不理解，详见 https://xiaozhuanlan.com/topic/3684721950
- * <p>
  * Create by KunMinX at 19/11/3
  */
-public class DrawerCoordinateHelper implements DefaultLifecycleObserver, View.OnTouchListener {
+public class DrawerCoordinateHelper implements DefaultLifecycleObserver {
 
-    private float downX;
-    private float downY;
-
-    public final UnPeekLiveData<Boolean> openDrawer = new UnPeekLiveData<>();
-
-    private static DrawerCoordinateHelper sHelper = new DrawerCoordinateHelper();
-
-    public static DrawerCoordinateHelper getInstance() {
-        return sHelper;
-    }
+    private static final DrawerCoordinateHelper S_HELPER = new DrawerCoordinateHelper();
 
     private DrawerCoordinateHelper() {
+    }
+
+    public static DrawerCoordinateHelper getInstance() {
+        return S_HELPER;
+    }
+
+    private final List<String> tagOfSecondaryPages = new ArrayList<>();
+
+    private final UnPeekLiveData<Boolean> enableSwipeDrawer = new UnPeekLiveData<>();
+
+    public ProtectedUnPeekLiveData<Boolean> isEnableSwipeDrawer() {
+        return enableSwipeDrawer;
+    }
+
+    public void requestToUpdateDrawerMode(boolean pageOpened, String pageName) {
+        if (pageOpened) {
+            tagOfSecondaryPages.add(pageName);
+        } else {
+            tagOfSecondaryPages.remove(pageName);
+        }
+        enableSwipeDrawer.setValue(tagOfSecondaryPages.size() == 0);
     }
 
     @Override
     public void onCreate(@NonNull LifecycleOwner owner) {
 
-        SharedViewModel.tagOfSecondaryPages.add(owner.getClass().getSimpleName());
+        tagOfSecondaryPages.add(owner.getClass().getSimpleName());
 
-        ((BaseFragment) owner).getSharedViewModel()
-                .enableSwipeDrawer.setValue(SharedViewModel.tagOfSecondaryPages.size() == 0);
+        enableSwipeDrawer.setValue(tagOfSecondaryPages.size() == 0);
+
     }
 
     @Override
     public void onDestroy(@NonNull LifecycleOwner owner) {
 
-        SharedViewModel.tagOfSecondaryPages.remove(owner.getClass().getSimpleName());
+        tagOfSecondaryPages.remove(owner.getClass().getSimpleName());
 
-        ((BaseFragment) owner).getSharedViewModel()
-                .enableSwipeDrawer.setValue(SharedViewModel.tagOfSecondaryPages.size() == 0);
+        enableSwipeDrawer.setValue(tagOfSecondaryPages.size() == 0);
+
     }
 
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                downX = x;
-                downY = y;
-                break;
-            case MotionEvent.ACTION_UP:
-                float dx = x - downX;
-                float dy = y - downY;
-                if (Math.abs(dx) > 8 && Math.abs(dy) > 8) {
-                    int orientation = getOrientation(dx, dy);
-                    switch (orientation) {
-                        case 'r':
-                            openDrawer.setValue(true);
-                            break;
-                        case 'l':
-                            break;
-                        case 't':
-                            break;
-                        case 'b':
-                            break;
-                    }
-                }
-                break;
-        }
-        return false;
-    }
-
-    private int getOrientation(float dx, float dy) {
-        if (Math.abs(dx) > Math.abs(dy)) {
-            return dx > 0 ? 'r' : 'l';
-        } else {
-            return dy > 0 ? 'b' : 't';
-        }
-    }
 }

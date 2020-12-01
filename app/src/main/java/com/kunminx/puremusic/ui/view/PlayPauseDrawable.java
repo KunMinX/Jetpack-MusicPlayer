@@ -1,19 +1,3 @@
-/*
- * Copyright 2018-2019 KunMinX
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.kunminx.puremusic.ui.view;
 
 import android.animation.Animator;
@@ -64,10 +48,6 @@ public class PlayPauseDrawable extends Drawable {
     private float mProgress;
     private boolean mIsPlay;
 
-    public void setmIsPlay(boolean mIsPlay) {
-        this.mIsPlay = mIsPlay;
-    }
-
     public PlayPauseDrawable(Context context) {
         final Resources res = context.getResources();
         mPaint.setAntiAlias(true);
@@ -80,6 +60,17 @@ public class PlayPauseDrawable extends Drawable {
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(color);
+    }
+
+    /**
+     * Linear interpolate between a and b with parameter t.
+     */
+    private static float lerp(float a, float b, float t) {
+        return a + (b - a) * t;
+    }
+
+    public void setIsPlay(boolean isPlay) {
+        this.mIsPlay = isPlay;
     }
 
     @Override
@@ -166,13 +157,13 @@ public class PlayPauseDrawable extends Drawable {
         return mIsPlay;
     }
 
+    private float getProgress() {
+        return mProgress;
+    }
+
     private void setProgress(float progress) {
         mProgress = progress;
         invalidateSelf();
-    }
-
-    private float getProgress() {
-        return mProgress;
     }
 
     @Override
@@ -195,12 +186,5 @@ public class PlayPauseDrawable extends Drawable {
     @Override
     public int getOpacity() {
         return PixelFormat.TRANSLUCENT;
-    }
-
-    /**
-     * Linear interpolate between a and b with parameter t.
-     */
-    private static float lerp(float a, float b, float t) {
-        return a + (b - a) * t;
     }
 }

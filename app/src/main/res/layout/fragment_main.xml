@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2018-2019 KunMinX
+  ~ Copyright 2018-present KunMinX
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -26,7 +26,11 @@
 
         <variable
             name="vm"
-            type="com.kunminx.puremusic.bridge.state.MainViewModel" />
+            type="com.kunminx.puremusic.ui.state.MainViewModel" />
+
+        <variable
+            name="adapter"
+            type="androidx.recyclerview.widget.ListAdapter" />
 
     </data>
 
@@ -47,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="275dp"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
+                app:contentScrim="@color/transparent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -72,38 +76,34 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp">
 
-                    <net.steamcrafted.materialiconlib.MaterialIconView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_menu"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_marginStart="12dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:onClick="@{()->click.openMenu()}"
-                        android:scaleType="center"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_menu_black_48dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:materialIcon="menu"
-                        app:materialIconColor="@color/gray"
-                        app:materialIconSize="24dp" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <net.steamcrafted.materialiconlib.MaterialIconView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_icon"
-                        onClickWithDebouncing="@{()->click.search()}"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        onClickWithDebouncing="@{()->click.login()}"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:scaleType="center"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_music_note_black_48dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toLeftOf="@+id/tv_app"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:materialIcon="music_note"
-                        app:materialIconColor="@color/gray"
-                        app:materialIconSize="24dp" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_app"
-                        onClickWithDebouncing="@{()->click.search()}"
+                        onClickWithDebouncing="@{()->click.login()}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/app_name"
@@ -114,20 +114,18 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <net.steamcrafted.materialiconlib.MaterialIconView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_search"
                         onClickWithDebouncing="@{()->click.search()}"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_marginEnd="12dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:scaleType="center"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_search_black_48dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:materialIcon="magnify"
-                        app:materialIconColor="@color/gray"
-                        app:materialIconSize="24dp" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -168,6 +166,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv"
+                adapter="@{adapter}"
+                notifyCurrentListChanged="@{vm.notifyCurrentListChanged}"
+                submitList="@{vm.list}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"

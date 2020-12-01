@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 KunMinX
+ * Copyright 2018-present KunMinX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,100 +16,66 @@
 
 package com.kunminx.puremusic.ui.page;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.kunminx.architecture.ui.adapter.SimpleBaseBindingAdapter;
+import com.kunminx.architecture.ui.page.BaseFragment;
+import com.kunminx.architecture.ui.page.DataBindingConfig;
+import com.kunminx.puremusic.BR;
 import com.kunminx.puremusic.R;
-import com.kunminx.puremusic.bridge.request.InfoRequestViewModel;
-import com.kunminx.puremusic.bridge.state.DrawerViewModel;
-import com.kunminx.puremusic.data.bean.LibraryInfo;
-import com.kunminx.puremusic.databinding.AdapterLibraryBinding;
-import com.kunminx.puremusic.databinding.FragmentDrawerBinding;
-import com.kunminx.puremusic.ui.base.BaseFragment;
+import com.kunminx.puremusic.ui.page.adapter.DrawerAdapter;
+import com.kunminx.puremusic.ui.state.DrawerViewModel;
 
 /**
  * Create by KunMinX at 19/10/29
  */
 public class DrawerFragment extends BaseFragment {
 
-    private FragmentDrawerBinding mBinding;
-    private DrawerViewModel mDrawerViewModel;
-    private InfoRequestViewModel mInfoRequestViewModel;
-    private SimpleBaseBindingAdapter<LibraryInfo, AdapterLibraryBinding> mAdapter;
+    private DrawerViewModel mState;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mInfoRequestViewModel = ViewModelProviders.of(this).get(InfoRequestViewModel.class);
-        mDrawerViewModel = ViewModelProviders.of(this).get(DrawerViewModel.class);
+    protected void initViewModel() {
+        mState = getFragmentScopeViewModel(DrawerViewModel.class);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_drawer, container, false);
-        mBinding = FragmentDrawerBinding.bind(view);
-        mBinding.setVm(mDrawerViewModel);
-        mBinding.setClick(new ClickProxy());
-        return view;
+    protected DataBindingConfig getDataBindingConfig() {
+        return new DataBindingConfig(R.layout.fragment_drawer, BR.vm, mState)
+                .addBindingParam(BR.click, new ClickProxy())
+                .addBindingParam(BR.adapter, new DrawerAdapter(getContext()));
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mAdapter = new SimpleBaseBindingAdapter<LibraryInfo, AdapterLibraryBinding>(getContext(), R.layout.adapter_library) {
-            @Override
-            protected void onSimpleBindItem(AdapterLibraryBinding binding, LibraryInfo item, RecyclerView.ViewHolder holder) {
-                binding.tvTitle.setText(item.getTitle());
-                binding.tvSummary.setText(item.getSummary());
-                binding.getRoot().setOnClickListener(v -> {
-                    Uri uri = Uri.parse(item.getUrl());
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivity(intent);
-                });
-            }
-        };
+        mState.infoRequest.getLibraryLiveData().observe(getViewLifecycleOwner(), dataResult -> {
+            if (!dataResult.getResultState().isSuccess()) return;
 
-        mBinding.rv.setAdapter(mAdapter);
-
-        mInfoRequestViewModel.getLibraryLiveData().observe(this, libraryInfos -> {
-            mInitDataCame = true;
-            if (mAnimationLoaded && libraryInfos != null) {
-                mAdapter.setList(libraryInfos);
-                mAdapter.notifyDataSetChanged();
+            if (mAnimationLoaded && dataResult.getResult() != null) {
+                mState.list.setValue(dataResult.getResult());
             }
         });
 
-        mInfoRequestViewModel.requestLibraryInfo();
+        mState.infoRequest.requestLibraryInfo();
     }
 
     @Override
     public void loadInitData() {
         super.loadInitData();
-        if (mInfoRequestViewModel.getLibraryLiveData().getValue() != null) {
-            mAdapter.setList(mInfoRequestViewModel.getLibraryLiveData().getValue());
-            mAdapter.notifyDataSetChanged();
+        if (mState.infoRequest.getLibraryLiveData().getValue() != null
+                && mState.infoRequest.getLibraryLiveData().getValue().getResult() != null) {
+            mState.list.setValue(mState.infoRequest.getLibraryLiveData().getValue().getResult());
         }
     }
 
     public class ClickProxy {
 
         public void logoClick() {
-            String u = "https://github.com/KunMinX/Jetpack-MVVM-Best-Practice";
-            Uri uri = Uri.parse(u);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
+            openUrlInBrowser(getString(R.string.github_project));
         }
     }
 

@@ -7,13 +7,18 @@
 
         <variable
             name="vm"
-            type="com.kunminx.puremusic.bridge.state.MainActivityViewModel" />
+            type="com.kunminx.puremusic.ui.state.MainActivityViewModel" />
+
+        <variable
+            name="event"
+            type="com.kunminx.puremusic.MainActivity.EventHandler" />
 
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/dl"
         allowDrawerOpen="@{vm.allowDrawerOpen}"
+        bindDrawerListener="@{event}"
         isOpenDrawer="@{vm.openDrawer}"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

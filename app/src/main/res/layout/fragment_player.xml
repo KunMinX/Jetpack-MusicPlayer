@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2018-2019 KunMinX
+  ~ Copyright 2018-present KunMinX
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -26,8 +26,12 @@
             type="com.kunminx.puremusic.ui.page.PlayerFragment.ClickProxy" />
 
         <variable
+            name="event"
+            type="com.kunminx.puremusic.ui.page.PlayerFragment.EventHandler" />
+
+        <variable
             name="vm"
-            type="com.kunminx.puremusic.bridge.state.PlayerViewModel" />
+            type="com.kunminx.puremusic.ui.state.PlayerViewModel" />
 
     </data>
 
@@ -37,7 +41,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="top">
 
-        <com.kunminx.puremusic.ui.view.ForegroundImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/album_art"
             imageUrl="@{vm.coverImg}"
             placeHolder="@{vm.placeHolder}"
@@ -85,12 +89,6 @@
 
         </RelativeLayout>
 
-        <com.kunminx.puremusic.ui.view.LyricView
-            android:id="@+id/lyric_view"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:visibility="gone" />
-
         <LinearLayout
             android:id="@+id/summary"
             android:layout_width="match_parent"
@@ -109,7 +107,7 @@
                 android:minHeight="4dp"
                 android:progress="@{vm.currentSeekPosition}"
                 android:progressDrawable="@drawable/progressbar_color"
-                android:progressTint="?colorAccent" />
+                android:progressTint="@color/transparent" />
 
             <TextView
                 android:id="@+id/title"
@@ -190,7 +188,7 @@
                 app:materialIconSize="28dp" />
 
             <net.steamcrafted.materialiconlib.MaterialIconView
-                android:id="@+id/mark"
+                android:id="@+id/mode"
                 mdIcon="@{vm.playModeIcon}"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
@@ -232,8 +230,7 @@
             android:progress="@{vm.currentSeekPosition}"
             android:progressDrawable="@drawable/progressbar_color"
             android:thumb="@null"
-            android:visibility="visible"
-            app:onSeekBarChangeListener="@{click}" />
+            app:onSeekBarChangeListener="@{event}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

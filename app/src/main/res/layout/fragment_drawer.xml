@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2018-2019 KunMinX
+  ~ Copyright 2018-present KunMinX
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -21,11 +21,15 @@
 
         <variable
             name="vm"
-            type="com.kunminx.puremusic.bridge.state.DrawerViewModel" />
+            type="com.kunminx.puremusic.ui.state.DrawerViewModel" />
 
         <variable
             name="click"
             type="com.kunminx.puremusic.ui.page.DrawerFragment.ClickProxy" />
+
+        <variable
+            name="adapter"
+            type="androidx.recyclerview.widget.ListAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -75,6 +79,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
+            adapter="@{adapter}"
+            submitList="@{vm.list}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="24dp"

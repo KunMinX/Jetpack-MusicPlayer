@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 KunMinX
+ * Copyright 2018-present KunMinX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,17 @@
 package com.kunminx.puremusic;
 
 import android.os.Bundle;
+import android.view.View;
 
-import androidx.core.view.GravityCompat;
-import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.kunminx.puremusic.bridge.state.MainActivityViewModel;
-import com.kunminx.puremusic.databinding.ActivityMainBinding;
-import com.kunminx.puremusic.ui.base.BaseActivity;
+import com.kunminx.architecture.ui.page.BaseActivity;
+import com.kunminx.architecture.ui.page.DataBindingConfig;
+import com.kunminx.puremusic.ui.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.helper.DrawerCoordinateHelper;
+import com.kunminx.puremusic.ui.state.MainActivityViewModel;
 
 /**
  * Create by KunMinX at 19/10/16
@@ -35,53 +35,72 @@ import com.kunminx.puremusic.ui.base.BaseActivity;
 
 public class MainActivity extends BaseActivity {
 
-    private ActivityMainBinding mBinding;
-    private MainActivityViewModel mMainActivityViewModel;
-    private boolean isListened = false;
+    private MainActivityViewModel mState;
+    private SharedViewModel mPageCallback;
+    private boolean mIsListened = false;
+
+    @Override
+    protected void initViewModel() {
+        mState = getActivityScopeViewModel(MainActivityViewModel.class);
+        mPageCallback = getApplicationScopeViewModel(SharedViewModel.class);
+    }
+
+    @Override
+    protected DataBindingConfig getDataBindingConfig() {
+        return new DataBindingConfig(R.layout.activity_main, BR.vm, mState)
+                .addBindingParam(BR.event, new EventHandler());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mMainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        mBinding.setVm(mMainActivityViewModel);
-
-        mSharedViewModel.activityCanBeClosedDirectly.observe(this, aBoolean -> {
+        mPageCallback.isToCloseActivityIfAllowed().observeInActivity(this, aBoolean -> {
             NavController nav = Navigation.findNavController(this, R.id.main_fragment_host);
             if (nav.getCurrentDestination() != null && nav.getCurrentDestination().getId() != R.id.mainFragment) {
                 nav.navigateUp();
-
-            } else if (mBinding.dl != null && mBinding.dl.isDrawerOpen(GravityCompat.START)) {
-                mBinding.dl.closeDrawer(GravityCompat.START);
-
+            } else if (mState.isDrawerOpened.get()) {
+                mPageCallback.requestToOpenOrCloseDrawer(false);
             } else {
                 super.onBackPressed();
             }
         });
 
-        mSharedViewModel.openOrCloseDrawer.observe(this, aBoolean -> {
-            mMainActivityViewModel.openDrawer.setValue(aBoolean);
+        mPageCallback.isToOpenOrCloseDrawer().observeInActivity(this, aBoolean -> {
+            mState.openDrawer.setValue(aBoolean);
         });
 
-        mSharedViewModel.enableSwipeDrawer.observe(this, aBoolean -> {
-            mMainActivityViewModel.allowDrawerOpen.setValue(aBoolean);
+        DrawerCoordinateHelper.getInstance().isEnableSwipeDrawer().observeInActivity(this, aBoolean -> {
+            mState.allowDrawerOpen.setValue(aBoolean);
         });
-
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (!isListened) {
-            mSharedViewModel.timeToAddSlideListener.setValue(true);
-            isListened = true;
+        if (!mIsListened) {
+            mPageCallback.requestToAddSlideListener(true);
+            mIsListened = true;
         }
     }
 
     @Override
     public void onBackPressed() {
-        mSharedViewModel.closeSlidePanelIfExpanded.setValue(true);
+        mPageCallback.requestToCloseSlidePanelIfExpanded(true);
+    }
+
+    public class EventHandler extends DrawerLayout.SimpleDrawerListener {
+        @Override
+        public void onDrawerOpened(View drawerView) {
+            super.onDrawerOpened(drawerView);
+            mState.isDrawerOpened.set(true);
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+            super.onDrawerClosed(drawerView);
+            mState.isDrawerOpened.set(false);
+            mState.openDrawer.setValue(false);
+        }
     }
 }
