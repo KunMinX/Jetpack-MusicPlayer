@@ -19,8 +19,8 @@ apply plugin: 'com.novoda.bintray-release'
 
 def build_versions = [:]
 
-build_versions.versionCode = 10106
-build_versions.versionName = "1.1.6"
+build_versions.versionCode = 10200
+build_versions.versionName = "1.2.0"
 
 ext.build_versions = build_versions
 
@@ -59,10 +59,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation "androidx.lifecycle:lifecycle-livedata:2.1.0"
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
     implementation 'com.danikula:videocache:2.7.1'
 }
 

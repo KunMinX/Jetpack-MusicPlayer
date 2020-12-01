@@ -40,7 +40,7 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
         OnPreparedListener, OnSeekCompleteListener, OnVideoSizeChangedListener, SurfaceHolder.Callback {
     public static final String TAG = "MediaPlayerHelper";
 
-    //定义我们支持的文件格式
+    //默认支持的文件格式
     private String[] ext = {
             ".m4a",
             ".3gp",
@@ -54,6 +54,7 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
 
     private List<String> formatList = new ArrayList<>();
 
+    //所有支持的格式（可在外部自定义添加）
     public List<String> getFormatList() {
         return formatList;
     }
@@ -66,7 +67,7 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
     private MediaPlayerHelperCallBack MediaPlayerHelperCallBack = null;
     private static MediaPlayerHelper instance;
     private int delaySecondTime = 1000;
-
+    private AssetManager assetMg;
 
     /**
      * 状态枚举
@@ -176,18 +177,20 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
         refress_time_handler.removeCallbacks(refress_time_Thread);
     }
 
+    public void initAssetManager(Context context) {
+        assetMg = context.getAssets();
+    }
+
     /**
      * 通过Assets文件名播放Assets目录下的文件
      *
-     * @param context   引用
      * @param assetName 名字,带后缀，比如:text.mp3
      * @return 是否成功
      */
-    public boolean playAsset(Context context, String assetName) {
+    public boolean playAsset(String assetName) {
         if (!checkAvalable(assetName)) {
             return false;
         }
-        AssetManager assetMg = context.getAssets();
         try {
             uiHolder.assetDescriptor = assetMg.openFd(assetName);
             uiHolder.player.setDisplay(null);

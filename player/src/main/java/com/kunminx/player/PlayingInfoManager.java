@@ -16,8 +16,6 @@
 
 package com.kunminx.player;
 
-import android.content.Context;
-
 import com.kunminx.player.bean.base.BaseAlbumItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
 
@@ -54,12 +52,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     //专辑详情
     private B mMusicAlbum;
 
-
-    public void init(Context context) {
-
-    }
-
-    public boolean isInited() {
+    boolean isInit() {
         return mMusicAlbum != null;
     }
 
@@ -69,7 +62,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
         Collections.shuffle(mShufflePlayingList);
     }
 
-    public Enum changeMode() {
+    Enum changeMode() {
         if (mRepeatMode == RepeatMode.LIST_CYCLE) {
             mRepeatMode = RepeatMode.SINGLE_CYCLE;
         } else if (mRepeatMode == RepeatMode.SINGLE_CYCLE) {
@@ -80,18 +73,18 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
         return mRepeatMode;
     }
 
-    public B getMusicAlbum() {
+    B getMusicAlbum() {
         return mMusicAlbum;
     }
 
-    public void setMusicAlbum(B musicAlbum) {
+    void setMusicAlbum(B musicAlbum) {
         this.mMusicAlbum = musicAlbum;
         mOriginPlayingList.clear();
         mOriginPlayingList.addAll(mMusicAlbum.getMusics());
         fitShuffle();
     }
 
-    public List<M> getPlayingList() {
+    List<M> getPlayingList() {
         if (mRepeatMode == RepeatMode.RANDOM) {
             return mShufflePlayingList;
         } else {
@@ -99,22 +92,22 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
         }
     }
 
-    public List<M> getOriginPlayingList() {
+    List<M> getOriginPlayingList() {
         return mOriginPlayingList;
     }
 
-    public M getCurrentPlayingMusic() {
+    M getCurrentPlayingMusic() {
         if (getPlayingList().isEmpty()) {
             return null;
         }
         return getPlayingList().get(mPlayIndex);
     }
 
-    public Enum getRepeatMode() {
+    Enum getRepeatMode() {
         return mRepeatMode;
     }
 
-    public void countPreviousIndex() {
+    void countPreviousIndex() {
         if (mPlayIndex == 0) {
             mPlayIndex = (getPlayingList().size() - 1);
         } else {
@@ -123,7 +116,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
         mAlbumIndex = mOriginPlayingList.indexOf(getCurrentPlayingMusic());
     }
 
-    public void countNextIndex() {
+    void countNextIndex() {
         if (mPlayIndex == (getPlayingList().size() - 1)) {
             mPlayIndex = 0;
         } else {
@@ -132,20 +125,12 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
         mAlbumIndex = mOriginPlayingList.indexOf(getCurrentPlayingMusic());
     }
 
-    public int getAlbumIndex() {
+    int getAlbumIndex() {
         return mAlbumIndex;
     }
 
-    public void setAlbumIndex(int albumIndex) {
+    void setAlbumIndex(int albumIndex) {
         mAlbumIndex = albumIndex;
         mPlayIndex = getPlayingList().indexOf(mOriginPlayingList.get(mAlbumIndex));
-    }
-
-    public void clear(Context context) {
-        saveRecords(context);
-    }
-
-    public void saveRecords(Context context) {
-
     }
 }

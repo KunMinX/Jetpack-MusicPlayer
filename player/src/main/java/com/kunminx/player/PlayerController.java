@@ -18,7 +18,6 @@ package com.kunminx.player;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -31,7 +30,6 @@ import com.kunminx.player.bean.dto.PlayingMusic;
 import com.kunminx.player.contract.IServiceNotifier;
 import com.kunminx.player.helper.MediaPlayerHelper;
 import com.kunminx.player.helper.PlayerFileNameGenerator;
-import com.kunminx.player.utils.NetworkUtils;
 
 import java.util.List;
 
@@ -46,10 +44,10 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
 
     private HttpProxyCacheServer proxy;
 
-    private MutableLiveData<ChangeMusic> changeMusicLiveData = new MutableLiveData<>();
-    private MutableLiveData<PlayingMusic> playingMusicLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> pauseLiveData = new MutableLiveData<>();
-    private MutableLiveData<Enum> playModeLiveData = new MutableLiveData<>();
+    private final MutableLiveData<ChangeMusic> changeMusicLiveData = new MutableLiveData<>();
+    private final MutableLiveData<PlayingMusic> playingMusicLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> pauseLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Enum> playModeLiveData = new MutableLiveData<>();
 
     private IServiceNotifier mIServiceNotifier;
 
@@ -58,8 +56,6 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
 
     public void init(Context context, List<String> extraFormatList, IServiceNotifier iServiceNotifier) {
 
-        mPlayingInfoManager.init(context.getApplicationContext());
-
         proxy = new HttpProxyCacheServer.Builder(context.getApplicationContext())
                 .fileNameGenerator(new PlayerFileNameGenerator())
                 .maxCacheSize(2147483648L) // 2GB
@@ -67,28 +63,30 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
 
         mIServiceNotifier = iServiceNotifier;
 
+        MediaPlayerHelper.getInstance().initAssetManager(context);
+
         if (extraFormatList != null) {
             MediaPlayerHelper.getInstance().getFormatList().addAll(extraFormatList);
         }
     }
 
-    public boolean isInited() {
-        return mPlayingInfoManager.isInited();
+    public boolean isInit() {
+        return mPlayingInfoManager.isInit();
     }
 
-    public void loadAlbum(Context context, B musicAlbum) {
-        setAlbum(context, musicAlbum, 0);
+    public void loadAlbum(B musicAlbum) {
+        setAlbum(musicAlbum, 0);
     }
 
-    private void setAlbum(Context context, B musicAlbum, int albumIndex) {
+    private void setAlbum(B musicAlbum, int albumIndex) {
         mPlayingInfoManager.setMusicAlbum(musicAlbum);
         mPlayingInfoManager.setAlbumIndex(albumIndex);
-        setChangingPlayingMusic(context, true);
+        setChangingPlayingMusic(true);
     }
 
-    public void loadAlbum(Context context, B musicAlbum, int albumIndex) {
-        setAlbum(context, musicAlbum, albumIndex);
-        playAudio(context);
+    public void loadAlbum(B musicAlbum, int albumIndex) {
+        setAlbum(musicAlbum, albumIndex);
+        playAudio();
     }
 
     public boolean isPlaying() {
@@ -102,27 +100,27 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     /**
      * @param albumIndex 从 album 进来的一定是 album 列表的 index
      */
-    public void playAudio(Context context, int albumIndex) {
+    public void playAudio(int albumIndex) {
         if (isPlaying() && albumIndex == mPlayingInfoManager.getAlbumIndex()) {
             return;
         }
 
         mPlayingInfoManager.setAlbumIndex(albumIndex);
-        setChangingPlayingMusic(context, true);
-        playAudio(context);
+        setChangingPlayingMusic(true);
+        playAudio();
     }
 
 
-    public void playAudio(Context context) {
+    public void playAudio() {
         if (mIsChangingPlayingMusic) {
             MediaPlayerHelper.getInstance().getMediaPlayer().stop();
-            getUrlAndPlay(context);
+            getUrlAndPlay();
         } else if (mIsPaused) {
             resumeAudio();
         }
     }
 
-    private void getUrlAndPlay(Context context) {
+    private void getUrlAndPlay() {
         String url = null;
         M freeMusic = null;
         freeMusic = mPlayingInfoManager.getCurrentPlayingMusic();
@@ -131,34 +129,31 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         if (TextUtils.isEmpty(url)) {
             pauseAudio();
         } else {
+            //涉及到网络请求，因而使用时 请在外部自行判断网络连接状态
             if ((url.contains("http:") || url.contains("ftp:") || url.contains("https:"))) {
-                if (NetworkUtils.isConnected(context)) {
-                    MediaPlayerHelper.getInstance().play(proxy.getProxyUrl(url));
-                    afterPlay(context);
-                } else {
-                    Toast.makeText(context, R.string.unconnnect, Toast.LENGTH_SHORT).show();
-                }
+                MediaPlayerHelper.getInstance().play(proxy.getProxyUrl(url));
+                afterPlay();
             } else if (url.contains("storage")) {
                 MediaPlayerHelper.getInstance().play(url);
-                afterPlay(context);
+                afterPlay();
             } else {
-                MediaPlayerHelper.getInstance().playAsset(context, url);
-                afterPlay(context);
+                MediaPlayerHelper.getInstance().playAsset(url);
+                afterPlay();
             }
         }
     }
 
-    private void afterPlay(Context context) {
-        setChangingPlayingMusic(context, false);
-        bindProgressListener(context);
+    private void afterPlay() {
+        setChangingPlayingMusic(false);
+        bindProgressListener();
         mIsPaused = false;
-        pauseLiveData.setValue(mIsPaused);
+        pauseLiveData.setValue(false);
         if (mIServiceNotifier != null) {
             mIServiceNotifier.notifyService(true);
         }
     }
 
-    private void bindProgressListener(Context context) {
+    private void bindProgressListener() {
         MediaPlayerHelper.getInstance().setProgressInterval(1000).setMediaPlayerHelperCallBack(
                 (state, mediaPlayerHelper, args) -> {
                     if (state == MediaPlayerHelper.CallBackState.PROGRESS) {
@@ -173,9 +168,9 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                                 //容许两秒内的误差，有的内容它就是会差那么 1 秒
                                 || duration / 1000 - position / 1000 < 2) {
                             if (getRepeatMode() == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) {
-                                playAgain(context);
+                                playAgain();
                             } else {
-                                playNext(context);
+                                playNext();
                             }
                         }
                     }
@@ -213,30 +208,30 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     }
 
 
-    public void playNext(Context context) {
+    public void playNext() {
         mPlayingInfoManager.countNextIndex();
-        setChangingPlayingMusic(context, true);
-        playAudio(context);
+        setChangingPlayingMusic(true);
+        playAudio();
     }
 
 
-    public void playPrevious(Context context) {
+    public void playPrevious() {
         mPlayingInfoManager.countPreviousIndex();
-        setChangingPlayingMusic(context, true);
-        playAudio(context);
+        setChangingPlayingMusic(true);
+        playAudio();
     }
 
 
-    public void playAgain(Context context) {
-        setChangingPlayingMusic(context, true);
-        playAudio(context);
+    public void playAgain() {
+        setChangingPlayingMusic(true);
+        playAudio();
     }
 
 
     public void pauseAudio() {
         MediaPlayerHelper.getInstance().getMediaPlayer().pause();
         mIsPaused = true;
-        pauseLiveData.setValue(mIsPaused);
+        pauseLiveData.setValue(true);
         if (mIServiceNotifier != null) {
             mIServiceNotifier.notifyService(true);
         }
@@ -246,30 +241,28 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     public void resumeAudio() {
         MediaPlayerHelper.getInstance().getMediaPlayer().start();
         mIsPaused = false;
-        pauseLiveData.setValue(mIsPaused);
+        pauseLiveData.setValue(false);
         if (mIServiceNotifier != null) {
             mIServiceNotifier.notifyService(true);
         }
     }
 
 
-    public void clear(Context context) {
+    public void clear() {
         MediaPlayerHelper.getInstance().getMediaPlayer().stop();
         MediaPlayerHelper.getInstance().getMediaPlayer().reset();
-//        MediaPlayerHelper.getInstance().getMediaPlayer().release();
-        mPlayingInfoManager.clear(context);
         pauseLiveData.setValue(true);
         //这里设为true是因为可能通知栏清除后，还可能在页面中点击播放
-        resetIsChangingPlayingChapter(context);
+        resetIsChangingPlayingChapter();
         MediaPlayerHelper.getInstance().setProgressInterval(1000).setMediaPlayerHelperCallBack(null);
         if (mIServiceNotifier != null) {
             mIServiceNotifier.notifyService(false);
         }
     }
 
-    public void resetIsChangingPlayingChapter(Context context) {
+    public void resetIsChangingPlayingChapter() {
         mIsChangingPlayingMusic = true;
-        setChangingPlayingMusic(context, true);
+        setChangingPlayingMusic(true);
     }
 
     public void changeMode() {
@@ -285,13 +278,12 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         return mPlayingInfoManager.getOriginPlayingList();
     }
 
-    public void setChangingPlayingMusic(Context context, boolean changingPlayingMusic) {
+    public void setChangingPlayingMusic(boolean changingPlayingMusic) {
         mIsChangingPlayingMusic = changingPlayingMusic;
         if (mIsChangingPlayingMusic) {
             mChangeMusic.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
             changeMusicLiveData.setValue(mChangeMusic);
             mCurrentPlay.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
-            mPlayingInfoManager.saveRecords(context);
         }
     }
 
@@ -319,11 +311,11 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         return mPlayingInfoManager.getRepeatMode();
     }
 
-    public void togglePlay(Context context) {
+    public void togglePlay() {
         if (isPlaying()) {
             pauseAudio();
         } else {
-            playAudio(context);
+            playAudio();
         }
     }
 

@@ -19,7 +19,6 @@ package com.kunminx.player;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.kunminx.player.bean.DefaultAlbum;
 import com.kunminx.player.bean.dto.ChangeMusic;
@@ -56,37 +55,37 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
 
     @Override
     public void loadAlbum(DefaultAlbum musicAlbum) {
-        mController.loadAlbum(mContext, musicAlbum);
+        mController.loadAlbum(musicAlbum);
     }
 
     @Override
     public void loadAlbum(DefaultAlbum musicAlbum, int playIndex) {
-        mController.loadAlbum(mContext, musicAlbum, playIndex);
+        mController.loadAlbum(musicAlbum, playIndex);
     }
 
     @Override
     public void playAudio() {
-        mController.playAudio(mContext);
+        mController.playAudio();
     }
 
     @Override
     public void playAudio(int albumIndex) {
-        mController.playAudio(mContext, albumIndex);
+        mController.playAudio(albumIndex);
     }
 
     @Override
     public void playNext() {
-        mController.playNext(mContext);
+        mController.playNext();
     }
 
     @Override
     public void playPrevious() {
-        mController.playPrevious(mContext);
+        mController.playPrevious();
     }
 
     @Override
     public void playAgain() {
-        mController.playAgain(mContext);
+        mController.playAgain();
     }
 
     @Override
@@ -101,7 +100,7 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
 
     @Override
     public void clear() {
-        mController.clear(mContext);
+        mController.clear();
     }
 
     @Override
@@ -120,8 +119,8 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
     }
 
     @Override
-    public boolean isInited() {
-        return mController.isInited();
+    public boolean isInit() {
+        return mController.isInit();
     }
 
     @Override
@@ -151,7 +150,7 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
 
     @Override
     public void setChangingPlayingMusic(boolean changingPlayingMusic) {
-        mController.setChangingPlayingMusic(mContext, changingPlayingMusic);
+        mController.setChangingPlayingMusic(changingPlayingMusic);
     }
 
     @Override
@@ -184,7 +183,7 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
 
     @Override
     public void togglePlay() {
-        mController.togglePlay(mContext);
+        mController.togglePlay();
     }
 
     @Override

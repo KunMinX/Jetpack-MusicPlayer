@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.kunminx.player.PlayerController;
 import com.kunminx.player.bean.dto.ChangeMusic;
@@ -30,6 +29,7 @@ import com.kunminx.player.contract.IServiceNotifier;
 import com.kunminx.puremusic.data.bean.TestAlbum;
 import com.kunminx.puremusic.player.notification.PlayerService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,7 +58,13 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     @Override
     public void init(Context context, IServiceNotifier iServiceNotifier) {
         mContext = context.getApplicationContext();
-        mController.init(mContext, null, startOrStop -> {
+
+        //添加额外的音乐格式
+        List<String> extraFormats = new ArrayList<>();
+        extraFormats.add(".flac");
+        extraFormats.add(".ape");
+
+        mController.init(mContext, extraFormats, startOrStop -> {
             Intent intent = new Intent(mContext, PlayerService.class);
             if (startOrStop) {
                 mContext.startService(intent);
@@ -70,37 +76,37 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
     @Override
     public void loadAlbum(TestAlbum musicAlbum) {
-        mController.loadAlbum(mContext, musicAlbum);
+        mController.loadAlbum(musicAlbum);
     }
 
     @Override
     public void loadAlbum(TestAlbum musicAlbum, int playIndex) {
-        mController.loadAlbum(mContext, musicAlbum, playIndex);
+        mController.loadAlbum(musicAlbum, playIndex);
     }
 
     @Override
     public void playAudio() {
-        mController.playAudio(mContext);
+        mController.playAudio();
     }
 
     @Override
     public void playAudio(int albumIndex) {
-        mController.playAudio(mContext, albumIndex);
+        mController.playAudio(albumIndex);
     }
 
     @Override
     public void playNext() {
-        mController.playNext(mContext);
+        mController.playNext();
     }
 
     @Override
     public void playPrevious() {
-        mController.playPrevious(mContext);
+        mController.playPrevious();
     }
 
     @Override
     public void playAgain() {
-        mController.playAgain(mContext);
+        mController.playAgain();
     }
 
     @Override
@@ -115,7 +121,7 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
     @Override
     public void clear() {
-        mController.clear(mContext);
+        mController.clear();
     }
 
     @Override
@@ -134,8 +140,8 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     }
 
     @Override
-    public boolean isInited() {
-        return mController.isInited();
+    public boolean isInit() {
+        return mController.isInit();
     }
 
     @Override
@@ -165,7 +171,7 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
     @Override
     public void setChangingPlayingMusic(boolean changingPlayingMusic) {
-        mController.setChangingPlayingMusic(mContext, changingPlayingMusic);
+        mController.setChangingPlayingMusic(changingPlayingMusic);
     }
 
     @Override
@@ -197,7 +203,7 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
     @Override
     public void togglePlay() {
-        mController.togglePlay(mContext);
+        mController.togglePlay();
     }
 
     @Override
