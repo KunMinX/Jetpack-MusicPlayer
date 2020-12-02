@@ -36,7 +36,7 @@ import java.util.TimerTask;
 /**
  * Create by KunMinX at 19/10/29
  */
-public class DataRepository implements ILocalSource, IRemoteSource {
+public class DataRepository {
 
     private static final DataRepository S_REQUEST_MANAGER = new DataRepository();
 
@@ -47,7 +47,7 @@ public class DataRepository implements ILocalSource, IRemoteSource {
         return S_REQUEST_MANAGER;
     }
 
-    @Override
+
     public void getFreeMusic(DataResult.Result<TestAlbum> result) {
 
         Gson gson = new Gson();
@@ -58,7 +58,7 @@ public class DataRepository implements ILocalSource, IRemoteSource {
         result.onResult(new DataResult<>(testAlbum, new ResultState()));
     }
 
-    @Override
+
     public void getLibraryInfo(DataResult.Result<List<LibraryInfo>> result) {
         Gson gson = new Gson();
         Type type = new TypeToken<List<LibraryInfo>>() {
@@ -68,7 +68,7 @@ public class DataRepository implements ILocalSource, IRemoteSource {
         result.onResult(new DataResult<>(list, new ResultState()));
     }
 
-    @Override
+
     public void downloadFile(DownloadFile downloadFile, DataResult.Result<DownloadFile> result) {
 
         Timer timer = new Timer();

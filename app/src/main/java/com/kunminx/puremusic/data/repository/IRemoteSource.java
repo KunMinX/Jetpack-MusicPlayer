@@ -16,22 +16,9 @@
 
 package com.kunminx.puremusic.data.repository;
 
-import com.kunminx.architecture.data.response.DataResult;
-import com.kunminx.puremusic.data.bean.DownloadFile;
-import com.kunminx.puremusic.data.bean.LibraryInfo;
-import com.kunminx.puremusic.data.bean.TestAlbum;
-
-import java.util.List;
-
 /**
  * Create by KunMinX at 19/10/29
  */
 public interface IRemoteSource {
-
-    void getFreeMusic(DataResult.Result<TestAlbum> result);
-
-    void getLibraryInfo(DataResult.Result<List<LibraryInfo>> result);
-
-    void downloadFile(DownloadFile downloadFile, DataResult.Result<DownloadFile> result);
 
 }
