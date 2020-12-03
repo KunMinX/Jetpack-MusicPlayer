@@ -31,6 +31,7 @@ import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.FragmentPlayerBinding;
 import com.kunminx.puremusic.player.PlayerManager;
 import com.kunminx.puremusic.ui.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.helper.DefaultInterface;
 import com.kunminx.puremusic.ui.helper.DrawerCoordinateHelper;
 import com.kunminx.puremusic.ui.state.PlayerViewModel;
 import com.kunminx.puremusic.ui.view.PlayerSlideListener;
@@ -67,16 +68,11 @@ public class PlayerFragment extends BaseFragment {
             if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
                 SlidingUpPanelLayout sliding = (SlidingUpPanelLayout) view.getParent().getParent();
                 sliding.addPanelSlideListener(new PlayerSlideListener((FragmentPlayerBinding) getBinding(), sliding));
-                sliding.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+                sliding.addPanelSlideListener(new DefaultInterface.PanelSlideListener() {
                     @Override
-                    public void onPanelSlide(View view, float v) {
-
-                    }
-
-                    @Override
-                    public void onPanelStateChanged(View view, SlidingUpPanelLayout.PanelState panelState,
-                                                    SlidingUpPanelLayout.PanelState panelState1) {
-
+                    public void onPanelStateChanged(
+                            View view, SlidingUpPanelLayout.PanelState panelState,
+                            SlidingUpPanelLayout.PanelState panelState1) {
                         DrawerCoordinateHelper.getInstance().requestToUpdateDrawerMode(
                                 panelState1 == SlidingUpPanelLayout.PanelState.EXPANDED,
                                 this.getClass().getSimpleName()
@@ -169,17 +165,7 @@ public class PlayerFragment extends BaseFragment {
         }
     }
 
-    public static class EventHandler implements SeekBar.OnSeekBarChangeListener {
-
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
+    public static class EventHandler implements DefaultInterface.OnSeekBarChangeListener {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {

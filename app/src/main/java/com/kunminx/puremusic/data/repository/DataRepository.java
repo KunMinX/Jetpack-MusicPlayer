@@ -21,7 +21,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kunminx.architecture.data.response.DataResult;
-import com.kunminx.architecture.data.response.ResultState;
+import com.kunminx.architecture.data.response.ResponseStatus;
 import com.kunminx.architecture.utils.Utils;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.DownloadFile;
@@ -55,9 +55,8 @@ public class DataRepository {
         }.getType();
         TestAlbum testAlbum = gson.fromJson(Utils.getApp().getString(R.string.free_music_json), type);
 
-        result.onResult(new DataResult<>(testAlbum, new ResultState()));
+        result.onResult(new DataResult<>(testAlbum, new ResponseStatus()));
     }
-
 
     public void getLibraryInfo(DataResult.Result<List<LibraryInfo>> result) {
         Gson gson = new Gson();
@@ -65,7 +64,7 @@ public class DataRepository {
         }.getType();
         List<LibraryInfo> list = gson.fromJson(Utils.getApp().getString(R.string.library_json), type);
 
-        result.onResult(new DataResult<>(list, new ResultState()));
+        result.onResult(new DataResult<>(list, new ResponseStatus()));
     }
 
 
@@ -89,7 +88,7 @@ public class DataRepository {
                     downloadFile.setForgive(false);
                     return;
                 }
-                result.onResult(new DataResult<>(downloadFile, new ResultState()));
+                result.onResult(new DataResult<>(downloadFile, new ResponseStatus()));
             }
         };
 

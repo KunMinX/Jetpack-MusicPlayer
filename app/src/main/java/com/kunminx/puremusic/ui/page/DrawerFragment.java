@@ -53,7 +53,7 @@ public class DrawerFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mState.infoRequest.getLibraryLiveData().observe(getViewLifecycleOwner(), dataResult -> {
-            if (!dataResult.getResultState().isSuccess()) return;
+            if (!dataResult.getResponseStatus().isSuccess()) return;
 
             if (mAnimationLoaded && dataResult.getResult() != null) {
                 mState.list.setValue(dataResult.getResult());

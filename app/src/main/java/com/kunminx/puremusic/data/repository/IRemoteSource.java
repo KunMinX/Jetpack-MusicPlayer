@@ -21,4 +21,5 @@ package com.kunminx.puremusic.data.repository;
  */
 public interface IRemoteSource {
 
+
 }
