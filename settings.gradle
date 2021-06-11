@@ -1,2 +1,2 @@
 include ':app', ':architecture', ':player'
-rootProject.name='PureMusic'
+rootProject.name='Jetpack-MusicPlayer'

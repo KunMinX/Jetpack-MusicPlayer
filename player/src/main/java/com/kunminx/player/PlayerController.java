@@ -22,14 +22,13 @@ import android.text.TextUtils;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.kunminx.player.bean.base.BaseAlbumItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
 import com.kunminx.player.bean.dto.ChangeMusic;
 import com.kunminx.player.bean.dto.PlayingMusic;
+import com.kunminx.player.contract.ICacheProxy;
 import com.kunminx.player.contract.IServiceNotifier;
 import com.kunminx.player.helper.MediaPlayerHelper;
-import com.kunminx.player.helper.PlayerFileNameGenerator;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     private boolean mIsPaused;
     private boolean mIsChangingPlayingMusic;
 
-    private HttpProxyCacheServer proxy;
+    private ICacheProxy mICacheProxy;
 
     private final MutableLiveData<ChangeMusic> changeMusicLiveData = new MutableLiveData<>();
     private final MutableLiveData<PlayingMusic> playingMusicLiveData = new MutableLiveData<>();
@@ -54,14 +53,12 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     private PlayingMusic mCurrentPlay = new PlayingMusic("00:00", "00:00");
     private ChangeMusic mChangeMusic = new ChangeMusic();
 
-    public void init(Context context, List<String> extraFormatList, IServiceNotifier iServiceNotifier) {
-
-        proxy = new HttpProxyCacheServer.Builder(context.getApplicationContext())
-                .fileNameGenerator(new PlayerFileNameGenerator())
-                .maxCacheSize(2147483648L) // 2GB
-                .build();
+    public void init(Context context, List<String> extraFormatList,
+                     IServiceNotifier iServiceNotifier,
+                     ICacheProxy iCacheProxy) {
 
         mIServiceNotifier = iServiceNotifier;
+        mICacheProxy = iCacheProxy;
 
         MediaPlayerHelper.getInstance().initAssetManager(context);
 
@@ -131,7 +128,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         } else {
             //涉及到网络请求，因而使用时 请在外部自行判断网络连接状态
             if ((url.contains("http:") || url.contains("ftp:") || url.contains("https:"))) {
-                MediaPlayerHelper.getInstance().play(proxy.getProxyUrl(url));
+                MediaPlayerHelper.getInstance().play(mICacheProxy.getCacheUrl(url));
                 afterPlay();
             } else if (url.contains("storage")) {
                 MediaPlayerHelper.getInstance().play(url);
@@ -322,6 +319,5 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     public M getCurrentPlayingMusic() {
         return mPlayingInfoManager.getCurrentPlayingMusic();
     }
-
 
 }

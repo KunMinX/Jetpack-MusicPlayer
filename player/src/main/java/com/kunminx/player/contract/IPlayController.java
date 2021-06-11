@@ -28,7 +28,7 @@ public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicIte
         extends ILiveDataNotifier, IPlayInfoManager {
 
     //程序启动时就初始化
-    void init(Context context, IServiceNotifier iServiceNotifier);
+    void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy);
 
     void loadAlbum(B musicAlbum);
 

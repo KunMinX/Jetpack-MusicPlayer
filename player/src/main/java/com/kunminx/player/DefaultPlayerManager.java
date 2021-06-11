@@ -23,6 +23,7 @@ import androidx.lifecycle.LiveData;
 import com.kunminx.player.bean.DefaultAlbum;
 import com.kunminx.player.bean.dto.ChangeMusic;
 import com.kunminx.player.bean.dto.PlayingMusic;
+import com.kunminx.player.contract.ICacheProxy;
 import com.kunminx.player.contract.IPlayController;
 import com.kunminx.player.contract.IServiceNotifier;
 
@@ -48,9 +49,9 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
     }
 
     @Override
-    public void init(Context context, IServiceNotifier iServiceNotifier) {
+    public void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy) {
         mContext = context.getApplicationContext();
-        mController.init(mContext, null, iServiceNotifier);
+        mController.init(mContext, null, iServiceNotifier, iCacheProxy);
     }
 
     @Override

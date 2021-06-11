@@ -67,7 +67,7 @@ Jetpack-MusicPlayer 的目标是：**一行代码即可接入 音乐播放控制
 1.在 build.gradle 中添加对该库的依赖。
 
 ```groovy
-implementation 'com.kunminx.player:player:1.1.6'
+implementation 'com.kunminx.player:player:1.3.0'
 ```
 
 2.依据默认的专辑实体类 `DefaultAlbum` 的结构准备一串数据。

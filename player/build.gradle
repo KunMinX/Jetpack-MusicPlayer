@@ -15,25 +15,43 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
-def build_versions = [:]
+ext {
+    PUBLISH_GROUP_ID = 'com.kunminx.player'
+    PUBLISH_ARTIFACT_ID = 'player'
+    PUBLISH_VERSION = '2.0.0'
+    VERSION_CODE = 20000
 
-build_versions.versionCode = 10200
-build_versions.versionName = "1.2.0"
+    ARTIFACT_DESCRIPTION = 'Jetpack MusicPlayer Library for android'
 
-ext.build_versions = build_versions
+    POM_URL='https://github.com/KunMinX/Jetpack-MusicPlayer'
+    POM_SCM_URL='https://github.com/KunMinX/Jetpack-MusicPlayer/tree/master'
+    POM_SCM_CONNECTION='scm:git:github.com/KunMinX/Jetpack-MusicPlayer.git'
+    POM_SCM_DEV_CONNECTION='scm:git:ssh://github.com/KunMinX/Jetpack-MusicPlayer.git'
+
+    POM_DEVELOPER_ID='KunMinX'
+    POM_DEVELOPER_NAME='KunMinX'
+    POM_DEVELOPER_URL='https://github.com/KunMinX'
+    POM_DEVELOPER_EMAIL='kunminx@gmail.com'
+
+    LICENSE_NAME='The Apache Software License, Version 2.0'
+    LICENSE_URL='http://www.apache.org/licenses/LICENSE-2.0.txt'
+
+    uploadJavadocs = false
+    uploadSources = false
+}
+
+apply from: "${rootProject.projectDir}/publish-mavencentral.gradle"
+
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
-
 
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode build_versions.versionCode
-        versionName build_versions.versionName
+        versionCode VERSION_CODE
+        versionName PUBLISH_VERSION
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -51,27 +69,12 @@ android {
         abortOnError false
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
-    implementation 'com.danikula:videocache:2.7.1'
-}
-
-publish {
-    userOrg = 'jetpackmusicplayer'
-    groupId = 'com.kunminx.player'
-    artifactId = 'player'
-    publishVersion = build_versions.versionName
-    desc = 'Jetpack MusicPlayer Library for android'
-    website = ''
-    licences = ['Apache-2.0']
+    implementation "androidx.lifecycle:lifecycle-livedata:2.3.1"
 }
