@@ -288,19 +288,19 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         return mPlayingInfoManager.getAlbumIndex();
     }
 
-    public LiveData<ChangeMusic> getChangeMusicLiveData() {
+    public LiveData<ChangeMusic> getChangeMusicEvent() {
         return changeMusicLiveData;
     }
 
-    public LiveData<PlayingMusic> getPlayingMusicLiveData() {
+    public LiveData<PlayingMusic> getPlayingMusicEvent() {
         return playingMusicLiveData;
     }
 
-    public LiveData<Boolean> getPauseLiveData() {
+    public LiveData<Boolean> getPauseEvent() {
         return pauseLiveData;
     }
 
-    public LiveData<Enum> getPlayModeLiveData() {
+    public LiveData<Enum> getPlayModeEvent() {
         return playModeLiveData;
     }
 

@@ -19,8 +19,8 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID = 'com.kunminx.player'
     PUBLISH_ARTIFACT_ID = 'player'
-    PUBLISH_VERSION = '2.0.0'
-    VERSION_CODE = 20000
+    PUBLISH_VERSION = '3.1.0'
+    VERSION_CODE = 30100
 
     ARTIFACT_DESCRIPTION = 'Jetpack MusicPlayer Library for android'
 
@@ -72,7 +72,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ["*.jar", "*.aar"])
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
