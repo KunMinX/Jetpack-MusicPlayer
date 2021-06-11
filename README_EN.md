@@ -50,8 +50,10 @@ If you are thinking about [**how to choose the right architecture for your proje
 1. Add a dependency on the library in build.gradle.
 
 ```groovy
-implementation 'com.kunminx.player:player:1.1.6'
+implementation 'com.kunminx.player:player:3.1.0'
 ```
+
+Tip: 鉴于 Jcenter 的关闭，我们已将仓库迁移至 Maven Central，请自行在根目录 build.gradle 添加 `mavenCentral()`。
 
 2. Prepare a string of data according to the structure of the default album entity class `DefaultAlbum`.
 

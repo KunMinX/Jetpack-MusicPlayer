@@ -25,7 +25,7 @@ import androidx.navigation.Navigation;
 
 import com.kunminx.architecture.ui.page.BaseActivity;
 import com.kunminx.architecture.ui.page.DataBindingConfig;
-import com.kunminx.puremusic.ui.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.event.SharedViewModel;
 import com.kunminx.puremusic.ui.helper.DrawerCoordinateHelper;
 import com.kunminx.puremusic.ui.state.MainActivityViewModel;
 
@@ -36,41 +36,41 @@ import com.kunminx.puremusic.ui.state.MainActivityViewModel;
 public class MainActivity extends BaseActivity {
 
     private MainActivityViewModel mState;
-    private SharedViewModel mPageCallback;
+    private SharedViewModel mEvent;
     private boolean mIsListened = false;
 
     @Override
     protected void initViewModel() {
         mState = getActivityScopeViewModel(MainActivityViewModel.class);
-        mPageCallback = getApplicationScopeViewModel(SharedViewModel.class);
+        mEvent = getApplicationScopeViewModel(SharedViewModel.class);
     }
 
     @Override
     protected DataBindingConfig getDataBindingConfig() {
         return new DataBindingConfig(R.layout.activity_main, BR.vm, mState)
-                .addBindingParam(BR.event, new EventHandler());
+                .addBindingParam(BR.listener, new ListenerHandler());
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPageCallback.isToCloseActivityIfAllowed().observeInActivity(this, aBoolean -> {
+        mEvent.isToCloseActivityIfAllowed().observe(this, aBoolean -> {
             NavController nav = Navigation.findNavController(this, R.id.main_fragment_host);
             if (nav.getCurrentDestination() != null && nav.getCurrentDestination().getId() != R.id.mainFragment) {
                 nav.navigateUp();
             } else if (mState.isDrawerOpened.get()) {
-                mPageCallback.requestToOpenOrCloseDrawer(false);
+                mEvent.requestToOpenOrCloseDrawer(false);
             } else {
                 super.onBackPressed();
             }
         });
 
-        mPageCallback.isToOpenOrCloseDrawer().observeInActivity(this, aBoolean -> {
+        mEvent.isToOpenOrCloseDrawer().observe(this, aBoolean -> {
             mState.openDrawer.setValue(aBoolean);
         });
 
-        DrawerCoordinateHelper.getInstance().isEnableSwipeDrawer().observeInActivity(this, aBoolean -> {
+        DrawerCoordinateHelper.getInstance().isEnableSwipeDrawer().observe(this, aBoolean -> {
             mState.allowDrawerOpen.setValue(aBoolean);
         });
     }
@@ -79,17 +79,17 @@ public class MainActivity extends BaseActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (!mIsListened) {
-            mPageCallback.requestToAddSlideListener(true);
+            mEvent.requestToAddSlideListener(true);
             mIsListened = true;
         }
     }
 
     @Override
     public void onBackPressed() {
-        mPageCallback.requestToCloseSlidePanelIfExpanded(true);
+        mEvent.requestToCloseSlidePanelIfExpanded(true);
     }
 
-    public class EventHandler extends DrawerLayout.SimpleDrawerListener {
+    public class ListenerHandler extends DrawerLayout.SimpleDrawerListener {
         @Override
         public void onDrawerOpened(View drawerView) {
             super.onDrawerOpened(drawerView);

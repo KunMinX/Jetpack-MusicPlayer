@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kunminx.player.helper;
+package com.kunminx.puremusic.player.helper;
 
 import com.danikula.videocache.file.FileNameGenerator;
 

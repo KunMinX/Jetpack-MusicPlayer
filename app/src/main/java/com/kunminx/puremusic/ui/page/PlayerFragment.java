@@ -82,22 +82,22 @@ public class PlayerFragment extends BaseFragment {
             }
         });
 
-        PlayerManager.getInstance().getChangeMusicLiveData().observe(getViewLifecycleOwner(), changeMusic -> {
+        PlayerManager.getInstance().getChangeMusicEvent().observe(getViewLifecycleOwner(), changeMusic -> {
             mState.title.set(changeMusic.getTitle());
             mState.artist.set(changeMusic.getSummary());
             mState.coverImg.set(changeMusic.getImg());
         });
 
-        PlayerManager.getInstance().getPlayingMusicLiveData().observe(getViewLifecycleOwner(), playingMusic -> {
+        PlayerManager.getInstance().getPlayingMusicEvent().observe(getViewLifecycleOwner(), playingMusic -> {
             mState.maxSeekDuration.set(playingMusic.getDuration());
             mState.currentSeekPosition.set(playingMusic.getPlayerPosition());
         });
 
-        PlayerManager.getInstance().getPauseLiveData().observe(getViewLifecycleOwner(), aBoolean -> {
+        PlayerManager.getInstance().getPauseEvent().observe(getViewLifecycleOwner(), aBoolean -> {
             mState.isPlaying.set(!aBoolean);
         });
 
-        PlayerManager.getInstance().getPlayModeLiveData().observe(getViewLifecycleOwner(), anEnum -> {
+        PlayerManager.getInstance().getPlayModeEvent().observe(getViewLifecycleOwner(), anEnum -> {
             int tip;
             if (anEnum == PlayingInfoManager.RepeatMode.LIST_CYCLE) {
                 mState.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);

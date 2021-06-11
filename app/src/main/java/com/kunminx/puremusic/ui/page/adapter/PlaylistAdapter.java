@@ -35,7 +35,7 @@ public class PlaylistAdapter extends SimpleDataBindingAdapter<TestAlbum.TestMusi
     public PlaylistAdapter(Context context) {
         super(context, R.layout.adapter_play_item, DiffUtils.getInstance().getTestMusicItemCallback());
 
-        setOnItemClickListener(((item, position) -> {
+        setOnItemClickListener(((viewId, item, position) -> {
             PlayerManager.getInstance().playAudio(position);
         }));
     }
