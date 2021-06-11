@@ -19,13 +19,20 @@ package com.kunminx.player.bean.dto;
 
 import com.kunminx.player.bean.base.BaseAlbumItem;
 import com.kunminx.player.bean.base.BaseArtistItem;
+import com.kunminx.player.bean.base.BaseMusicItem;
+
+import java.io.Serializable;
 
 /**
  * provide play info of playing music
- *
+ * <p>
  * Create by KunMinX at 18/9/24
  */
-public class PlayingMusic<A extends BaseArtistItem, B extends BaseAlbumItem> extends ChangeMusic {
+public class PlayingMusic<
+        A extends BaseArtistItem,
+        B extends BaseAlbumItem<M, A>,
+        M extends BaseMusicItem<A>>
+        extends ChangeMusic<B, M, A> implements Serializable {
 
     private String nowTime;
     private String allTime;
@@ -37,13 +44,27 @@ public class PlayingMusic<A extends BaseArtistItem, B extends BaseAlbumItem> ext
         this.allTime = allTime;
     }
 
-    public PlayingMusic(String title, String summary, String bookId, String chapterId, String nowTime, String allTime, String img, A artist) {
+    public PlayingMusic(
+            String title,
+            String summary,
+            String bookId,
+            String chapterId,
+            String nowTime,
+            String allTime,
+            String img,
+            A artist
+    ) {
         super(title, summary, bookId, chapterId, img, artist);
         this.nowTime = nowTime;
         this.allTime = allTime;
     }
 
-    public PlayingMusic(B baseAlbumItem, int playIndex, String nowTime, String allTime) {
+    public PlayingMusic(
+            B baseAlbumItem,
+            int playIndex,
+            String nowTime,
+            String allTime
+    ) {
         super(baseAlbumItem, playIndex);
         this.nowTime = nowTime;
         this.allTime = allTime;

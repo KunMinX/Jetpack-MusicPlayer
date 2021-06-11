@@ -16,6 +16,7 @@
 
 package com.kunminx.player.bean.base;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -23,7 +24,10 @@ import java.util.List;
  * <p>
  * Create by KunMinX at 18/9/24
  */
-public class BaseAlbumItem<M extends BaseMusicItem, A extends BaseArtistItem> {
+public class BaseAlbumItem<
+        M extends BaseMusicItem<A>,
+        A extends BaseArtistItem>
+        implements Serializable {
 
     private String albumId;
     private String title;
@@ -35,7 +39,14 @@ public class BaseAlbumItem<M extends BaseMusicItem, A extends BaseArtistItem> {
     public BaseAlbumItem() {
     }
 
-    public BaseAlbumItem(String albumId, String title, String summary, A artist, String coverImg, List<M> musics) {
+    public BaseAlbumItem(
+            String albumId,
+            String title,
+            String summary,
+            A artist,
+            String coverImg,
+            List<M> musics
+    ) {
         this.albumId = albumId;
         this.title = title;
         this.summary = summary;

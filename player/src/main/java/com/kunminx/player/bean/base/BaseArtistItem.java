@@ -16,12 +16,14 @@
 
 package com.kunminx.player.bean.base;
 
+import java.io.Serializable;
+
 /**
  * 作者实体，music artist bean
  * <p>
  * Create by KunMinX at 19/10/31
  */
-public class BaseArtistItem {
+public class BaseArtistItem implements Serializable {
 
     private String name;
 

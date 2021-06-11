@@ -23,7 +23,9 @@ import com.kunminx.player.bean.base.BaseMusicItem;
 /**
  * Create by KunMinX at 19/11/1
  */
-public class DefaultAlbum extends BaseAlbumItem<DefaultAlbum.DefaultMusic, DefaultAlbum.DefaultArtist> {
+public class DefaultAlbum extends BaseAlbumItem<
+        DefaultAlbum.DefaultMusic,
+        DefaultAlbum.DefaultArtist> {
 
     public static class DefaultMusic extends BaseMusicItem<DefaultArtist> {
 

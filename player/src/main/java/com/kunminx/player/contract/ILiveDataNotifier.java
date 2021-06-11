@@ -26,12 +26,12 @@ import com.kunminx.player.bean.dto.PlayingMusic;
  */
 public interface ILiveDataNotifier {
 
-    LiveData<ChangeMusic> getChangeMusicLiveData();
+    LiveData<ChangeMusic> getChangeMusicEvent();
 
-    LiveData<PlayingMusic> getPlayingMusicLiveData();
+    LiveData<PlayingMusic> getPlayingMusicEvent();
 
-    LiveData<Boolean> getPauseLiveData();
+    LiveData<Boolean> getPauseEvent();
 
-    LiveData<Enum> getPlayModeLiveData();
+    LiveData<Enum> getPlayModeEvent();
 
 }

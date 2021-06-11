@@ -16,12 +16,14 @@
 
 package com.kunminx.player.bean.base;
 
+import java.io.Serializable;
+
 /**
  * 音乐实体，music bean
  * <p>
  * Create by KunMinX at 18/9/24
  */
-public class BaseMusicItem<A extends BaseArtistItem> {
+public class BaseMusicItem<A extends BaseArtistItem> implements Serializable {
 
     private String musicId;
     private String coverImg;
@@ -32,7 +34,13 @@ public class BaseMusicItem<A extends BaseArtistItem> {
     public BaseMusicItem() {
     }
 
-    public BaseMusicItem(String musicId, String coverImg, String url, String title, A artist) {
+    public BaseMusicItem(
+            String musicId,
+            String coverImg,
+            String url,
+            String title,
+            A artist
+    ) {
         this.musicId = musicId;
         this.coverImg = coverImg;
         this.url = url;

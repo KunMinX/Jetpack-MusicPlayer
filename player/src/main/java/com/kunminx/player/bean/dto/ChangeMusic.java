@@ -20,12 +20,18 @@ import com.kunminx.player.bean.base.BaseAlbumItem;
 import com.kunminx.player.bean.base.BaseArtistItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
 
+import java.io.Serializable;
+
 /**
  * provide music info when music changed
- *
+ * <p>
  * Create by KunMinX at 18/9/24
  */
-public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A extends BaseArtistItem> {
+public class ChangeMusic<
+        B extends BaseAlbumItem<M, A>,
+        M extends BaseMusicItem<A>,
+        A extends BaseArtistItem>
+        implements Serializable {
 
     private String title;
     private String summary;
@@ -37,7 +43,14 @@ public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A ext
     public ChangeMusic() {
     }
 
-    public ChangeMusic(String title, String summary, String albumId, String musicId, String img, A artist) {
+    public ChangeMusic(
+            String title,
+            String summary,
+            String albumId,
+            String musicId,
+            String img,
+            A artist
+    ) {
         this.title = title;
         this.summary = summary;
         this.albumId = albumId;

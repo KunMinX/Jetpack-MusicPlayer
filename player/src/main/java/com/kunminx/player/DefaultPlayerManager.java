@@ -159,21 +159,21 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
         return mController.getAlbumIndex();
     }
 
-    public LiveData<ChangeMusic> getChangeMusicLiveData() {
+    public LiveData<ChangeMusic> getChangeMusicEvent() {
         return mController.getChangeMusicLiveData();
     }
 
-    public LiveData<PlayingMusic> getPlayingMusicLiveData() {
+    public LiveData<PlayingMusic> getPlayingMusicEvent() {
         return mController.getPlayingMusicLiveData();
     }
 
-    public LiveData<Boolean> getPauseLiveData() {
+    public LiveData<Boolean> getPauseEvent() {
         return mController.getPauseLiveData();
     }
 
 
     @Override
-    public LiveData<Enum> getPlayModeLiveData() {
+    public LiveData<Enum> getPlayModeEvent() {
         return mController.getPlayModeLiveData();
     }
 
