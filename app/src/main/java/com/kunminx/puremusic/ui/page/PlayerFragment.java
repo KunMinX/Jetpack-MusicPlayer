@@ -30,7 +30,7 @@ import com.kunminx.puremusic.BR;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.FragmentPlayerBinding;
 import com.kunminx.puremusic.player.PlayerManager;
-import com.kunminx.puremusic.ui.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.event.SharedViewModel;
 import com.kunminx.puremusic.ui.helper.DefaultInterface;
 import com.kunminx.puremusic.ui.helper.DrawerCoordinateHelper;
 import com.kunminx.puremusic.ui.state.PlayerViewModel;
@@ -45,26 +45,26 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 public class PlayerFragment extends BaseFragment {
 
     private PlayerViewModel mState;
-    private SharedViewModel mPageCallback;
+    private SharedViewModel mEvent;
 
     @Override
     protected void initViewModel() {
         mState = getFragmentScopeViewModel(PlayerViewModel.class);
-        mPageCallback = getApplicationScopeViewModel(SharedViewModel.class);
+        mEvent = getApplicationScopeViewModel(SharedViewModel.class);
     }
 
     @Override
     protected DataBindingConfig getDataBindingConfig() {
         return new DataBindingConfig(R.layout.fragment_player, BR.vm, mState)
                 .addBindingParam(BR.click, new ClickProxy())
-                .addBindingParam(BR.event, new EventHandler());
+                .addBindingParam(BR.listener, new ListenerHandler());
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPageCallback.isToAddSlideListener().observeInFragment(this, aBoolean -> {
+        mEvent.isToAddSlideListener().observe(this, aBoolean -> {
             if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
                 SlidingUpPanelLayout sliding = (SlidingUpPanelLayout) view.getParent().getParent();
                 sliding.addPanelSlideListener(new PlayerSlideListener((FragmentPlayerBinding) getBinding(), sliding));
@@ -117,7 +117,7 @@ public class PlayerFragment extends BaseFragment {
             }
         });
 
-        mPageCallback.isToCloseSlidePanelIfExpanded().observeInFragment(this, aBoolean -> {
+        mEvent.isToCloseSlidePanelIfExpanded().observe(this, aBoolean -> {
 
             if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
 
@@ -126,10 +126,10 @@ public class PlayerFragment extends BaseFragment {
                 if (sliding.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     sliding.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 } else {
-                    mPageCallback.requestToCloseActivityIfAllowed(true);
+                    mEvent.requestToCloseActivityIfAllowed(true);
                 }
             } else {
-                mPageCallback.requestToCloseActivityIfAllowed(true);
+                mEvent.requestToCloseActivityIfAllowed(true);
             }
         });
 
@@ -158,14 +158,14 @@ public class PlayerFragment extends BaseFragment {
         }
 
         public void slideDown() {
-            mPageCallback.requestToCloseSlidePanelIfExpanded(true);
+            mEvent.requestToCloseSlidePanelIfExpanded(true);
         }
 
         public void more() {
         }
     }
 
-    public static class EventHandler implements DefaultInterface.OnSeekBarChangeListener {
+    public static class ListenerHandler implements DefaultInterface.OnSeekBarChangeListener {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {

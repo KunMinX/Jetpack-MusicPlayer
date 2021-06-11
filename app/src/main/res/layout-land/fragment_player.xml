@@ -26,7 +26,7 @@
 
         <variable
             name="event"
-            type="com.kunminx.puremusic.ui.page.PlayerFragment.EventHandler" />
+            type="com.kunminx.puremusic.ui.page.PlayerFragment.ListenerHandler" />
 
         <variable
             name="vm"

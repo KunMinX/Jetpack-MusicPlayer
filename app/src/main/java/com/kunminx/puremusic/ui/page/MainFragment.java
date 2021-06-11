@@ -28,7 +28,7 @@ import com.kunminx.puremusic.BR;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.TestAlbum;
 import com.kunminx.puremusic.player.PlayerManager;
-import com.kunminx.puremusic.ui.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.event.SharedViewModel;
 import com.kunminx.puremusic.ui.page.adapter.PlaylistAdapter;
 import com.kunminx.puremusic.ui.state.MainViewModel;
 
@@ -38,12 +38,12 @@ import com.kunminx.puremusic.ui.state.MainViewModel;
 public class MainFragment extends BaseFragment {
 
     private MainViewModel mState;
-    private SharedViewModel mPageCallback;
+    private SharedViewModel mEvent;
 
     @Override
     protected void initViewModel() {
         mState = getFragmentScopeViewModel(MainViewModel.class);
-        mPageCallback = getApplicationScopeViewModel(SharedViewModel.class);
+        mEvent = getApplicationScopeViewModel(SharedViewModel.class);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class MainFragment extends BaseFragment {
     public class ClickProxy {
 
         public void openMenu() {
-            mPageCallback.requestToOpenOrCloseDrawer(true);
+            mEvent.requestToOpenOrCloseDrawer(true);
         }
 
         public void login() {
