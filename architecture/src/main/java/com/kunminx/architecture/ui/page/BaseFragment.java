@@ -45,9 +45,6 @@ public abstract class BaseFragment extends DataBindingFragment {
     private ViewModelProvider mActivityProvider;
     private ViewModelProvider mApplicationProvider;
 
-    private static final Handler HANDLER = new Handler();
-    protected boolean mAnimationLoaded;
-
     protected <T extends ViewModel> T getFragmentScopeViewModel(@NonNull Class<T> modelClass) {
         if (mFragmentProvider == null) {
             mFragmentProvider = new ViewModelProvider(this);
@@ -96,21 +93,6 @@ public abstract class BaseFragment extends DataBindingFragment {
         return NavHostFragment.findNavController(this);
     }
 
-    @Nullable
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        HANDLER.postDelayed(() -> {
-            if (!mAnimationLoaded) {
-                mAnimationLoaded = true;
-                loadInitData();
-            }
-        }, 280);
-        return super.onCreateAnimation(transit, enter, nextAnim);
-    }
-
-    protected void loadInitData() {
-
-    }
 
     protected void toggleSoftInput() {
         InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Activity.INPUT_METHOD_SERVICE);
