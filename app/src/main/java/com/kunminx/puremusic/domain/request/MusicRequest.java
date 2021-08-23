@@ -17,11 +17,10 @@
 package com.kunminx.puremusic.domain.request;
 
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.kunminx.architecture.data.response.DataResult;
 import com.kunminx.architecture.domain.request.BaseRequest;
+import com.kunminx.architecture.ui.callback.ProtectedUnPeekLiveData;
+import com.kunminx.architecture.ui.callback.UnPeekLiveData;
 import com.kunminx.puremusic.data.bean.TestAlbum;
 import com.kunminx.puremusic.data.repository.DataRepository;
 
@@ -30,9 +29,9 @@ import com.kunminx.puremusic.data.repository.DataRepository;
  */
 public class MusicRequest extends BaseRequest {
 
-  private final MutableLiveData<DataResult<TestAlbum>> mFreeMusicsLiveData = new MutableLiveData<>();
+  private final UnPeekLiveData<DataResult<TestAlbum>> mFreeMusicsLiveData = new UnPeekLiveData<>();
 
-  public LiveData<DataResult<TestAlbum>> getFreeMusicsLiveData() {
+  public ProtectedUnPeekLiveData<DataResult<TestAlbum>> getFreeMusicsLiveData() {
     return mFreeMusicsLiveData;
   }
 

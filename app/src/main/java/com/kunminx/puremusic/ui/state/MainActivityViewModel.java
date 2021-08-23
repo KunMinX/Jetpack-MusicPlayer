@@ -20,8 +20,6 @@ import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.kunminx.puremusic.domain.request.DownloadRequest;
-
 /**
  * Create by KunMinX at 19/10/29
  */
@@ -32,8 +30,6 @@ public class MainActivityViewModel extends ViewModel {
   public final MutableLiveData<Boolean> openDrawer = new MutableLiveData<>();
 
   public final MutableLiveData<Boolean> allowDrawerOpen = new MutableLiveData<>();
-
-  public final DownloadRequest downloadRequest = new DownloadRequest();
 
   {
     allowDrawerOpen.setValue(true);
