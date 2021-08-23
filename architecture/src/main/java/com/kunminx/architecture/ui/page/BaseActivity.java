@@ -17,7 +17,6 @@
 package com.kunminx.architecture.ui.page;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -67,24 +66,9 @@ public abstract class BaseActivity extends DataBindingActivity {
 
   protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
     if (mApplicationProvider == null) {
-      mApplicationProvider = new ViewModelProvider((BaseApplication) this.getApplicationContext(),
-              getAppFactory(this));
+      mApplicationProvider = new ViewModelProvider((BaseApplication) this.getApplicationContext());
     }
     return mApplicationProvider.get(modelClass);
-  }
-
-  private ViewModelProvider.Factory getAppFactory(Activity activity) {
-    Application application = checkApplication(activity);
-    return ViewModelProvider.AndroidViewModelFactory.getInstance(application);
-  }
-
-  private Application checkApplication(Activity activity) {
-    Application application = activity.getApplication();
-    if (application == null) {
-      throw new IllegalStateException("Your activity/fragment is not yet attached to "
-              + "Application. You can't request ViewModel before onCreate call.");
-    }
-    return application;
   }
 
   @Override
