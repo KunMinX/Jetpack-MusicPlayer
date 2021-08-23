@@ -31,19 +31,19 @@ import java.util.List;
  */
 public class MainViewModel extends ViewModel {
 
-    public final ObservableBoolean initTabAndPage = new ObservableBoolean();
+  public final ObservableBoolean initTabAndPage = new ObservableBoolean();
 
-    public final ObservableField<String> pageAssetPath = new ObservableField<>();
+  public final ObservableField<String> pageAssetPath = new ObservableField<>();
 
-    public final MutableLiveData<List<TestAlbum.TestMusic>> list = new MutableLiveData<>();
+  public final MutableLiveData<List<TestAlbum.TestMusic>> list = new MutableLiveData<>();
 
-    public final MutableLiveData<Boolean> notifyCurrentListChanged = new MutableLiveData<>();
+  public final MutableLiveData<Boolean> notifyCurrentListChanged = new MutableLiveData<>();
 
-    public final MusicRequest musicRequest = new MusicRequest();
+  public final MusicRequest musicRequest = new MusicRequest();
 
-    {
-        initTabAndPage.set(true);
-        pageAssetPath.set("summary.html");
-    }
+  {
+    initTabAndPage.set(true);
+    pageAssetPath.set("summary.html");
+  }
 
 }

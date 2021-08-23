@@ -37,64 +37,64 @@ import com.kunminx.puremusic.ui.state.MainViewModel;
  */
 public class MainFragment extends BaseFragment {
 
-    private MainViewModel mState;
-    private SharedViewModel mEvent;
+  private MainViewModel mState;
+  private SharedViewModel mEvent;
 
-    @Override
-    protected void initViewModel() {
-        mState = getFragmentScopeViewModel(MainViewModel.class);
-        mEvent = getApplicationScopeViewModel(SharedViewModel.class);
+  @Override
+  protected void initViewModel() {
+    mState = getFragmentScopeViewModel(MainViewModel.class);
+    mEvent = getApplicationScopeViewModel(SharedViewModel.class);
+  }
+
+  @Override
+  protected DataBindingConfig getDataBindingConfig() {
+    return new DataBindingConfig(R.layout.fragment_main, BR.vm, mState)
+            .addBindingParam(BR.click, new ClickProxy())
+            .addBindingParam(BR.adapter, new PlaylistAdapter(getContext()));
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    PlayerManager.getInstance().getChangeMusicEvent().observe(getViewLifecycleOwner(), changeMusic -> {
+      mState.notifyCurrentListChanged.setValue(true);
+    });
+
+    mState.musicRequest.getFreeMusicsLiveData().observe(getViewLifecycleOwner(), dataResult -> {
+      if (!dataResult.getResponseStatus().isSuccess()) return;
+
+      TestAlbum musicAlbum = dataResult.getResult();
+
+      if (musicAlbum != null && musicAlbum.getMusics() != null) {
+        mState.list.setValue(musicAlbum.getMusics());
+
+        if (PlayerManager.getInstance().getAlbum() == null ||
+                !PlayerManager.getInstance().getAlbum().getAlbumId().equals(musicAlbum.getAlbumId())) {
+          PlayerManager.getInstance().loadAlbum(musicAlbum);
+        }
+      }
+    });
+
+    if (PlayerManager.getInstance().getAlbum() == null) {
+      mState.musicRequest.requestFreeMusics();
+    } else {
+      mState.list.setValue(PlayerManager.getInstance().getAlbum().getMusics());
+    }
+  }
+
+  public class ClickProxy {
+
+    public void openMenu() {
+      mEvent.requestToOpenOrCloseDrawer(true);
     }
 
-    @Override
-    protected DataBindingConfig getDataBindingConfig() {
-        return new DataBindingConfig(R.layout.fragment_main, BR.vm, mState)
-                .addBindingParam(BR.click, new ClickProxy())
-                .addBindingParam(BR.adapter, new PlaylistAdapter(getContext()));
+    public void login() {
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        PlayerManager.getInstance().getChangeMusicEvent().observe(getViewLifecycleOwner(), changeMusic -> {
-            mState.notifyCurrentListChanged.setValue(true);
-        });
-
-        mState.musicRequest.getFreeMusicsLiveData().observe(getViewLifecycleOwner(), dataResult -> {
-            if (!dataResult.getResponseStatus().isSuccess()) return;
-
-            TestAlbum musicAlbum = dataResult.getResult();
-
-            if (musicAlbum != null && musicAlbum.getMusics() != null) {
-                mState.list.setValue(musicAlbum.getMusics());
-
-                if (PlayerManager.getInstance().getAlbum() == null ||
-                        !PlayerManager.getInstance().getAlbum().getAlbumId().equals(musicAlbum.getAlbumId())) {
-                    PlayerManager.getInstance().loadAlbum(musicAlbum);
-                }
-            }
-        });
-
-        if (PlayerManager.getInstance().getAlbum() == null) {
-            mState.musicRequest.requestFreeMusics();
-        } else {
-            mState.list.setValue(PlayerManager.getInstance().getAlbum().getMusics());
-        }
+    public void search() {
     }
 
-    public class ClickProxy {
-
-        public void openMenu() {
-            mEvent.requestToOpenOrCloseDrawer(true);
-        }
-
-        public void login() {
-        }
-
-        public void search() {
-        }
-
-    }
+  }
 
 }

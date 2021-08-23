@@ -27,44 +27,44 @@ import com.kunminx.player.bean.base.BaseMusicItem;
 public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicItem>
         extends ILiveDataNotifier, IPlayInfoManager {
 
-    //程序启动时就初始化
-    void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy);
+  //程序启动时就初始化
+  void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy);
 
-    void loadAlbum(B musicAlbum);
+  void loadAlbum(B musicAlbum);
 
-    //切换专辑时。只在从新专辑进入播放页面时切换。
-    void loadAlbum(B musicAlbum, int playIndex);
+  //切换专辑时。只在从新专辑进入播放页面时切换。
+  void loadAlbum(B musicAlbum, int playIndex);
 
-    void playAudio();
+  void playAudio();
 
-    void playAudio(int albumIndex);
+  void playAudio(int albumIndex);
 
-    //手动点击，和自动next，都调用这个
-    void playNext();
+  //手动点击，和自动next，都调用这个
+  void playNext();
 
-    void playPrevious();
+  void playPrevious();
 
-    void playAgain();
+  void playAgain();
 
-    void togglePlay();
+  void togglePlay();
 
-    void pauseAudio();
+  void pauseAudio();
 
-    void resumeAudio();
+  void resumeAudio();
 
-    void clear();
+  void clear();
 
-    //切换循环模式
-    void changeMode();
+  //切换循环模式
+  void changeMode();
 
-    boolean isPlaying();
+  boolean isPlaying();
 
-    boolean isPaused();
+  boolean isPaused();
 
-    boolean isInit();
+  boolean isInit();
 
-    void setSeek(int progress);
+  void setSeek(int progress);
 
-    String getTrackTime(int progress);
+  String getTrackTime(int progress);
 
 }

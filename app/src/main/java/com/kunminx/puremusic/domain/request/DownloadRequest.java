@@ -15,35 +15,35 @@ import com.kunminx.puremusic.domain.usecase.CanBeStoppedUseCase;
  */
 public class DownloadRequest extends BaseRequest {
 
-    private final MutableLiveData<DataResult<DownloadFile>> mDownloadFileLiveData = new MutableLiveData<>();
+  private final MutableLiveData<DataResult<DownloadFile>> mDownloadFileLiveData = new MutableLiveData<>();
 
-    private final MutableLiveData<DataResult<DownloadFile>> mDownloadFileCanBeStoppedLiveData = new MutableLiveData<>();
+  private final MutableLiveData<DataResult<DownloadFile>> mDownloadFileCanBeStoppedLiveData = new MutableLiveData<>();
 
-    private final CanBeStoppedUseCase mCanBeStoppedUseCase = new CanBeStoppedUseCase();
+  private final CanBeStoppedUseCase mCanBeStoppedUseCase = new CanBeStoppedUseCase();
 
-    public LiveData<DataResult<DownloadFile>> getDownloadFileLiveData() {
-        return mDownloadFileLiveData;
-    }
+  public LiveData<DataResult<DownloadFile>> getDownloadFileLiveData() {
+    return mDownloadFileLiveData;
+  }
 
-    public LiveData<DataResult<DownloadFile>> getDownloadFileCanBeStoppedLiveData() {
-        return mDownloadFileCanBeStoppedLiveData;
-    }
+  public LiveData<DataResult<DownloadFile>> getDownloadFileCanBeStoppedLiveData() {
+    return mDownloadFileCanBeStoppedLiveData;
+  }
 
-    public CanBeStoppedUseCase getCanBeStoppedUseCase() {
-        return mCanBeStoppedUseCase;
-    }
+  public CanBeStoppedUseCase getCanBeStoppedUseCase() {
+    return mCanBeStoppedUseCase;
+  }
 
-    public void requestDownloadFile() {
+  public void requestDownloadFile() {
 
-        DownloadFile downloadFile = new DownloadFile();
+    DownloadFile downloadFile = new DownloadFile();
 
-        DataRepository.getInstance().downloadFile(downloadFile, mDownloadFileLiveData::postValue);
-    }
+    DataRepository.getInstance().downloadFile(downloadFile, mDownloadFileLiveData::postValue);
+  }
 
-    public void requestCanBeStoppedDownloadFile() {
-        UseCaseHandler.getInstance().execute(getCanBeStoppedUseCase(),
-                new CanBeStoppedUseCase.RequestValues(), response -> {
-                    mDownloadFileCanBeStoppedLiveData.setValue(response.getDataResult());
-                });
-    }
+  public void requestCanBeStoppedDownloadFile() {
+    UseCaseHandler.getInstance().execute(getCanBeStoppedUseCase(),
+            new CanBeStoppedUseCase.RequestValues(), response -> {
+              mDownloadFileCanBeStoppedLiveData.setValue(response.getDataResult());
+            });
+  }
 }

@@ -26,17 +26,17 @@ import java.util.List;
  */
 public interface IPlayInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem> {
 
-    B getAlbum();
+  B getAlbum();
 
-    List<M> getAlbumMusics();
+  List<M> getAlbumMusics();
 
-    void setChangingPlayingMusic(boolean changingPlayingMusic);
+  void setChangingPlayingMusic(boolean changingPlayingMusic);
 
-    int getAlbumIndex();
+  int getAlbumIndex();
 
-    Enum getRepeatMode();
+  Enum getRepeatMode();
 
-    M getCurrentPlayingMusic();
+  M getCurrentPlayingMusic();
 
-    void requestLastPlayingInfo();
+  void requestLastPlayingInfo();
 }

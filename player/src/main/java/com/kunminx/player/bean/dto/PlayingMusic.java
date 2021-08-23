@@ -34,71 +34,71 @@ public class PlayingMusic<
         M extends BaseMusicItem<A>>
         extends ChangeMusic<B, M, A> implements Serializable {
 
-    private String nowTime;
-    private String allTime;
-    private int duration;
-    private int playerPosition;
+  private String nowTime;
+  private String allTime;
+  private int duration;
+  private int playerPosition;
 
-    public PlayingMusic(String nowTime, String allTime) {
-        this.nowTime = nowTime;
-        this.allTime = allTime;
-    }
+  public PlayingMusic(String nowTime, String allTime) {
+    this.nowTime = nowTime;
+    this.allTime = allTime;
+  }
 
-    public PlayingMusic(
-            String title,
-            String summary,
-            String bookId,
-            String chapterId,
-            String nowTime,
-            String allTime,
-            String img,
-            A artist
-    ) {
-        super(title, summary, bookId, chapterId, img, artist);
-        this.nowTime = nowTime;
-        this.allTime = allTime;
-    }
+  public PlayingMusic(
+          String title,
+          String summary,
+          String bookId,
+          String chapterId,
+          String nowTime,
+          String allTime,
+          String img,
+          A artist
+  ) {
+    super(title, summary, bookId, chapterId, img, artist);
+    this.nowTime = nowTime;
+    this.allTime = allTime;
+  }
 
-    public PlayingMusic(
-            B baseAlbumItem,
-            int playIndex,
-            String nowTime,
-            String allTime
-    ) {
-        super(baseAlbumItem, playIndex);
-        this.nowTime = nowTime;
-        this.allTime = allTime;
-    }
+  public PlayingMusic(
+          B baseAlbumItem,
+          int playIndex,
+          String nowTime,
+          String allTime
+  ) {
+    super(baseAlbumItem, playIndex);
+    this.nowTime = nowTime;
+    this.allTime = allTime;
+  }
 
-    public String getNowTime() {
-        return nowTime;
-    }
+  public String getNowTime() {
+    return nowTime;
+  }
 
-    public void setNowTime(String nowTime) {
-        this.nowTime = nowTime;
-    }
+  public void setNowTime(String nowTime) {
+    this.nowTime = nowTime;
+  }
 
-    public String getAllTime() {
-        return allTime;
-    }
+  public String getAllTime() {
+    return allTime;
+  }
 
-    public void setAllTime(String allTime) {
-        this.allTime = allTime;
-    }
+  public void setAllTime(String allTime) {
+    this.allTime = allTime;
+  }
 
-    public int getDuration() {
-        return duration;
-    }
+  public int getDuration() {
+    return duration;
+  }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
+  public void setDuration(int duration) {
+    this.duration = duration;
+  }
 
-    public int getPlayerPosition() {
-        return playerPosition;
-    }
+  public int getPlayerPosition() {
+    return playerPosition;
+  }
 
-    public void setPlayerPosition(int playerPosition) {
-        this.playerPosition = playerPosition;
-    }
+  public void setPlayerPosition(int playerPosition) {
+    this.playerPosition = playerPosition;
+  }
 }

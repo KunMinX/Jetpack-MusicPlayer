@@ -30,13 +30,13 @@ import com.kunminx.puremusic.data.repository.DataRepository;
  */
 public class MusicRequest extends BaseRequest {
 
-    private final MutableLiveData<DataResult<TestAlbum>> mFreeMusicsLiveData = new MutableLiveData<>();
+  private final MutableLiveData<DataResult<TestAlbum>> mFreeMusicsLiveData = new MutableLiveData<>();
 
-    public LiveData<DataResult<TestAlbum>> getFreeMusicsLiveData() {
-        return mFreeMusicsLiveData;
-    }
+  public LiveData<DataResult<TestAlbum>> getFreeMusicsLiveData() {
+    return mFreeMusicsLiveData;
+  }
 
-    public void requestFreeMusics() {
-        DataRepository.getInstance().getFreeMusic(mFreeMusicsLiveData::setValue);
-    }
+  public void requestFreeMusics() {
+    DataRepository.getInstance().getFreeMusic(mFreeMusicsLiveData::setValue);
+  }
 }

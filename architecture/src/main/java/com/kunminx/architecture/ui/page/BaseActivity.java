@@ -43,83 +43,83 @@ import com.kunminx.architecture.utils.ScreenUtils;
  */
 public abstract class BaseActivity extends DataBindingActivity {
 
-    private ViewModelProvider mActivityProvider;
-    private ViewModelProvider mApplicationProvider;
+  private ViewModelProvider mActivityProvider;
+  private ViewModelProvider mApplicationProvider;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+  @Override
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
 
-        BarUtils.setStatusBarColor(this, Color.TRANSPARENT);
-        BarUtils.setStatusBarLightMode(this, true);
+    BarUtils.setStatusBarColor(this, Color.TRANSPARENT);
+    BarUtils.setStatusBarLightMode(this, true);
 
-        super.onCreate(savedInstanceState);
+    super.onCreate(savedInstanceState);
 
-        getLifecycle().addObserver(NetworkStateManager.getInstance());
+    getLifecycle().addObserver(NetworkStateManager.getInstance());
 
+  }
+
+  protected <T extends ViewModel> T getActivityScopeViewModel(@NonNull Class<T> modelClass) {
+    if (mActivityProvider == null) {
+      mActivityProvider = new ViewModelProvider(this);
     }
+    return mActivityProvider.get(modelClass);
+  }
 
-    protected <T extends ViewModel> T getActivityScopeViewModel(@NonNull Class<T> modelClass) {
-        if (mActivityProvider == null) {
-            mActivityProvider = new ViewModelProvider(this);
-        }
-        return mActivityProvider.get(modelClass);
+  protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
+    if (mApplicationProvider == null) {
+      mApplicationProvider = new ViewModelProvider((BaseApplication) this.getApplicationContext(),
+              getAppFactory(this));
     }
+    return mApplicationProvider.get(modelClass);
+  }
 
-    protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
-        if (mApplicationProvider == null) {
-            mApplicationProvider = new ViewModelProvider((BaseApplication) this.getApplicationContext(),
-                    getAppFactory(this));
-        }
-        return mApplicationProvider.get(modelClass);
-    }
+  private ViewModelProvider.Factory getAppFactory(Activity activity) {
+    Application application = checkApplication(activity);
+    return ViewModelProvider.AndroidViewModelFactory.getInstance(application);
+  }
 
-    private ViewModelProvider.Factory getAppFactory(Activity activity) {
-        Application application = checkApplication(activity);
-        return ViewModelProvider.AndroidViewModelFactory.getInstance(application);
+  private Application checkApplication(Activity activity) {
+    Application application = activity.getApplication();
+    if (application == null) {
+      throw new IllegalStateException("Your activity/fragment is not yet attached to "
+              + "Application. You can't request ViewModel before onCreate call.");
     }
+    return application;
+  }
 
-    private Application checkApplication(Activity activity) {
-        Application application = activity.getApplication();
-        if (application == null) {
-            throw new IllegalStateException("Your activity/fragment is not yet attached to "
-                    + "Application. You can't request ViewModel before onCreate call.");
-        }
-        return application;
+  @Override
+  public Resources getResources() {
+    if (ScreenUtils.isPortrait()) {
+      return AdaptScreenUtils.adaptWidth(super.getResources(), 360);
+    } else {
+      return AdaptScreenUtils.adaptHeight(super.getResources(), 640);
     }
+  }
 
-    @Override
-    public Resources getResources() {
-        if (ScreenUtils.isPortrait()) {
-            return AdaptScreenUtils.adaptWidth(super.getResources(), 360);
-        } else {
-            return AdaptScreenUtils.adaptHeight(super.getResources(), 640);
-        }
-    }
+  protected void toggleSoftInput() {
+    InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+  }
 
-    protected void toggleSoftInput() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-    }
+  protected void openUrlInBrowser(String url) {
+    Uri uri = Uri.parse(url);
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    startActivity(intent);
+  }
 
-    protected void openUrlInBrowser(String url) {
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
-    }
+  protected void showLongToast(String text) {
+    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+  }
 
-    protected void showLongToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-    }
+  protected void showShortToast(String text) {
+    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+  }
 
-    protected void showShortToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-    }
+  protected void showLongToast(int stringRes) {
+    showLongToast(getApplicationContext().getString(stringRes));
+  }
 
-    protected void showLongToast(int stringRes) {
-        showLongToast(getApplicationContext().getString(stringRes));
-    }
-
-    protected void showShortToast(int stringRes) {
-        showShortToast(getApplicationContext().getString(stringRes));
-    }
+  protected void showShortToast(int stringRes) {
+    showShortToast(getApplicationContext().getString(stringRes));
+  }
 }

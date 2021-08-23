@@ -32,13 +32,13 @@ import java.util.List;
  */
 public class InfoRequest extends BaseRequest {
 
-    private final MutableLiveData<DataResult<List<LibraryInfo>>> mLibraryLiveData = new MutableLiveData<>();
+  private final MutableLiveData<DataResult<List<LibraryInfo>>> mLibraryLiveData = new MutableLiveData<>();
 
-    public LiveData<DataResult<List<LibraryInfo>>> getLibraryLiveData() {
-        return mLibraryLiveData;
-    }
+  public LiveData<DataResult<List<LibraryInfo>>> getLibraryLiveData() {
+    return mLibraryLiveData;
+  }
 
-    public void requestLibraryInfo() {
-        DataRepository.getInstance().getLibraryInfo(mLibraryLiveData::setValue);
-    }
+  public void requestLibraryInfo() {
+    DataRepository.getInstance().getLibraryInfo(mLibraryLiveData::setValue);
+  }
 }

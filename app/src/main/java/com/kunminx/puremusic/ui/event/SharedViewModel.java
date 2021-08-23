@@ -26,44 +26,44 @@ import com.kunminx.architecture.ui.callback.UnPeekLiveData;
  */
 public class SharedViewModel extends ViewModel {
 
-    private final UnPeekLiveData<Boolean> toCloseSlidePanelIfExpanded = new UnPeekLiveData<>();
+  private final UnPeekLiveData<Boolean> toCloseSlidePanelIfExpanded = new UnPeekLiveData<>();
 
-    private final UnPeekLiveData<Boolean> toCloseActivityIfAllowed = new UnPeekLiveData<>();
+  private final UnPeekLiveData<Boolean> toCloseActivityIfAllowed = new UnPeekLiveData<>();
 
-    private final UnPeekLiveData<Boolean> toOpenOrCloseDrawer = new UnPeekLiveData<>();
+  private final UnPeekLiveData<Boolean> toOpenOrCloseDrawer = new UnPeekLiveData<>();
 
-    private final UnPeekLiveData<Boolean> toAddSlideListener =
-            new UnPeekLiveData.Builder<Boolean>().setAllowNullValue(false).create();
+  private final UnPeekLiveData<Boolean> toAddSlideListener =
+          new UnPeekLiveData.Builder<Boolean>().setAllowNullValue(false).create();
 
-    public ProtectedUnPeekLiveData<Boolean> isToAddSlideListener() {
-        return toAddSlideListener;
-    }
+  public ProtectedUnPeekLiveData<Boolean> isToAddSlideListener() {
+    return toAddSlideListener;
+  }
 
-    public ProtectedUnPeekLiveData<Boolean> isToCloseSlidePanelIfExpanded() {
-        return toCloseSlidePanelIfExpanded;
-    }
+  public ProtectedUnPeekLiveData<Boolean> isToCloseSlidePanelIfExpanded() {
+    return toCloseSlidePanelIfExpanded;
+  }
 
-    public ProtectedUnPeekLiveData<Boolean> isToCloseActivityIfAllowed() {
-        return toCloseActivityIfAllowed;
-    }
+  public ProtectedUnPeekLiveData<Boolean> isToCloseActivityIfAllowed() {
+    return toCloseActivityIfAllowed;
+  }
 
-    public ProtectedUnPeekLiveData<Boolean> isToOpenOrCloseDrawer() {
-        return toOpenOrCloseDrawer;
-    }
+  public ProtectedUnPeekLiveData<Boolean> isToOpenOrCloseDrawer() {
+    return toOpenOrCloseDrawer;
+  }
 
-    public void requestToCloseActivityIfAllowed(boolean allow) {
-        toCloseActivityIfAllowed.setValue(allow);
-    }
+  public void requestToCloseActivityIfAllowed(boolean allow) {
+    toCloseActivityIfAllowed.setValue(allow);
+  }
 
-    public void requestToOpenOrCloseDrawer(boolean open) {
-        toOpenOrCloseDrawer.setValue(open);
-    }
+  public void requestToOpenOrCloseDrawer(boolean open) {
+    toOpenOrCloseDrawer.setValue(open);
+  }
 
-    public void requestToCloseSlidePanelIfExpanded(boolean close) {
-        toCloseSlidePanelIfExpanded.setValue(close);
-    }
+  public void requestToCloseSlidePanelIfExpanded(boolean close) {
+    toCloseSlidePanelIfExpanded.setValue(close);
+  }
 
-    public void requestToAddSlideListener(boolean add) {
-        toAddSlideListener.setValue(add);
-    }
+  public void requestToAddSlideListener(boolean add) {
+    toAddSlideListener.setValue(add);
+  }
 }
