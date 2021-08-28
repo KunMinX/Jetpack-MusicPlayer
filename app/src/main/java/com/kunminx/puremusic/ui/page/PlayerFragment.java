@@ -25,14 +25,15 @@ import androidx.annotation.Nullable;
 
 import com.kunminx.architecture.ui.page.BaseFragment;
 import com.kunminx.architecture.ui.page.DataBindingConfig;
+import com.kunminx.architecture.utils.ToastUtils;
 import com.kunminx.player.PlayingInfoManager;
 import com.kunminx.puremusic.BR;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.FragmentPlayerBinding;
+import com.kunminx.puremusic.domain.message.DrawerCoordinateManager;
+import com.kunminx.puremusic.domain.message.SharedViewModel;
 import com.kunminx.puremusic.player.PlayerManager;
-import com.kunminx.puremusic.ui.event.SharedViewModel;
 import com.kunminx.puremusic.ui.helper.DefaultInterface;
-import com.kunminx.puremusic.ui.helper.DrawerCoordinateHelper;
 import com.kunminx.puremusic.ui.state.PlayerViewModel;
 import com.kunminx.puremusic.ui.view.PlayerSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -73,7 +74,7 @@ public class PlayerFragment extends BaseFragment {
           public void onPanelStateChanged(
                   View view, SlidingUpPanelLayout.PanelState panelState,
                   SlidingUpPanelLayout.PanelState panelState1) {
-            DrawerCoordinateHelper.getInstance().requestToUpdateDrawerMode(
+            DrawerCoordinateManager.getInstance().requestToUpdateDrawerMode(
                     panelState1 == SlidingUpPanelLayout.PanelState.EXPANDED,
                     this.getClass().getSimpleName()
             );
@@ -112,7 +113,7 @@ public class PlayerFragment extends BaseFragment {
       if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
         SlidingUpPanelLayout sliding = (SlidingUpPanelLayout) view.getParent().getParent();
         if (sliding.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-          showShortToast(tip);
+          ToastUtils.showShortToast(mActivity.getApplicationContext(), getString(tip));
         }
       }
     });
@@ -154,7 +155,7 @@ public class PlayerFragment extends BaseFragment {
     }
 
     public void showPlayList() {
-      showShortToast(R.string.unfinished);
+      ToastUtils.showShortToast(mActivity.getApplicationContext(), getString(R.string.unfinished));
     }
 
     public void slideDown() {

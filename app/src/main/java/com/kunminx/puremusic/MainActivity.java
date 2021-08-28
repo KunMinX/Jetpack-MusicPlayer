@@ -25,8 +25,8 @@ import androidx.navigation.Navigation;
 
 import com.kunminx.architecture.ui.page.BaseActivity;
 import com.kunminx.architecture.ui.page.DataBindingConfig;
-import com.kunminx.puremusic.ui.event.SharedViewModel;
-import com.kunminx.puremusic.ui.helper.DrawerCoordinateHelper;
+import com.kunminx.puremusic.domain.message.DrawerCoordinateManager;
+import com.kunminx.puremusic.domain.message.SharedViewModel;
 import com.kunminx.puremusic.ui.state.MainActivityViewModel;
 
 /**
@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity {
       mState.openDrawer.setValue(aBoolean);
     });
 
-    DrawerCoordinateHelper.getInstance().isEnableSwipeDrawer().observe(this, aBoolean -> {
+    DrawerCoordinateManager.getInstance().isEnableSwipeDrawer().observe(this, aBoolean -> {
       mState.allowDrawerOpen.setValue(aBoolean);
     });
   }

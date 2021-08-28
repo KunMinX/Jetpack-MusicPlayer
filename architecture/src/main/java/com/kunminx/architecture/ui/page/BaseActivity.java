@@ -23,7 +23,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -91,19 +90,4 @@ public abstract class BaseActivity extends DataBindingActivity {
     startActivity(intent);
   }
 
-  protected void showLongToast(String text) {
-    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-  }
-
-  protected void showShortToast(String text) {
-    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-  }
-
-  protected void showLongToast(int stringRes) {
-    showLongToast(getApplicationContext().getString(stringRes));
-  }
-
-  protected void showShortToast(int stringRes) {
-    showShortToast(getApplicationContext().getString(stringRes));
-  }
 }

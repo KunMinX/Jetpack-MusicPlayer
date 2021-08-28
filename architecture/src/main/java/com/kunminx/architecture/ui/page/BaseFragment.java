@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -77,19 +76,4 @@ public abstract class BaseFragment extends DataBindingFragment {
     startActivity(intent);
   }
 
-  protected void showLongToast(String text) {
-    Toast.makeText(mActivity.getApplicationContext(), text, Toast.LENGTH_LONG).show();
-  }
-
-  protected void showShortToast(String text) {
-    Toast.makeText(mActivity.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-  }
-
-  protected void showLongToast(int stringRes) {
-    showLongToast(mActivity.getApplicationContext().getString(stringRes));
-  }
-
-  protected void showShortToast(int stringRes) {
-    showShortToast(mActivity.getApplicationContext().getString(stringRes));
-  }
 }

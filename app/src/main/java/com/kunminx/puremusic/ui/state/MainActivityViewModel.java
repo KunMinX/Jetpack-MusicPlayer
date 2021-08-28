@@ -27,13 +27,8 @@ public class MainActivityViewModel extends ViewModel {
 
   public final ObservableBoolean isDrawerOpened = new ObservableBoolean();
 
-  public final MutableLiveData<Boolean> openDrawer = new MutableLiveData<>();
+  public final MutableLiveData<Boolean> openDrawer = new MutableLiveData<>(false);
 
-  public final MutableLiveData<Boolean> allowDrawerOpen = new MutableLiveData<>();
-
-  {
-    allowDrawerOpen.setValue(true);
-    openDrawer.setValue(false);
-  }
+  public final MutableLiveData<Boolean> allowDrawerOpen = new MutableLiveData<>(true);
 
 }
