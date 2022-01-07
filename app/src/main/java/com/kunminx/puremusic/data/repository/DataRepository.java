@@ -38,61 +38,61 @@ import java.util.TimerTask;
  */
 public class DataRepository {
 
-    private static final DataRepository S_REQUEST_MANAGER = new DataRepository();
+  private static final DataRepository S_REQUEST_MANAGER = new DataRepository();
 
-    private DataRepository() {
-    }
+  private DataRepository() {
+  }
 
-    public static DataRepository getInstance() {
-        return S_REQUEST_MANAGER;
-    }
-
-
-    public void getFreeMusic(DataResult.Result<TestAlbum> result) {
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<TestAlbum>() {
-        }.getType();
-        TestAlbum testAlbum = gson.fromJson(Utils.getApp().getString(R.string.free_music_json), type);
-
-        result.onResult(new DataResult<>(testAlbum, new ResponseStatus()));
-    }
-
-    public void getLibraryInfo(DataResult.Result<List<LibraryInfo>> result) {
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<LibraryInfo>>() {
-        }.getType();
-        List<LibraryInfo> list = gson.fromJson(Utils.getApp().getString(R.string.library_json), type);
-
-        result.onResult(new DataResult<>(list, new ResponseStatus()));
-    }
+  public static DataRepository getInstance() {
+    return S_REQUEST_MANAGER;
+  }
 
 
-    public void downloadFile(DownloadFile downloadFile, DataResult.Result<DownloadFile> result) {
+  public void getFreeMusic(DataResult.Result<TestAlbum> result) {
 
-        Timer timer = new Timer();
+    Gson gson = new Gson();
+    Type type = new TypeToken<TestAlbum>() {
+    }.getType();
+    TestAlbum testAlbum = gson.fromJson(Utils.getApp().getString(R.string.free_music_json), type);
 
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
+    result.onResult(new DataResult<>(testAlbum, new ResponseStatus()));
+  }
 
-                if (downloadFile.getProgress() < 100) {
-                    downloadFile.setProgress(downloadFile.getProgress() + 1);
-                    Log.d("TAG", "下载进度 " + downloadFile.getProgress() + "%");
-                } else {
-                    timer.cancel();
-                }
-                if (downloadFile.isForgive()) {
-                    timer.cancel();
-                    downloadFile.setProgress(0);
-                    downloadFile.setForgive(false);
-                    return;
-                }
-                result.onResult(new DataResult<>(downloadFile, new ResponseStatus()));
-            }
-        };
+  public void getLibraryInfo(DataResult.Result<List<LibraryInfo>> result) {
+    Gson gson = new Gson();
+    Type type = new TypeToken<List<LibraryInfo>>() {
+    }.getType();
+    List<LibraryInfo> list = gson.fromJson(Utils.getApp().getString(R.string.library_json), type);
 
-        timer.schedule(task, 100, 100);
-    }
+    result.onResult(new DataResult<>(list, new ResponseStatus()));
+  }
+
+
+  public void downloadFile(DownloadFile downloadFile, DataResult.Result<DownloadFile> result) {
+
+    Timer timer = new Timer();
+
+    TimerTask task = new TimerTask() {
+      @Override
+      public void run() {
+
+        if (downloadFile.getProgress() < 100) {
+          downloadFile.setProgress(downloadFile.getProgress() + 1);
+          Log.d("TAG", "下载进度 " + downloadFile.getProgress() + "%");
+        } else {
+          timer.cancel();
+        }
+        if (downloadFile.isForgive()) {
+          timer.cancel();
+          downloadFile.setProgress(0);
+          downloadFile.setForgive(false);
+          return;
+        }
+        result.onResult(new DataResult<>(downloadFile, new ResponseStatus()));
+      }
+    };
+
+    timer.schedule(task, 100, 100);
+  }
 
 }

@@ -28,109 +28,109 @@ import java.util.List;
  */
 public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem> {
 
-    //index of current playing which maybe Shuffled
-    private int mPlayIndex = 0;
+  //index of current playing which maybe Shuffled
+  private int mPlayIndex = 0;
 
-    //index of current playing which user see in the list
-    private int mAlbumIndex = 0;
+  //index of current playing which user see in the list
+  private int mAlbumIndex = 0;
 
-    //循环模式
-    private Enum mRepeatMode;
+  //循环模式
+  private Enum mRepeatMode;
 
-    public enum RepeatMode {
-        SINGLE_CYCLE,
-        LIST_CYCLE,
-        RANDOM
+  public enum RepeatMode {
+    SINGLE_CYCLE,
+    LIST_CYCLE,
+    RANDOM
+  }
+
+  //原始列表
+  private List<M> mOriginPlayingList = new ArrayList<>();
+
+  //随机播放列表
+  private List<M> mShufflePlayingList = new ArrayList<>();
+
+  //专辑详情
+  private B mMusicAlbum;
+
+  boolean isInit() {
+    return mMusicAlbum != null;
+  }
+
+  private void fitShuffle() {
+    mShufflePlayingList.clear();
+    mShufflePlayingList.addAll(mOriginPlayingList);
+    Collections.shuffle(mShufflePlayingList);
+  }
+
+  Enum changeMode() {
+    if (mRepeatMode == RepeatMode.LIST_CYCLE) {
+      mRepeatMode = RepeatMode.SINGLE_CYCLE;
+    } else if (mRepeatMode == RepeatMode.SINGLE_CYCLE) {
+      mRepeatMode = RepeatMode.RANDOM;
+    } else {
+      mRepeatMode = RepeatMode.LIST_CYCLE;
     }
+    return mRepeatMode;
+  }
 
-    //原始列表
-    private List<M> mOriginPlayingList = new ArrayList<>();
+  B getMusicAlbum() {
+    return mMusicAlbum;
+  }
 
-    //随机播放列表
-    private List<M> mShufflePlayingList = new ArrayList<>();
+  void setMusicAlbum(B musicAlbum) {
+    this.mMusicAlbum = musicAlbum;
+    mOriginPlayingList.clear();
+    mOriginPlayingList.addAll(mMusicAlbum.getMusics());
+    fitShuffle();
+  }
 
-    //专辑详情
-    private B mMusicAlbum;
-
-    boolean isInit() {
-        return mMusicAlbum != null;
+  List<M> getPlayingList() {
+    if (mRepeatMode == RepeatMode.RANDOM) {
+      return mShufflePlayingList;
+    } else {
+      return mOriginPlayingList;
     }
+  }
 
-    private void fitShuffle() {
-        mShufflePlayingList.clear();
-        mShufflePlayingList.addAll(mOriginPlayingList);
-        Collections.shuffle(mShufflePlayingList);
-    }
+  List<M> getOriginPlayingList() {
+    return mOriginPlayingList;
+  }
 
-    Enum changeMode() {
-        if (mRepeatMode == RepeatMode.LIST_CYCLE) {
-            mRepeatMode = RepeatMode.SINGLE_CYCLE;
-        } else if (mRepeatMode == RepeatMode.SINGLE_CYCLE) {
-            mRepeatMode = RepeatMode.RANDOM;
-        } else {
-            mRepeatMode = RepeatMode.LIST_CYCLE;
-        }
-        return mRepeatMode;
+  M getCurrentPlayingMusic() {
+    if (getPlayingList().isEmpty()) {
+      return null;
     }
+    return getPlayingList().get(mPlayIndex);
+  }
 
-    B getMusicAlbum() {
-        return mMusicAlbum;
-    }
+  Enum getRepeatMode() {
+    return mRepeatMode;
+  }
 
-    void setMusicAlbum(B musicAlbum) {
-        this.mMusicAlbum = musicAlbum;
-        mOriginPlayingList.clear();
-        mOriginPlayingList.addAll(mMusicAlbum.getMusics());
-        fitShuffle();
+  void countPreviousIndex() {
+    if (mPlayIndex == 0) {
+      mPlayIndex = (getPlayingList().size() - 1);
+    } else {
+      --mPlayIndex;
     }
+    mAlbumIndex = mOriginPlayingList.indexOf(getCurrentPlayingMusic());
+  }
 
-    List<M> getPlayingList() {
-        if (mRepeatMode == RepeatMode.RANDOM) {
-            return mShufflePlayingList;
-        } else {
-            return mOriginPlayingList;
-        }
+  void countNextIndex() {
+    if (mPlayIndex == (getPlayingList().size() - 1)) {
+      mPlayIndex = 0;
+    } else {
+      ++mPlayIndex;
     }
+    mAlbumIndex = mOriginPlayingList.indexOf(getCurrentPlayingMusic());
+  }
 
-    List<M> getOriginPlayingList() {
-        return mOriginPlayingList;
-    }
+  int getAlbumIndex() {
+    return mAlbumIndex;
+  }
 
-    M getCurrentPlayingMusic() {
-        if (getPlayingList().isEmpty()) {
-            return null;
-        }
-        return getPlayingList().get(mPlayIndex);
-    }
-
-    Enum getRepeatMode() {
-        return mRepeatMode;
-    }
-
-    void countPreviousIndex() {
-        if (mPlayIndex == 0) {
-            mPlayIndex = (getPlayingList().size() - 1);
-        } else {
-            --mPlayIndex;
-        }
-        mAlbumIndex = mOriginPlayingList.indexOf(getCurrentPlayingMusic());
-    }
-
-    void countNextIndex() {
-        if (mPlayIndex == (getPlayingList().size() - 1)) {
-            mPlayIndex = 0;
-        } else {
-            ++mPlayIndex;
-        }
-        mAlbumIndex = mOriginPlayingList.indexOf(getCurrentPlayingMusic());
-    }
-
-    int getAlbumIndex() {
-        return mAlbumIndex;
-    }
-
-    void setAlbumIndex(int albumIndex) {
-        mAlbumIndex = albumIndex;
-        mPlayIndex = getPlayingList().indexOf(mOriginPlayingList.get(mAlbumIndex));
-    }
+  void setAlbumIndex(int albumIndex) {
+    mAlbumIndex = albumIndex;
+    mPlayIndex = getPlayingList().indexOf(mOriginPlayingList.get(mAlbumIndex));
+  }
 }

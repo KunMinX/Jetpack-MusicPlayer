@@ -1,9 +1,5 @@
 ## 真香警告：即使不用云音乐听曲儿，也请务必收藏好该库！
 
-### [Here is the English guide](https://github.com/KunMinX/Jetpack-MusicPlayer/blob/master/README_EN.md)
-
-&nbsp;
-
 > ⚠️ 提示：本库的存在主要是为了提供 基于设计模式和 LiveData 实现的 软件工程安全的 音乐播放器的示例，欢迎就库中的封装思想学习和参考。
 考虑到库中使用的是原生的 MediaPlayer，存在不可预期的兼容性问题，请勿用于生产环境。
 
@@ -281,7 +277,7 @@ Juejin：[KunMinX 在掘金](https://juejin.im/user/58ab0de9ac502e006975d757/pos
 
 付费读者加微信进群：myatejx
 
-[![重学安卓小专栏](https://i.loli.net/2019/06/17/5d067596c2dbf49609.png)](https://xiaozhuanlan.com/kunminx?rel=kunminx)
+[![重学安卓小专栏](https://images.xiaozhuanlan.com/photo/2021/d493a54a32e38e7fbcfa68d424ebfd1e.png)](https://xiaozhuanlan.com/kunminx)
 
 &nbsp;
 

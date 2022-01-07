@@ -30,8 +30,8 @@ import java.util.List;
  */
 public class DrawerViewModel extends ViewModel {
 
-    public final MutableLiveData<List<LibraryInfo>> list = new MutableLiveData<>();
+  public final MutableLiveData<List<LibraryInfo>> list = new MutableLiveData<>();
 
-    public final InfoRequest infoRequest = new InfoRequest();
+  public final InfoRequest infoRequest = new InfoRequest();
 
 }

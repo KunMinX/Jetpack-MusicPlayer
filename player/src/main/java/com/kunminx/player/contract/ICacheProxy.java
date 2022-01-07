@@ -5,5 +5,5 @@ package com.kunminx.player.contract;
  */
 public interface ICacheProxy {
 
-    String getCacheUrl(String url);
+  String getCacheUrl(String url);
 }

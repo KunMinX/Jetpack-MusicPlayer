@@ -34,51 +34,42 @@ import com.kunminx.puremusic.ui.state.DrawerViewModel;
  */
 public class DrawerFragment extends BaseFragment {
 
-    private DrawerViewModel mState;
+  private DrawerViewModel mState;
 
-    @Override
-    protected void initViewModel() {
-        mState = getFragmentScopeViewModel(DrawerViewModel.class);
+  @Override
+  protected void initViewModel() {
+    mState = getFragmentScopeViewModel(DrawerViewModel.class);
+  }
+
+  @Override
+  protected DataBindingConfig getDataBindingConfig() {
+    return new DataBindingConfig(R.layout.fragment_drawer, BR.vm, mState)
+            .addBindingParam(BR.click, new ClickProxy())
+            .addBindingParam(BR.adapter, new DrawerAdapter(getContext()));
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    mState.infoRequest.getLibraryLiveData().observe(getViewLifecycleOwner(), dataResult -> {
+      if (!dataResult.getResponseStatus().isSuccess()) return;
+
+      if (dataResult.getResult() != null) {
+        mState.list.setValue(dataResult.getResult());
+      }
+    });
+
+    if (mState.infoRequest.getLibraryLiveData().getValue() == null) {
+      mState.infoRequest.requestLibraryInfo();
     }
+  }
 
-    @Override
-    protected DataBindingConfig getDataBindingConfig() {
-        return new DataBindingConfig(R.layout.fragment_drawer, BR.vm, mState)
-                .addBindingParam(BR.click, new ClickProxy())
-                .addBindingParam(BR.adapter, new DrawerAdapter(getContext()));
+  public class ClickProxy {
+
+    public void logoClick() {
+      openUrlInBrowser(getString(R.string.github_project));
     }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        mState.infoRequest.getLibraryLiveData().observe(getViewLifecycleOwner(), dataResult -> {
-            if (!dataResult.getResponseStatus().isSuccess()) return;
-
-            if (mAnimationLoaded && dataResult.getResult() != null) {
-                mState.list.setValue(dataResult.getResult());
-            }
-        });
-
-        if (mState.infoRequest.getLibraryLiveData().getValue() == null) {
-            mState.infoRequest.requestLibraryInfo();
-        }
-    }
-
-    @Override
-    public void loadInitData() {
-        super.loadInitData();
-        if (mState.infoRequest.getLibraryLiveData().getValue() != null
-                && mState.infoRequest.getLibraryLiveData().getValue().getResult() != null) {
-            mState.list.setValue(mState.infoRequest.getLibraryLiveData().getValue().getResult());
-        }
-    }
-
-    public class ClickProxy {
-
-        public void logoClick() {
-            openUrlInBrowser(getString(R.string.github_project));
-        }
-    }
+  }
 
 }

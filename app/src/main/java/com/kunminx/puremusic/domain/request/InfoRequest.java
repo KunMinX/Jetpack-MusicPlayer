@@ -17,11 +17,10 @@
 package com.kunminx.puremusic.domain.request;
 
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.kunminx.architecture.data.response.DataResult;
 import com.kunminx.architecture.domain.request.BaseRequest;
+import com.kunminx.architecture.ui.callback.ProtectedUnPeekLiveData;
+import com.kunminx.architecture.ui.callback.UnPeekLiveData;
 import com.kunminx.puremusic.data.bean.LibraryInfo;
 import com.kunminx.puremusic.data.repository.DataRepository;
 
@@ -32,13 +31,13 @@ import java.util.List;
  */
 public class InfoRequest extends BaseRequest {
 
-    private final MutableLiveData<DataResult<List<LibraryInfo>>> mLibraryLiveData = new MutableLiveData<>();
+  private final UnPeekLiveData<DataResult<List<LibraryInfo>>> mLibraryLiveData = new UnPeekLiveData<>();
 
-    public LiveData<DataResult<List<LibraryInfo>>> getLibraryLiveData() {
-        return mLibraryLiveData;
-    }
+  public ProtectedUnPeekLiveData<DataResult<List<LibraryInfo>>> getLibraryLiveData() {
+    return mLibraryLiveData;
+  }
 
-    public void requestLibraryInfo() {
-        DataRepository.getInstance().getLibraryInfo(mLibraryLiveData::setValue);
-    }
+  public void requestLibraryInfo() {
+    DataRepository.getInstance().getLibraryInfo(mLibraryLiveData::setValue);
+  }
 }

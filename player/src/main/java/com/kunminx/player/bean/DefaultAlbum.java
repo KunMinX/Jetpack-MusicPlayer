@@ -27,11 +27,11 @@ public class DefaultAlbum extends BaseAlbumItem<
         DefaultAlbum.DefaultMusic,
         DefaultAlbum.DefaultArtist> {
 
-    public static class DefaultMusic extends BaseMusicItem<DefaultArtist> {
+  public static class DefaultMusic extends BaseMusicItem<DefaultArtist> {
 
-    }
+  }
 
-    public static class DefaultArtist extends BaseArtistItem {
+  public static class DefaultArtist extends BaseArtistItem {
 
-    }
+  }
 }
