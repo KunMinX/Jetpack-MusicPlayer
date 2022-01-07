@@ -19,8 +19,8 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID = 'com.kunminx.player'
     PUBLISH_ARTIFACT_ID = 'player'
-    PUBLISH_VERSION = '3.1.0'
-    VERSION_CODE = 30100
+    PUBLISH_VERSION = '3.2.0'
+    VERSION_CODE = 30200
 
     ARTIFACT_DESCRIPTION = 'Jetpack MusicPlayer Library for android'
 
@@ -50,8 +50,6 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode VERSION_CODE
-        versionName PUBLISH_VERSION
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
