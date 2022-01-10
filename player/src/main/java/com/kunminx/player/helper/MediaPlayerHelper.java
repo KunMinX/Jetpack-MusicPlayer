@@ -257,9 +257,19 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
     if (!surport) {
       callBack(CallBackState.FORMATE_NOT_SURPORT, uiHolder.player);
       Log.v(TAG, CallBackState.FORMATE_NOT_SURPORT.toString());
-      return false;
+      return onCustomCheckAvailable(path);
     }
     return true;
+  }
+
+  /**
+   * 有些播放地址不是后缀结尾，那么通过这个接口，自定义方式去判断
+   *
+   * @param url
+   * @return
+   */
+  public boolean onCustomCheckAvailable(String url) {
+    return false;
   }
 
   /**

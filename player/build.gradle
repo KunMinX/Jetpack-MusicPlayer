@@ -19,8 +19,8 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID = 'com.kunminx.player'
     PUBLISH_ARTIFACT_ID = 'player'
-    PUBLISH_VERSION = '3.2.0'
-    VERSION_CODE = 30200
+    PUBLISH_VERSION = '3.3.0'
+    VERSION_CODE = 30300
 
     ARTIFACT_DESCRIPTION = 'Jetpack MusicPlayer Library for android'
 
