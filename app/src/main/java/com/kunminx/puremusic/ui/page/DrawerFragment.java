@@ -73,16 +73,13 @@ public class DrawerFragment extends BaseFragment {
   }
 
   public class ClickProxy {
-
     public void logoClick() {
       openUrlInBrowser(getString(R.string.github_project));
     }
   }
 
   public static class DrawerViewModel extends ViewModel {
-
     public final State<List<LibraryInfo>> list = new State<>();
-
   }
 
 }

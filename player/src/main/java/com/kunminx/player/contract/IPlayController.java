@@ -19,13 +19,14 @@ package com.kunminx.player.contract;
 import android.content.Context;
 
 import com.kunminx.player.bean.base.BaseAlbumItem;
+import com.kunminx.player.bean.base.BaseArtistItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
 
 /**
  * Create by KunMinX at 18/9/24
  */
-public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicItem>
-        extends ILiveDataNotifier, IPlayInfoManager {
+public interface IPlayController<B extends BaseAlbumItem<M, A>, M extends BaseMusicItem<A>, A extends BaseArtistItem>
+        extends ILiveDataNotifier<B, M, A>, IPlayInfoManager<B, M, A> {
 
   //程序启动时就初始化
   void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy);

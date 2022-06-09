@@ -16,6 +16,7 @@
 
 package com.kunminx.player;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
@@ -32,13 +33,12 @@ import java.util.List;
 /**
  * Create by KunMinX at 19/10/31
  */
-public class DefaultPlayerManager implements IPlayController<DefaultAlbum, DefaultAlbum.DefaultMusic> {
+public class DefaultPlayerManager implements IPlayController<DefaultAlbum, DefaultAlbum.DefaultMusic, DefaultAlbum.DefaultArtist> {
 
-  private static DefaultPlayerManager sManager = new DefaultPlayerManager();
+  @SuppressLint("StaticFieldLeak")
+  private static final DefaultPlayerManager sManager = new DefaultPlayerManager();
 
-  private PlayerController<DefaultAlbum, DefaultAlbum.DefaultMusic> mController;
-
-  private Context mContext;
+  private final PlayerController<DefaultAlbum, DefaultAlbum.DefaultMusic, DefaultAlbum.DefaultArtist> mController;
 
   private DefaultPlayerManager() {
     mController = new PlayerController<>();
@@ -50,8 +50,7 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
 
   @Override
   public void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy) {
-    mContext = context.getApplicationContext();
-    mController.init(mContext, null, iServiceNotifier, iCacheProxy);
+    mController.init(context.getApplicationContext(), null, iServiceNotifier, iCacheProxy);
   }
 
   @Override
@@ -159,11 +158,15 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
     return mController.getAlbumIndex();
   }
 
-  public LiveData<ChangeMusic> getChangeMusicEvent() {
+  public LiveData<ChangeMusic<DefaultAlbum,
+          DefaultAlbum.DefaultMusic,
+          DefaultAlbum.DefaultArtist>> getChangeMusicEvent() {
     return mController.getChangeMusicEvent();
   }
 
-  public LiveData<PlayingMusic> getPlayingMusicEvent() {
+  public LiveData<PlayingMusic<DefaultAlbum,
+          DefaultAlbum.DefaultMusic,
+          DefaultAlbum.DefaultArtist>> getPlayingMusicEvent() {
     return mController.getPlayingMusicEvent();
   }
 
@@ -173,12 +176,12 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
 
 
   @Override
-  public LiveData<Enum> getPlayModeEvent() {
+  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeEvent() {
     return mController.getPlayModeEvent();
   }
 
   @Override
-  public Enum getRepeatMode() {
+  public Enum<PlayingInfoManager.RepeatMode> getRepeatMode() {
     return mController.getRepeatMode();
   }
 

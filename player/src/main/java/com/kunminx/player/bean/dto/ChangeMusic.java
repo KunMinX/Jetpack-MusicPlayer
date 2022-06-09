@@ -69,7 +69,7 @@ public class ChangeMusic<
   }
 
   public void setBaseInfo(B musicAlbum, M music) {
-    //要用当前实际播放的列表，因为不同模式存在不同的播放列表
+    //要用当前实际播放列表，因为不同模式存在不同播放列表
     this.title = music.getTitle();
     this.summary = musicAlbum.getSummary();
     this.albumId = musicAlbum.getAlbumId();

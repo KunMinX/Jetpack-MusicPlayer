@@ -143,7 +143,6 @@ public class PlayerFragment extends BaseFragment {
   }
 
   public class ClickProxy {
-
     public void playMode() {
       PlayerManager.getInstance().changeMode();
     }
@@ -181,21 +180,13 @@ public class PlayerFragment extends BaseFragment {
   }
 
   public static class PlayerViewModel extends ViewModel {
-
     public final State<String> title = new State<>(Utils.getApp().getString(R.string.app_name));
-
     public final State<String> artist = new State<>(Utils.getApp().getString(R.string.app_name));
-
     public final State<String> coverImg = new State<>();
-
     public final State<Drawable> placeHolder = new State<>(ContextCompat.getDrawable(Utils.getApp(), R.drawable.bg_album_default));
-
     public final State<Integer> maxSeekDuration = new State<>();
-
     public final State<Integer> currentSeekPosition = new State<>();
-
     public final State<Boolean> isPlaying = new State<>(null, false);
-
     public final State<MaterialDrawableBuilder.IconValue> playModeIcon = new State<>();
 
     {

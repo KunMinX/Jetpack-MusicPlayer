@@ -41,7 +41,7 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
   public static final String TAG = "MediaPlayerHelper";
 
   //默认支持的文件格式
-  private String[] ext = {
+  private final String[] ext = {
           ".m4a",
           ".3gp",
           ".mp4",
@@ -52,7 +52,7 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
           ".mid"
   };
 
-  private List<String> formatList = new ArrayList<>();
+  private final List<String> formatList = new ArrayList<>();
 
   //所有支持的格式（可在外部自定义添加）
   public List<String> getFormatList() {
@@ -159,11 +159,9 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
    * 设置回调
    *
    * @param MediaPlayerHelperCallBack 回调
-   * @return 类对象
    */
-  public MediaPlayerHelper setMediaPlayerHelperCallBack(MediaPlayerHelperCallBack MediaPlayerHelperCallBack) {
+  public void setMediaPlayerHelperCallBack(MediaPlayerHelperCallBack MediaPlayerHelperCallBack) {
     this.MediaPlayerHelperCallBack = MediaPlayerHelperCallBack;
-    return instance;
   }
 
   /**
@@ -185,11 +183,10 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
    * 通过Assets文件名播放Assets目录下的文件
    *
    * @param assetName 名字,带后缀，比如:text.mp3
-   * @return 是否成功
    */
-  public boolean playAsset(String assetName) {
-    if (!checkAvalable(assetName)) {
-      return false;
+  public void playAsset(String assetName) {
+    if (!checkAvailable(assetName)) {
+      return;
     }
     try {
       uiHolder.assetDescriptor = assetMg.openFd(assetName);
@@ -199,27 +196,24 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
       uiHolder.player.prepare();
     } catch (Exception e) {
       callBack(CallBackState.ERROR, uiHolder.player);
-      return false;
     }
-    return true;
   }
 
   /**
    * 通过文件路径或者网络路径播放音视频
    *
    * @param localPathOrURL 路径
-   * @return 是否成功
    */
-  public boolean play(final String localPathOrURL) {
-    if (!checkAvalable(localPathOrURL)) {
-      return false;
+  public void play(final String localPathOrURL) {
+    if (!checkAvailable(localPathOrURL)) {
+      return;
     }
     try {
-      /**
-       * 其实仔细观察优酷app切换播放网络视频时的确像是这样做的：先暂停当前视频，
-       * 让mediaplayer与先前的surfaceHolder脱离“绑定”,当mediaplayer再次准备好要start时，
-       * 再次让mediaplayer与surfaceHolder“绑定”在一起，显示下一个要播放的视频。
-       * 注：MediaPlayer.setDisplay()的作用： 设置SurfaceHolder用于显示的视频部分媒体。
+      /*
+        其实仔细观察优酷app切换播放网络视频时的确像是这样做的：先暂停当前视频，
+        让mediaplayer与先前的surfaceHolder脱离“绑定”,当mediaplayer再次准备好要start时，
+        再次让mediaplayer与surfaceHolder“绑定”在一起，显示下一个要播放的视频。
+        注：MediaPlayer.setDisplay()的作用： 设置SurfaceHolder用于显示的视频部分媒体。
        */
       uiHolder.player.setDisplay(null);
       uiHolder.player.reset();
@@ -227,9 +221,7 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
       uiHolder.player.prepare();
     } catch (Exception e) {
       callBack(CallBackState.ERROR, uiHolder.player);
-      return false;
     }
-    return true;
   }
 
   /**
@@ -247,14 +239,14 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
    * @param path 参数
    * @return 结果
    */
-  private boolean checkAvalable(String path) {
-    boolean surport = false;
-    for (int i = 0; i < ext.length; i++) {
-      if (path.toLowerCase().endsWith(ext[i])) {
-        surport = true;
+  private boolean checkAvailable(String path) {
+    boolean support = false;
+    for (String s : ext) {
+      if (path.toLowerCase().endsWith(s)) {
+        support = true;
       }
     }
-    if (!surport) {
+    if (!support) {
       callBack(CallBackState.FORMATE_NOT_SURPORT, uiHolder.player);
       Log.v(TAG, CallBackState.FORMATE_NOT_SURPORT.toString());
       return onCustomCheckAvailable(path);

@@ -18,20 +18,27 @@ package com.kunminx.player.contract;
 
 import androidx.lifecycle.LiveData;
 
+import com.kunminx.player.PlayingInfoManager;
+import com.kunminx.player.bean.base.BaseAlbumItem;
+import com.kunminx.player.bean.base.BaseArtistItem;
+import com.kunminx.player.bean.base.BaseMusicItem;
 import com.kunminx.player.bean.dto.ChangeMusic;
 import com.kunminx.player.bean.dto.PlayingMusic;
 
 /**
  * Create by KunMinX at 19/11/1
  */
-public interface ILiveDataNotifier {
+public interface ILiveDataNotifier<
+        B extends BaseAlbumItem<M, A>,
+        M extends BaseMusicItem<A>,
+        A extends BaseArtistItem> {
 
-  LiveData<ChangeMusic> getChangeMusicEvent();
+  LiveData<ChangeMusic<B, M, A>> getChangeMusicEvent();
 
-  LiveData<PlayingMusic> getPlayingMusicEvent();
+  LiveData<PlayingMusic<B, M, A>> getPlayingMusicEvent();
 
   LiveData<Boolean> getPauseEvent();
 
-  LiveData<Enum> getPlayModeEvent();
+  LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeEvent();
 
 }

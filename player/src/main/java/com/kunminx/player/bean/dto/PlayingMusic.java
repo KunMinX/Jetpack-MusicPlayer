@@ -29,9 +29,9 @@ import java.io.Serializable;
  * Create by KunMinX at 18/9/24
  */
 public class PlayingMusic<
-        A extends BaseArtistItem,
         B extends BaseAlbumItem<M, A>,
-        M extends BaseMusicItem<A>>
+        M extends BaseMusicItem<A>,
+        A extends BaseArtistItem>
         extends ChangeMusic<B, M, A> implements Serializable {
 
   private String nowTime;

@@ -1,74 +1,78 @@
-## 真香警告：即使不用云音乐听曲儿，也请务必收藏好该库！
+## 真香警告：即使不用云音乐听曲，也请务必收藏好该库！
 
-> ⚠️ 提示：本库的存在主要是为了提供 基于设计模式和 LiveData 实现的 软件工程安全的 音乐播放器的示例，欢迎就库中的封装思想学习和参考。
-考虑到库中使用的是原生的 MediaPlayer，存在不可预期的兼容性问题，请勿用于生产环境。
+> ⚠️ 提示：本库的存在主要为提供 "设计模式+ LiveData => 软件工程安全" 音乐播放器示例，欢迎就库封装思想学习和参考。
+> 本库使用原生 MediaPlayer，存在不可预期兼容性问题，故请勿用于生产环境。
 
 ## 公告：
 
-刚刚就本项目 "被卖课" 一事，在掘金发表了一期专访 [《开源项目被人拿去做课程卖了 1000 多万是什么体验》](https://juejin.im/post/5ecb4950518825431a669897)
+我们就本项目 "被卖课" 一事，在掘金发表一期专访 [《开源项目被人拿去做课程卖了 1000 多万是什么体验》](https://juejin.im/post/5ecb4950518825431a669897)
 
-本项目系我为了方便开发者们 **无痛理解 Google 开源的 Jetpack MVVM 中每个架构组件的 存在缘由、职责边界**，而 **精心设计的一个又一个高频应用场景**，
+本项目系我为方便开发者们 **无痛理解 Google 开源 Jetpack MVVM 中每个架构组件的 存在缘由、职责边界**，而 **精心设计的高频应用场景**，
 
-与此同时，本项目是作为《重学安卓》专栏 Jetpack MVVM 系列文章的配套项目而存在，**文章内容和项目中的代码设计均涉及本人对 Jetpack MVVM 的独家理解，本人对此享有著作权**。
+与此同时，本项目是作为 [《重学安卓》](https://xiaozhuanlan.com/topic/6017825943)专栏 Jetpack MVVM 系列文章 “配套项目” 而存在，**文章内容和项目代码设计均涉及本人对 Jetpack MVVM 独家理解，本人对此享有著作权**。
 
-任何组织或个人，未经与作者本人沟通，不得将本项目的代码设计和本人对 Jetpack MVVM 的独家理解用于出书和卖课的商业用途。
-
-### 由来
-
-Jetpack-MusicPlayer 是一款基于 Jetpack MVVM 架构开发的 音乐播放控制组件，它是因 [“Jetpack-MVVM-Best-Practice”](https://github.com/KunMinX/Jetpack-MVVM-Best-Practice) 这个项目的需求而存在。
-
-在最初寻遍了 GitHub 也没有找到合适的开源库（高度解耦、可远程依赖）之后，我决心研究参考现有开源项目关于 多媒体播放控制 的逻辑，并自己动手编写一个 **高度解耦、轻松配置、可通过 Maven 仓库远程依赖** 的真正的第三方库。
-
-Jetpack-MusicPlayer 的使用十分简单，依托于 设计模式原则 及 JAVA 泛型特性，使用者无需知道内部的实现细节，**仅通过继承** Album、Music、Artist **基类 即可完成 业务实体类 的定制和扩展**。
-
-此外，在不设置自定义配置的情况下，Jetpack-MusicPlayer 最少只需 **一行代码即可运行起来**。
+任何组织或个人，未经与作者本人沟通，不得将本项目代码设计和本人对 Jetpack MVVM 独家理解用于 "**打包贩卖、引流、出书 和 卖课**" 等商业用途。
 
 &nbsp;
 
-|                          PureMusic                           |                      LiveData Dispatch                       |                        PlayMode Switch                       |
+### 由来
+
+Jetpack-MusicPlayer 是一款基于 Jetpack MVVM 架构音乐播放控制组件，它是因 [“Jetpack-MVVM-Best-Practice”](https://github.com/KunMinX/Jetpack-MVVM-Best-Practice) 这项目需求而存在。
+
+最初寻遍 GitHub 也未找到合适开源库，于是决定另起炉灶，自己编写 **高度解耦、轻松配置、可通过 Maven 仓库远程依赖** 的真正第三方库。
+
+Jetpack-MusicPlayer 使用十分简单，依托于 设计模式原则 及 Java 泛型特性，使用者无需知道内部实现细节，**仅通过继承** Album、Music、Artist **基类 即可完成 业务实体类 定制和扩展**。
+
+此外，在不设置自定义配置情况下，Jetpack-MusicPlayer 最少只需 **一行代码即可运行起来**。
+
+&nbsp;
+
+|                          PureMusic                           |                      LiveData Dispatch                       |                       PlayMode Switch                        |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![5.gif](https://upload-images.jianshu.io/upload_images/57036-eeaa9ea7399d90d5.gif) | ![4.gif](https://upload-images.jianshu.io/upload_images/57036-a9b1831b428993b0.gif) | ![3.gif](https://upload-images.jianshu.io/upload_images/57036-466fe782f7170a44.gif) |
+| ![](https://upload-images.jianshu.io/upload_images/57036-eeaa9ea7399d90d5.gif) | ![](https://upload-images.jianshu.io/upload_images/57036-a9b1831b428993b0.gif) | ![](https://upload-images.jianshu.io/upload_images/57036-466fe782f7170a44.gif) |
 
 
 &nbsp;
 
 ### 目标
 
-Jetpack-MusicPlayer 的目标是：**一行代码即可接入 音乐播放控制组件**。
+Jetpack-MusicPlayer 目标是：**一行代码即可接入 音乐播放控制组件**。
 
-除了一键接入而省去 99% 不必要的、复杂的、重复的工作外，你还可以从这个开源项目获得的内容包括：
+除一键接入省去 99% 繁杂重复工作外，你还可从该项目获得内容包括：
 
-1. 整洁的代码风格 和 标准的资源命名规范。
-2. **Jetpack MVVM 架构在 编写第三方库 中的最佳实践**：通过 LiveData 配合 作为唯一可信源的单例 来完成 全应用范围内 播放状态的正确分发，以避免 **在软件工程的背景下** 滋生的各种 **不可预期的错误**。
-3. 优秀的代码分层和封装思想，在不做任何个性化配置的情况下，一行代码即可接入。
-4. 主体工程基于前沿的、软件工程安全的 JetPack MVVM 架构。
-5. AndroidX 和 Material Design 2 的全面使用。
-6. ConstraintLayout 约束布局的最佳实践。
-7. 绝不使用 Dagger，绝不使用奇技淫巧、编写艰深晦涩的代码。
+1. 整洁代码风格 和 标准资源命名规范。
+2. **LiveData 架构组件 编写第三方库 最佳实践**：通过 "唯一可信源" 结构实现全应用范围内 播放状态可靠一致分发，规避 **软件工程背景下** 滋生各种 **不可预期错误**。
+3. 优秀代码分层和封装思想，在不做任何个性化配置情况下，一行代码即可接入。
+4. 主体工程基于前沿软件工程安全 JetPack MVVM 架构。
+5. AndroidX 和 Material Design 2 全面使用。
+6. ConstraintLayout 约束布局最佳实践。
+7. 绝不使用 Dagger，绝不使用奇技淫巧、编写艰深晦涩代码。
 
 &nbsp;
 
-如果你正在思考 [**如何为项目挑选合适的架构**](https://juejin.im/post/6846687603547176974) 的话，这个项目值得你参考！
+如你正在思考 [**如何为项目挑选合适的架构**](https://juejin.cn/post/7106042518457810952)，这项目值得你参考！
 
 &nbsp;
 
 # Download
 
-[![google-play1.png](https://upload-images.jianshu.io/upload_images/57036-f9dbd7810d38ae95.png)](https://www.coolapk.com/apk/247826) [![coolapk1.png](https://upload-images.jianshu.io/upload_images/57036-6cf24d0c9efe8362.png)](https://www.coolapk.com/apk/247826)
+[![](https://upload-images.jianshu.io/upload_images/57036-f9dbd7810d38ae95.png)](https://www.coolapk.com/apk/247826) [![](https://upload-images.jianshu.io/upload_images/57036-6cf24d0c9efe8362.png)](https://www.coolapk.com/apk/247826)
 
 &nbsp;
 
 ### 简单使用：
 
-1.在 build.gradle 中添加对该库的依赖。
+### 1.初始化装载数据
+
+1.在 build.gradle 中添加依赖。
 
 ```groovy
-implementation 'com.kunminx.player:player:3.1.0'
+implementation 'com.kunminx.player:player:3.4.0'
 ```
 
-提示：鉴于 Jcenter 的关闭，我们已将仓库迁移至 Maven Central，请自行在根目录 build.gradle 添加 `mavenCentral()`。
+提示：鉴于 Jcenter 关闭，我们已将仓库迁移至 Maven Central，请自行在根目录 build.gradle 添加 `mavenCentral()`。
 
-2.依据默认的专辑实体类 `DefaultAlbum` 的结构准备一串数据。
+2.依据默认专辑实体类 `DefaultAlbum` 结构准备一串数据。
 
 ```java
 // DefaultAlbum 包含 DefaultMusic 和 DefaultArtist 两个子类：
@@ -76,7 +80,6 @@ implementation 'com.kunminx.player:player:3.1.0'
 ```
 
 ```java
-
 //创建专辑实例
 DefaultAlbum album = new DefaultAlbum("001", "Cute", "BenSound");
 
@@ -119,18 +122,21 @@ DefaultPlayerManager.getInstance().init(this);
 DefaultPlayerManager.getInstance().loadAlbum(album);
 ```
 
-5.在视图控制器中 发送改变播放状态的请求，并接收来自 唯一可信源 统一分发的结果响应。
 
-5.1.在 任一视图控制器 的 任一处 发送请求，例如 此处请求了 播放下一首
+
+### 2.播放控制
+
+5.在 “视图控制器” 中发送请求，并接收来自 “唯一可信源” 统一分发结果响应。
+
+5.1.在 “视图控制器” 任意处发送请求，例如此处请求 “播放下一首”
 
 ```java
 DefaultPlayerManager.getInstance().playNext();
-
 ```
 
-5.2.在 订阅了对应状态通知 的 视图控制器 中，收听来自 唯一可信源 推送的结果响应。
+5.2.在 “视图控制器” 订阅通知处，收听来自 “唯一可信源” 推送结果响应。
 
-5.2.1.例如 此处响应了 播放按钮状态 的推送
+5.2.1.例如此处响应 “播放按钮状态” 推送。
 
 ```java
 DefaultPlayerManager.getInstance().pauseLiveData().observe(this, aBoolean -> {
@@ -138,7 +144,7 @@ DefaultPlayerManager.getInstance().pauseLiveData().observe(this, aBoolean -> {
 });
 ```
 
-5.2.2.例如 此处响应了 当前歌曲详细信息 的推送
+5.2.2.此处响应 “当前歌曲详细信息” 推送
 
 ```java
 DefaultPlayerManager.getInstance().changeMusicLiveData().observe(this, changeMusic -> {
@@ -148,7 +154,7 @@ DefaultPlayerManager.getInstance().changeMusicLiveData().observe(this, changeMus
 });
 ```
 
-5.2.3.例如 此处响应了 当前歌曲播放进度 的推送
+5.2.3.此处响应 “当前歌曲播放进度” 推送
 
 ```java
 DefaultPlayerManager.getInstance().playingMusicLiveData().observe(this, playingMusic -> {
@@ -165,93 +171,9 @@ DefaultPlayerManager.getInstance().playingMusicLiveData().observe(this, playingM
 
 &nbsp;
 
-### 个性化配置：
+个性化配置详见 [Wiki](https://github.com/KunMinX/Jetpack-MusicPlayer/wiki/%E4%B8%AA%E6%80%A7%E5%8C%96%E9%85%8D%E7%BD%AE)
 
-该库为 Album、Music、Artist 分别准备了基础实体类，定制实体类时，即是去继承、拓展 并取代 这些实体类。
 
-关于个性化配置，具体可以参考我在 `TestAlbum`、 `PlayerManager` 和 `PlayerFragment` 等类中编写的案例：
-
-### Step1：根据需求扩展实体类
-
-你需要根据需求，在 `BaseAlbumItem` 等实体类的基础上进行扩展，具体的办法是，编写一个实体类，该实体类须继承于 `BaseAlbumItem`；该实体类中的两个内部类也须分别继承于 `BaseMusicItem` 和  `BaseArtistItem`。
-
-以 TestAlbum 实体类为例，扩充 `albumMid` 三个字段：
-
-```java
-public class TestAlbum extends BaseAlbumItem<TestAlbum.TestMusic, TestAlbum.TestArtist> {
-
-    private String albumMid;
-
-    public String getAlbumMid() { return albumMid; }
-
-    public void setAlbumMid(String albumMid) { this.albumMid = albumMid; }
-
-    public static class TestMusic extends BaseMusicItem<TestArtist> {
-
-        private String songMid;
-
-        public String getSongMid() { return songMid; }
-
-        public void setSongMid(String songMid) { this.songMid = songMid; }
-    }
-
-    public static class TestArtist extends BaseArtistItem {
-
-        private String birthday;
-
-        public String getBirthday() { return birthday; }
-
-        public void setBirthday(String birthday) { this.birthday = birthday; }
-    }
-}
-```
-
-注意：如使用 JSON，请在 ProGuard Rules 中为该实体类配置混淆白名单。
-
-&nbsp;
-
-### Step2：实现接口，完成自定义配置
-
-在装载数据和实现自定义配置时，泛型框中须指明你编写的实体类。
-
-具体可参考 `PlayerManager` 类，该单例的存在就是为了指定你自己定义的实体类，否则你大可直接使用 `DefaultPlayerManager`。
-
-```java
-public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestMusic> {
-
-    private static PlayerManager sManager = new PlayerManager();
-
-    private PlayerController<TestAlbum, TestAlbum.TestMusic> mController;
-
-    private Context mContext;
-
-    private PlayerManager() {
-        mController = new PlayerController<>();
-    }
-
-    public static PlayerManager getInstance() {
-        return sManager;
-    }
-
-    @Override
-    public void init(Context context) {
-        mContext = context.getApplicationContext();
-        mController.init(mContext);
-    }
-
-    @Override
-    public void loadAlbum(TestAlbum musicAlbum) {
-        mController.loadAlbum(mContext, musicAlbum);
-    }
-
-    ...
-
-    //事实上，大可直接 Copy 本类到项目中、只修改作为泛型的那几个实体类。
-
-}
-```
-
-&nbsp;
 
 # Thanks to
 
@@ -269,22 +191,14 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
 
 Email：[kunminx@gmail.com](mailto:kunminx@gmail.com)
 
-Home：[KunMinX 的个人博客](https://www.kunminx.com/)
-
 Juejin：[KunMinX 在掘金](https://juejin.im/user/58ab0de9ac502e006975d757/posts)
-
-[《重学安卓》 专栏](https://xiaozhuanlan.com/kunminx?rel=kunminx)
-
-付费读者加微信进群：myatejx
-
-[![重学安卓小专栏](https://images.xiaozhuanlan.com/photo/2021/d493a54a32e38e7fbcfa68d424ebfd1e.png)](https://xiaozhuanlan.com/kunminx)
 
 &nbsp;
 
 # License
 
 ```
-Copyright 2018-2020 KunMinX
+Copyright 2018-present KunMinX
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

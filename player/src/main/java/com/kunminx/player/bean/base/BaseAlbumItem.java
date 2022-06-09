@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 音乐的专辑实体, music album bean
+ * 音乐专辑实体, music album bean
  * <p>
  * Create by KunMinX at 18/9/24
  */

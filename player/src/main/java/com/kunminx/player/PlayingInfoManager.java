@@ -17,6 +17,7 @@
 package com.kunminx.player;
 
 import com.kunminx.player.bean.base.BaseAlbumItem;
+import com.kunminx.player.bean.base.BaseArtistItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * Create by KunMinX at 18/9/24
  */
-public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem> {
+public class PlayingInfoManager<B extends BaseAlbumItem<M, A>, M extends BaseMusicItem<A>, A extends BaseArtistItem> {
 
   //index of current playing which maybe Shuffled
   private int mPlayIndex = 0;
@@ -35,7 +36,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
   private int mAlbumIndex = 0;
 
   //循环模式
-  private Enum mRepeatMode;
+  private Enum<RepeatMode> mRepeatMode;
 
   public enum RepeatMode {
     SINGLE_CYCLE,
@@ -44,10 +45,10 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
   }
 
   //原始列表
-  private List<M> mOriginPlayingList = new ArrayList<>();
+  private final List<M> mOriginPlayingList = new ArrayList<>();
 
   //随机播放列表
-  private List<M> mShufflePlayingList = new ArrayList<>();
+  private final List<M> mShufflePlayingList = new ArrayList<>();
 
   //专辑详情
   private B mMusicAlbum;
@@ -62,7 +63,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     Collections.shuffle(mShufflePlayingList);
   }
 
-  Enum changeMode() {
+  Enum<RepeatMode> changeMode() {
     if (mRepeatMode == RepeatMode.LIST_CYCLE) {
       mRepeatMode = RepeatMode.SINGLE_CYCLE;
     } else if (mRepeatMode == RepeatMode.SINGLE_CYCLE) {
@@ -103,7 +104,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     return getPlayingList().get(mPlayIndex);
   }
 
-  Enum getRepeatMode() {
+  Enum<RepeatMode> getRepeatMode() {
     return mRepeatMode;
   }
 

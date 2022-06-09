@@ -17,6 +17,7 @@
 package com.kunminx.player.contract;
 
 import com.kunminx.player.bean.base.BaseAlbumItem;
+import com.kunminx.player.bean.base.BaseArtistItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
 /**
  * Create by KunMinX at 19/11/1
  */
-public interface IPlayInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem> {
+public interface IPlayInfoManager<B extends BaseAlbumItem<M, A>, M extends BaseMusicItem<A>, A extends BaseArtistItem> {
 
   B getAlbum();
 

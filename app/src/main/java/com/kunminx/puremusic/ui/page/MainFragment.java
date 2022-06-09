@@ -16,6 +16,7 @@
 
 package com.kunminx.puremusic.ui.page;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 
@@ -66,6 +67,7 @@ public class MainFragment extends BaseFragment {
             .addBindingParam(BR.adapter, mAdapter);
   }
 
+  @SuppressLint("NotifyDataSetChanged")
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
@@ -78,10 +80,8 @@ public class MainFragment extends BaseFragment {
       if (!dataResult.getResponseStatus().isSuccess()) return;
 
       TestAlbum musicAlbum = dataResult.getResult();
-
       if (musicAlbum != null && musicAlbum.getMusics() != null) {
         mStates.list.set(musicAlbum.getMusics());
-
         if (PlayerManager.getInstance().getAlbum() == null ||
                 !PlayerManager.getInstance().getAlbum().getAlbumId().equals(musicAlbum.getAlbumId())) {
           PlayerManager.getInstance().loadAlbum(musicAlbum);
@@ -97,20 +97,15 @@ public class MainFragment extends BaseFragment {
   }
 
   public class ClickProxy {
-
     public void openMenu() {
       mMessenger.requestToOpenOrCloseDrawer(true);
     }
   }
 
   public static class MainViewModel extends ViewModel {
-
     public final State<Boolean> initTabAndPage = new State<>(true);
-
     public final State<String> pageAssetPath = new State<>("summary.html");
-
     public final State<List<TestAlbum.TestMusic>> list = new State<>();
-
   }
 
 }
