@@ -17,27 +17,26 @@
 package com.kunminx.puremusic.domain.request;
 
 
+import androidx.lifecycle.ViewModel;
+
 import com.kunminx.architecture.data.response.DataResult;
-import com.kunminx.architecture.domain.request.BaseRequest;
-import com.kunminx.architecture.ui.callback.ProtectedUnPeekLiveData;
-import com.kunminx.architecture.ui.callback.UnPeekLiveData;
-import com.kunminx.puremusic.data.bean.LibraryInfo;
+import com.kunminx.architecture.domain.message.Event;
+import com.kunminx.architecture.domain.message.MutableEvent;
+import com.kunminx.puremusic.data.bean.TestAlbum;
 import com.kunminx.puremusic.data.repository.DataRepository;
 
-import java.util.List;
-
 /**
- * Create by KunMinX at 19/11/2
+ * Create by KunMinX at 19/10/29
  */
-public class InfoRequest extends BaseRequest {
+public class MusicRequester extends ViewModel {
 
-  private final UnPeekLiveData<DataResult<List<LibraryInfo>>> mLibraryLiveData = new UnPeekLiveData<>();
+  private final MutableEvent<DataResult<TestAlbum>> mFreeMusicsEvent = new MutableEvent<>();
 
-  public ProtectedUnPeekLiveData<DataResult<List<LibraryInfo>>> getLibraryLiveData() {
-    return mLibraryLiveData;
+  public Event<DataResult<TestAlbum>> getFreeMusicsEvent() {
+    return mFreeMusicsEvent;
   }
 
-  public void requestLibraryInfo() {
-    DataRepository.getInstance().getLibraryInfo(mLibraryLiveData::setValue);
+  public void requestFreeMusics() {
+    DataRepository.getInstance().getFreeMusic(mFreeMusicsEvent::setValue);
   }
 }

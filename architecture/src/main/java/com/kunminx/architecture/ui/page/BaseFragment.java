@@ -17,6 +17,7 @@
 package com.kunminx.architecture.ui.page;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.inputmethod.InputMethodManager;
@@ -53,13 +54,12 @@ public abstract class BaseFragment extends DataBindingFragment {
     return mActivityProvider.get(modelClass);
   }
 
-  protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
-    if (mApplicationProvider == null) {
-      mApplicationProvider = new ViewModelProvider(
-              (BaseApplication) mActivity.getApplicationContext());
+    protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
+        if (mApplicationProvider == null) {
+            mApplicationProvider = new ViewModelProvider((BaseApplication) mActivity.getApplicationContext());
+        }
+        return mApplicationProvider.get(modelClass);
     }
-    return mApplicationProvider.get(modelClass);
-  }
 
   protected NavController nav() {
     return NavHostFragment.findNavController(this);
@@ -75,5 +75,9 @@ public abstract class BaseFragment extends DataBindingFragment {
     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
     startActivity(intent);
   }
+
+    protected Context getApplicationContext() {
+        return mActivity.getApplicationContext();
+    }
 
 }

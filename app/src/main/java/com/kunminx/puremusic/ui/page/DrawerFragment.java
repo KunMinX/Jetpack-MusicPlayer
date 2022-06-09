@@ -21,29 +21,36 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 
 import com.kunminx.architecture.ui.page.BaseFragment;
 import com.kunminx.architecture.ui.page.DataBindingConfig;
+import com.kunminx.architecture.ui.page.State;
 import com.kunminx.puremusic.BR;
 import com.kunminx.puremusic.R;
+import com.kunminx.puremusic.data.bean.LibraryInfo;
+import com.kunminx.puremusic.domain.request.InfoRequester;
 import com.kunminx.puremusic.ui.page.adapter.DrawerAdapter;
-import com.kunminx.puremusic.ui.state.DrawerViewModel;
+
+import java.util.List;
 
 /**
  * Create by KunMinX at 19/10/29
  */
 public class DrawerFragment extends BaseFragment {
 
-  private DrawerViewModel mState;
+  private DrawerViewModel mStates;
+  private InfoRequester mInfoRequester;
 
   @Override
   protected void initViewModel() {
-    mState = getFragmentScopeViewModel(DrawerViewModel.class);
+    mStates = getFragmentScopeViewModel(DrawerViewModel.class);
+    mInfoRequester = getFragmentScopeViewModel(InfoRequester.class);
   }
 
   @Override
   protected DataBindingConfig getDataBindingConfig() {
-    return new DataBindingConfig(R.layout.fragment_drawer, BR.vm, mState)
+    return new DataBindingConfig(R.layout.fragment_drawer, BR.vm, mStates)
             .addBindingParam(BR.click, new ClickProxy())
             .addBindingParam(BR.adapter, new DrawerAdapter(getContext()));
   }
@@ -52,16 +59,16 @@ public class DrawerFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    mState.infoRequest.getLibraryLiveData().observe(getViewLifecycleOwner(), dataResult -> {
+    mInfoRequester.getLibraryEvent().observe(getViewLifecycleOwner(), dataResult -> {
       if (!dataResult.getResponseStatus().isSuccess()) return;
 
       if (dataResult.getResult() != null) {
-        mState.list.setValue(dataResult.getResult());
+        mStates.list.set(dataResult.getResult());
       }
     });
 
-    if (mState.infoRequest.getLibraryLiveData().getValue() == null) {
-      mState.infoRequest.requestLibraryInfo();
+    if (mInfoRequester.getLibraryEvent().getValue() == null) {
+      mInfoRequester.requestLibraryInfo();
     }
   }
 
@@ -70,6 +77,12 @@ public class DrawerFragment extends BaseFragment {
     public void logoClick() {
       openUrlInBrowser(getString(R.string.github_project));
     }
+  }
+
+  public static class DrawerViewModel extends ViewModel {
+
+    public final State<List<LibraryInfo>> list = new State<>();
+
   }
 
 }

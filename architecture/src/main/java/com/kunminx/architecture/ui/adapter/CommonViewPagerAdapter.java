@@ -34,9 +34,9 @@ public class CommonViewPagerAdapter extends PagerAdapter {
   private final String[] title;
 
   public CommonViewPagerAdapter(boolean enableDestroyItem, String[] title) {
+    this.count = title.length;
     this.enableDestroyItem = enableDestroyItem;
     this.title = title;
-    this.count = title.length;
   }
 
   @Override

@@ -26,11 +26,11 @@
 
         <variable
             name="vm"
-            type="com.kunminx.puremusic.ui.state.MainViewModel" />
+            type="com.kunminx.puremusic.ui.page.MainFragment.MainViewModel" />
 
         <variable
             name="adapter"
-            type="androidx.recyclerview.widget.ListAdapter" />
+            type="androidx.recyclerview.widget.RecyclerView.Adapter" />
 
     </data>
 
@@ -91,7 +91,6 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_icon"
-                        onClickWithDebouncing="@{()->click.login()}"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
@@ -103,7 +102,6 @@
 
                     <TextView
                         android:id="@+id/tv_app"
-                        onClickWithDebouncing="@{()->click.login()}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/app_name"
@@ -116,7 +114,6 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_search"
-                        onClickWithDebouncing="@{()->click.search()}"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginEnd="12dp"
@@ -135,7 +132,7 @@
                 android:id="@+id/tab_layout"
                 initTabAndPage="@{vm.initTabAndPage}"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 app:tabBackground="@color/white"
                 app:tabIndicatorColor="@color/gray"
                 app:tabIndicatorHeight="4dp"
@@ -166,12 +163,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv"
                 adapter="@{adapter}"
-                notifyCurrentListChanged="@{vm.notifyCurrentListChanged}"
                 submitList="@{vm.list}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layoutManager="com.kunminx.binding_recyclerview.layout_manager.WrapContentLinearLayoutManager"
                 tools:listitem="@layout/adapter_play_item" />
 
             <androidx.core.widget.NestedScrollView

@@ -16,25 +16,29 @@
 
 package com.kunminx.puremusic.ui.page;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModel;
 
 import com.kunminx.architecture.ui.page.BaseFragment;
 import com.kunminx.architecture.ui.page.DataBindingConfig;
+import com.kunminx.architecture.ui.page.State;
 import com.kunminx.architecture.utils.ToastUtils;
+import com.kunminx.architecture.utils.Utils;
 import com.kunminx.player.PlayingInfoManager;
 import com.kunminx.puremusic.BR;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.FragmentPlayerBinding;
 import com.kunminx.puremusic.domain.message.DrawerCoordinateManager;
-import com.kunminx.puremusic.domain.message.SharedViewModel;
+import com.kunminx.puremusic.domain.message.PageMessenger;
 import com.kunminx.puremusic.player.PlayerManager;
-import com.kunminx.puremusic.ui.helper.DefaultInterface;
-import com.kunminx.puremusic.ui.state.PlayerViewModel;
+import com.kunminx.puremusic.ui.page.helper.DefaultInterface;
 import com.kunminx.puremusic.ui.view.PlayerSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -45,18 +49,19 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
  */
 public class PlayerFragment extends BaseFragment {
 
-  private PlayerViewModel mState;
-  private SharedViewModel mEvent;
+  private PlayerViewModel mStates;
+  private PageMessenger mMessenger;
+  private PlayerSlideListener mListener;
 
   @Override
   protected void initViewModel() {
-    mState = getFragmentScopeViewModel(PlayerViewModel.class);
-    mEvent = getApplicationScopeViewModel(SharedViewModel.class);
+    mStates = getFragmentScopeViewModel(PlayerViewModel.class);
+    mMessenger = getApplicationScopeViewModel(PageMessenger.class);
   }
 
   @Override
   protected DataBindingConfig getDataBindingConfig() {
-    return new DataBindingConfig(R.layout.fragment_player, BR.vm, mState)
+    return new DataBindingConfig(R.layout.fragment_player, BR.vm, mStates)
             .addBindingParam(BR.click, new ClickProxy())
             .addBindingParam(BR.listener, new ListenerHandler());
   }
@@ -65,10 +70,10 @@ public class PlayerFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    mEvent.isToAddSlideListener().observe(this, aBoolean -> {
+    mMessenger.isToAddSlideListener().observe(getViewLifecycleOwner(), aBoolean -> {
       if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
         SlidingUpPanelLayout sliding = (SlidingUpPanelLayout) view.getParent().getParent();
-        sliding.addPanelSlideListener(new PlayerSlideListener((FragmentPlayerBinding) getBinding(), sliding));
+        sliding.addPanelSlideListener(mListener = new PlayerSlideListener((FragmentPlayerBinding) getBinding(), sliding));
         sliding.addPanelSlideListener(new DefaultInterface.PanelSlideListener() {
           @Override
           public void onPanelStateChanged(
@@ -84,53 +89,54 @@ public class PlayerFragment extends BaseFragment {
     });
 
     PlayerManager.getInstance().getChangeMusicEvent().observe(getViewLifecycleOwner(), changeMusic -> {
-      mState.title.set(changeMusic.getTitle());
-      mState.artist.set(changeMusic.getSummary());
-      mState.coverImg.set(changeMusic.getImg());
+      mStates.title.set(changeMusic.getTitle());
+      mStates.artist.set(changeMusic.getSummary());
+      mStates.coverImg.set(changeMusic.getImg());
+
+      if (mListener != null) {
+        view.post(mListener::calculateTitleAndArtist);
+      }
     });
 
     PlayerManager.getInstance().getPlayingMusicEvent().observe(getViewLifecycleOwner(), playingMusic -> {
-      mState.maxSeekDuration.set(playingMusic.getDuration());
-      mState.currentSeekPosition.set(playingMusic.getPlayerPosition());
+      mStates.maxSeekDuration.set(playingMusic.getDuration());
+      mStates.currentSeekPosition.set(playingMusic.getPlayerPosition());
     });
 
     PlayerManager.getInstance().getPauseEvent().observe(getViewLifecycleOwner(), aBoolean -> {
-      mState.isPlaying.set(!aBoolean);
+      mStates.isPlaying.set(!aBoolean);
     });
 
     PlayerManager.getInstance().getPlayModeEvent().observe(getViewLifecycleOwner(), anEnum -> {
       int tip;
       if (anEnum == PlayingInfoManager.RepeatMode.LIST_CYCLE) {
-        mState.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);
+        mStates.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);
         tip = R.string.play_repeat;
       } else if (anEnum == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) {
-        mState.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT_ONCE);
+        mStates.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT_ONCE);
         tip = R.string.play_repeat_once;
       } else {
-        mState.playModeIcon.set(MaterialDrawableBuilder.IconValue.SHUFFLE);
+        mStates.playModeIcon.set(MaterialDrawableBuilder.IconValue.SHUFFLE);
         tip = R.string.play_shuffle;
       }
       if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
         SlidingUpPanelLayout sliding = (SlidingUpPanelLayout) view.getParent().getParent();
         if (sliding.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-          ToastUtils.showShortToast(mActivity.getApplicationContext(), getString(tip));
+          ToastUtils.showShortToast(getApplicationContext(), getString(tip));
         }
       }
     });
 
-    mEvent.isToCloseSlidePanelIfExpanded().observe(this, aBoolean -> {
-
+    mMessenger.isToCloseSlidePanelIfExpanded().observe(getViewLifecycleOwner(), aBoolean -> {
       if (view.getParent().getParent() instanceof SlidingUpPanelLayout) {
-
         SlidingUpPanelLayout sliding = (SlidingUpPanelLayout) view.getParent().getParent();
-
         if (sliding.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
           sliding.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else {
-          mEvent.requestToCloseActivityIfAllowed(true);
+          mMessenger.requestToCloseActivityIfAllowed(true);
         }
       } else {
-        mEvent.requestToCloseActivityIfAllowed(true);
+        mMessenger.requestToCloseActivityIfAllowed(true);
       }
     });
 
@@ -155,11 +161,11 @@ public class PlayerFragment extends BaseFragment {
     }
 
     public void showPlayList() {
-      ToastUtils.showShortToast(mActivity.getApplicationContext(), getString(R.string.unfinished));
+      ToastUtils.showShortToast(getApplicationContext(), getString(R.string.unfinished));
     }
 
     public void slideDown() {
-      mEvent.requestToCloseSlidePanelIfExpanded(true);
+      mMessenger.requestToCloseSlidePanelIfExpanded(true);
     }
 
     public void more() {
@@ -171,6 +177,35 @@ public class PlayerFragment extends BaseFragment {
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
       PlayerManager.getInstance().setSeek(seekBar.getProgress());
+    }
+  }
+
+  public static class PlayerViewModel extends ViewModel {
+
+    public final State<String> title = new State<>(Utils.getApp().getString(R.string.app_name));
+
+    public final State<String> artist = new State<>(Utils.getApp().getString(R.string.app_name));
+
+    public final State<String> coverImg = new State<>();
+
+    public final State<Drawable> placeHolder = new State<>(ContextCompat.getDrawable(Utils.getApp(), R.drawable.bg_album_default));
+
+    public final State<Integer> maxSeekDuration = new State<>();
+
+    public final State<Integer> currentSeekPosition = new State<>();
+
+    public final State<Boolean> isPlaying = new State<>(null, false);
+
+    public final State<MaterialDrawableBuilder.IconValue> playModeIcon = new State<>();
+
+    {
+      if (PlayerManager.getInstance().getRepeatMode() == PlayingInfoManager.RepeatMode.LIST_CYCLE) {
+        playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);
+      } else if (PlayerManager.getInstance().getRepeatMode() == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) {
+        playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT_ONCE);
+      } else {
+        playModeIcon.set(MaterialDrawableBuilder.IconValue.SHUFFLE);
+      }
     }
   }
 

@@ -24,9 +24,9 @@ import com.kunminx.architecture.data.response.DataResult;
 import com.kunminx.architecture.data.response.ResponseStatus;
 import com.kunminx.architecture.utils.Utils;
 import com.kunminx.puremusic.R;
-import com.kunminx.puremusic.data.bean.DownloadFile;
 import com.kunminx.puremusic.data.bean.LibraryInfo;
 import com.kunminx.puremusic.data.bean.TestAlbum;
+import com.kunminx.puremusic.domain.usecase.CanBeStoppedUseCase;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -68,7 +68,7 @@ public class DataRepository {
   }
 
 
-  public void downloadFile(DownloadFile downloadFile, DataResult.Result<DownloadFile> result) {
+  public void downloadFile(CanBeStoppedUseCase.DownloadState downloadState, DataResult.Result<CanBeStoppedUseCase.DownloadState> result) {
 
     Timer timer = new Timer();
 
@@ -76,19 +76,19 @@ public class DataRepository {
       @Override
       public void run() {
 
-        if (downloadFile.getProgress() < 100) {
-          downloadFile.setProgress(downloadFile.getProgress() + 1);
-          Log.d("TAG", "下载进度 " + downloadFile.getProgress() + "%");
+        if (downloadState.progress < 100) {
+          downloadState.progress = downloadState.progress + 1;
+          Log.d("TAG", "下载进度 " + downloadState.progress + "%");
         } else {
           timer.cancel();
         }
-        if (downloadFile.isForgive()) {
+        if (downloadState.isForgive) {
           timer.cancel();
-          downloadFile.setProgress(0);
-          downloadFile.setForgive(false);
+          downloadState.progress = 0;
+          downloadState.isForgive = false;
           return;
         }
-        result.onResult(new DataResult<>(downloadFile, new ResponseStatus()));
+        result.onResult(new DataResult<>(downloadState, new ResponseStatus()));
       }
     };
 

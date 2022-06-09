@@ -14,24 +14,31 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.ui.state;
+package com.kunminx.puremusic.domain.request;
 
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.data.response.DataResult;
+import com.kunminx.architecture.domain.message.Event;
+import com.kunminx.architecture.domain.message.MutableEvent;
 import com.kunminx.puremusic.data.bean.LibraryInfo;
-import com.kunminx.puremusic.domain.request.InfoRequest;
+import com.kunminx.puremusic.data.repository.DataRepository;
 
 import java.util.List;
 
 /**
- * Create by KunMinX at 19/10/29
+ * Create by KunMinX at 19/11/2
  */
-public class DrawerViewModel extends ViewModel {
+public class InfoRequester extends ViewModel {
 
-  public final MutableLiveData<List<LibraryInfo>> list = new MutableLiveData<>();
+  private final MutableEvent<DataResult<List<LibraryInfo>>> mLibraryEvent = new MutableEvent<>();
 
-  public final InfoRequest infoRequest = new InfoRequest();
+  public Event<DataResult<List<LibraryInfo>>> getLibraryEvent() {
+    return mLibraryEvent;
+  }
 
+  public void requestLibraryInfo() {
+    DataRepository.getInstance().getLibraryInfo(mLibraryEvent::setValue);
+  }
 }

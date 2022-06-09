@@ -22,8 +22,9 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.kunminx.architecture.data.response.DataResult;
 import com.kunminx.architecture.domain.usecase.UseCase;
-import com.kunminx.puremusic.data.bean.DownloadFile;
 import com.kunminx.puremusic.data.repository.DataRepository;
+
+import java.io.File;
 
 
 /**
@@ -32,21 +33,21 @@ import com.kunminx.puremusic.data.repository.DataRepository;
 public class CanBeStoppedUseCase extends UseCase<CanBeStoppedUseCase.RequestValues,
         CanBeStoppedUseCase.ResponseValue> implements DefaultLifecycleObserver {
 
-  private DownloadFile mDownloadFile = new DownloadFile();
+  private final DownloadState downloadState = new DownloadState();
 
   @Override
   public void onStop(@NonNull LifecycleOwner owner) {
     if (getRequestValues() != null) {
-      mDownloadFile.setForgive(true);
-      mDownloadFile.setProgress(0);
-      mDownloadFile.setFile(null);
+      downloadState.isForgive = true;
+      downloadState.file = null;
+      downloadState.progress = 0;
       getUseCaseCallback().onError();
     }
   }
 
   @Override
   protected void executeUseCase(RequestValues requestValues) {
-    DataRepository.getInstance().downloadFile(mDownloadFile, dataResult -> {
+    DataRepository.getInstance().downloadFile(downloadState, dataResult -> {
       getUseCaseCallback().onSuccess(new ResponseValue(dataResult));
     });
   }
@@ -57,14 +58,23 @@ public class CanBeStoppedUseCase extends UseCase<CanBeStoppedUseCase.RequestValu
 
   public static final class ResponseValue implements UseCase.ResponseValue {
 
-    private DataResult<DownloadFile> mDataResult;
+    private final DataResult<CanBeStoppedUseCase.DownloadState> mDataResult;
 
-    public ResponseValue(DataResult<DownloadFile> dataResult) {
+    public ResponseValue(DataResult<CanBeStoppedUseCase.DownloadState> dataResult) {
       mDataResult = dataResult;
     }
 
-    public DataResult<DownloadFile> getDataResult() {
+    public DataResult<CanBeStoppedUseCase.DownloadState> getDataResult() {
       return mDataResult;
     }
+  }
+
+  public static final class DownloadState {
+
+    public boolean isForgive = false;
+
+    public int progress;
+
+    public File file;
   }
 }

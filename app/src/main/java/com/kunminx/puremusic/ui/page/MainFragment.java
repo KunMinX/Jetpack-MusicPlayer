@@ -21,36 +21,49 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 
 import com.kunminx.architecture.ui.page.BaseFragment;
 import com.kunminx.architecture.ui.page.DataBindingConfig;
+import com.kunminx.architecture.ui.page.State;
 import com.kunminx.puremusic.BR;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.TestAlbum;
+import com.kunminx.puremusic.domain.message.PageMessenger;
+import com.kunminx.puremusic.domain.request.MusicRequester;
 import com.kunminx.puremusic.player.PlayerManager;
-import com.kunminx.puremusic.domain.message.SharedViewModel;
 import com.kunminx.puremusic.ui.page.adapter.PlaylistAdapter;
-import com.kunminx.puremusic.ui.state.MainViewModel;
+
+import java.util.List;
 
 /**
  * Create by KunMinX at 19/10/29
  */
 public class MainFragment extends BaseFragment {
 
-  private MainViewModel mState;
-  private SharedViewModel mEvent;
+  private MainViewModel mStates;
+  private PageMessenger mMessenger;
+  private MusicRequester mMusicRequester;
+  private PlaylistAdapter mAdapter;
 
   @Override
   protected void initViewModel() {
-    mState = getFragmentScopeViewModel(MainViewModel.class);
-    mEvent = getApplicationScopeViewModel(SharedViewModel.class);
+    mStates = getFragmentScopeViewModel(MainViewModel.class);
+    mMessenger = getApplicationScopeViewModel(PageMessenger.class);
+    mMusicRequester = getFragmentScopeViewModel(MusicRequester.class);
   }
 
   @Override
   protected DataBindingConfig getDataBindingConfig() {
-    return new DataBindingConfig(R.layout.fragment_main, BR.vm, mState)
+
+    mAdapter = new PlaylistAdapter(getContext());
+    mAdapter.setOnItemClickListener((viewId, item, position) -> {
+      PlayerManager.getInstance().playAudio(position);
+    });
+
+    return new DataBindingConfig(R.layout.fragment_main, BR.vm, mStates)
             .addBindingParam(BR.click, new ClickProxy())
-            .addBindingParam(BR.adapter, new PlaylistAdapter(getContext()));
+            .addBindingParam(BR.adapter, mAdapter);
   }
 
   @Override
@@ -58,16 +71,16 @@ public class MainFragment extends BaseFragment {
     super.onViewCreated(view, savedInstanceState);
 
     PlayerManager.getInstance().getChangeMusicEvent().observe(getViewLifecycleOwner(), changeMusic -> {
-      mState.notifyCurrentListChanged.setValue(true);
+      mAdapter.notifyDataSetChanged();
     });
 
-    mState.musicRequest.getFreeMusicsLiveData().observe(getViewLifecycleOwner(), dataResult -> {
+    mMusicRequester.getFreeMusicsEvent().observe(getViewLifecycleOwner(), dataResult -> {
       if (!dataResult.getResponseStatus().isSuccess()) return;
 
       TestAlbum musicAlbum = dataResult.getResult();
 
       if (musicAlbum != null && musicAlbum.getMusics() != null) {
-        mState.list.setValue(musicAlbum.getMusics());
+        mStates.list.set(musicAlbum.getMusics());
 
         if (PlayerManager.getInstance().getAlbum() == null ||
                 !PlayerManager.getInstance().getAlbum().getAlbumId().equals(musicAlbum.getAlbumId())) {
@@ -77,23 +90,26 @@ public class MainFragment extends BaseFragment {
     });
 
     if (PlayerManager.getInstance().getAlbum() == null) {
-      mState.musicRequest.requestFreeMusics();
+      mMusicRequester.requestFreeMusics();
     } else {
-      mState.list.setValue(PlayerManager.getInstance().getAlbum().getMusics());
+      mStates.list.set(PlayerManager.getInstance().getAlbum().getMusics());
     }
   }
 
   public class ClickProxy {
 
     public void openMenu() {
-      mEvent.requestToOpenOrCloseDrawer(true);
+      mMessenger.requestToOpenOrCloseDrawer(true);
     }
+  }
 
-    public void login() {
-    }
+  public static class MainViewModel extends ViewModel {
 
-    public void search() {
-    }
+    public final State<Boolean> initTabAndPage = new State<>(true);
+
+    public final State<String> pageAssetPath = new State<>("summary.html");
+
+    public final State<List<TestAlbum.TestMusic>> list = new State<>();
 
   }
 
