@@ -88,7 +88,7 @@ public class PlayerFragment extends BaseFragment {
       }
     });
 
-    PlayerManager.getInstance().getChangeMusicEvent().observe(getViewLifecycleOwner(), changeMusic -> {
+    PlayerManager.getInstance().getChangeMusicResult().observe(getViewLifecycleOwner(), changeMusic -> {
       mStates.title.set(changeMusic.getTitle());
       mStates.artist.set(changeMusic.getSummary());
       mStates.coverImg.set(changeMusic.getImg());
@@ -98,16 +98,16 @@ public class PlayerFragment extends BaseFragment {
       }
     });
 
-    PlayerManager.getInstance().getPlayingMusicEvent().observe(getViewLifecycleOwner(), playingMusic -> {
+    PlayerManager.getInstance().getPlayingMusicResult().observe(getViewLifecycleOwner(), playingMusic -> {
       mStates.maxSeekDuration.set(playingMusic.getDuration());
       mStates.currentSeekPosition.set(playingMusic.getPlayerPosition());
     });
 
-    PlayerManager.getInstance().getPauseEvent().observe(getViewLifecycleOwner(), aBoolean -> {
+    PlayerManager.getInstance().getPauseResult().observe(getViewLifecycleOwner(), aBoolean -> {
       mStates.isPlaying.set(!aBoolean);
     });
 
-    PlayerManager.getInstance().getPlayModeEvent().observe(getViewLifecycleOwner(), anEnum -> {
+    PlayerManager.getInstance().getPlayModeResult().observe(getViewLifecycleOwner(), anEnum -> {
       int tip;
       if (anEnum == PlayingInfoManager.RepeatMode.LIST_CYCLE) {
         mStates.playModeIcon.set(MaterialDrawableBuilder.IconValue.REPEAT);
@@ -182,12 +182,12 @@ public class PlayerFragment extends BaseFragment {
   public static class PlayerViewModel extends ViewModel {
     public final State<String> title = new State<>(Utils.getApp().getString(R.string.app_name));
     public final State<String> artist = new State<>(Utils.getApp().getString(R.string.app_name));
-    public final State<String> coverImg = new State<>();
+    public final State<String> coverImg = new State<>("");
     public final State<Drawable> placeHolder = new State<>(ContextCompat.getDrawable(Utils.getApp(), R.drawable.bg_album_default));
-    public final State<Integer> maxSeekDuration = new State<>();
-    public final State<Integer> currentSeekPosition = new State<>();
-    public final State<Boolean> isPlaying = new State<>(null, false);
-    public final State<MaterialDrawableBuilder.IconValue> playModeIcon = new State<>();
+    public final State<Integer> maxSeekDuration = new State<>(0);
+    public final State<Integer> currentSeekPosition = new State<>(0);
+    public final State<Boolean> isPlaying = new State<>(false, false);
+    public final State<MaterialDrawableBuilder.IconValue> playModeIcon = new State<>(MaterialDrawableBuilder.IconValue.REPEAT);
 
     {
       if (PlayerManager.getInstance().getRepeatMode() == PlayingInfoManager.RepeatMode.LIST_CYCLE) {

@@ -22,7 +22,6 @@ import android.content.Intent;
 import androidx.lifecycle.LiveData;
 
 import com.danikula.videocache.HttpProxyCacheServer;
-import com.kunminx.architecture.domain.message.Event;
 import com.kunminx.player.PlayerController;
 import com.kunminx.player.PlayingInfoManager;
 import com.kunminx.player.bean.dto.ChangeMusic;
@@ -189,21 +188,21 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     return mController.getAlbumIndex();
   }
 
-  public LiveData<ChangeMusic<TestAlbum, TestAlbum.TestMusic, TestAlbum.TestArtist>> getChangeMusicEvent() {
-    return mController.getChangeMusicEvent();
+  public LiveData<ChangeMusic<TestAlbum, TestAlbum.TestMusic, TestAlbum.TestArtist>> getChangeMusicResult() {
+    return mController.getChangeMusicResult();
   }
 
-  public LiveData<PlayingMusic<TestAlbum, TestAlbum.TestMusic, TestAlbum.TestArtist>> getPlayingMusicEvent() {
-    return mController.getPlayingMusicEvent();
+  public LiveData<PlayingMusic<TestAlbum, TestAlbum.TestMusic, TestAlbum.TestArtist>> getPlayingMusicResult() {
+    return mController.getPlayingMusicResult();
   }
 
-  public LiveData<Boolean> getPauseEvent() {
-    return mController.getPauseEvent();
+  public LiveData<Boolean> getPauseResult() {
+    return mController.getPauseResult();
   }
 
   @Override
-  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeEvent() {
-    return mController.getPlayModeEvent();
+  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeResult() {
+    return mController.getPlayModeResult();
   }
 
   @Override

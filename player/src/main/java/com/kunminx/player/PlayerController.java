@@ -292,19 +292,19 @@ public class PlayerController<
     return mPlayingInfoManager.getAlbumIndex();
   }
 
-  public LiveData<ChangeMusic<B, M, A>> getChangeMusicEvent() {
+  public LiveData<ChangeMusic<B, M, A>> getChangeMusicResult() {
     return changeMusicLiveData;
   }
 
-  public LiveData<PlayingMusic<B, M, A>> getPlayingMusicEvent() {
+  public LiveData<PlayingMusic<B, M, A>> getPlayingMusicResult() {
     return playingMusicLiveData;
   }
 
-  public LiveData<Boolean> getPauseEvent() {
+  public LiveData<Boolean> getPauseResult() {
     return pauseLiveData;
   }
 
-  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeEvent() {
+  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeResult() {
     return playModeLiveData;
   }
 

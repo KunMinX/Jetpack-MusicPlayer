@@ -32,6 +32,7 @@ import com.kunminx.puremusic.data.bean.LibraryInfo;
 import com.kunminx.puremusic.domain.request.InfoRequester;
 import com.kunminx.puremusic.ui.page.adapter.DrawerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,7 +60,7 @@ public class DrawerFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    mInfoRequester.getLibraryEvent().observe(getViewLifecycleOwner(), dataResult -> {
+    mInfoRequester.getLibraryResult().observe(getViewLifecycleOwner(), dataResult -> {
       if (!dataResult.getResponseStatus().isSuccess()) return;
 
       if (dataResult.getResult() != null) {
@@ -67,7 +68,7 @@ public class DrawerFragment extends BaseFragment {
       }
     });
 
-    if (mInfoRequester.getLibraryEvent().getValue() == null) {
+    if (mInfoRequester.getLibraryResult().getValue() == null) {
       mInfoRequester.requestLibraryInfo();
     }
   }
@@ -79,7 +80,7 @@ public class DrawerFragment extends BaseFragment {
   }
 
   public static class DrawerViewModel extends ViewModel {
-    public final State<List<LibraryInfo>> list = new State<>();
+    public final State<List<LibraryInfo>> list = new State<>(new ArrayList<>());
   }
 
 }

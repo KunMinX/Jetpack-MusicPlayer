@@ -20,8 +20,8 @@ package com.kunminx.puremusic.domain.request;
 import androidx.lifecycle.ViewModel;
 
 import com.kunminx.architecture.data.response.DataResult;
-import com.kunminx.architecture.domain.message.Event;
-import com.kunminx.architecture.domain.message.MutableEvent;
+import com.kunminx.architecture.domain.message.Result;
+import com.kunminx.architecture.domain.message.MutableResult;
 import com.kunminx.puremusic.data.bean.LibraryInfo;
 import com.kunminx.puremusic.data.repository.DataRepository;
 
@@ -32,13 +32,13 @@ import java.util.List;
  */
 public class InfoRequester extends ViewModel {
 
-  private final MutableEvent<DataResult<List<LibraryInfo>>> mLibraryEvent = new MutableEvent<>();
+  private final MutableResult<DataResult<List<LibraryInfo>>> mLibraryResult = new MutableResult<>();
 
-  public Event<DataResult<List<LibraryInfo>>> getLibraryEvent() {
-    return mLibraryEvent;
+  public Result<DataResult<List<LibraryInfo>>> getLibraryResult() {
+    return mLibraryResult;
   }
 
   public void requestLibraryInfo() {
-    DataRepository.getInstance().getLibraryInfo(mLibraryEvent::setValue);
+    DataRepository.getInstance().getLibraryInfo(mLibraryResult::setValue);
   }
 }

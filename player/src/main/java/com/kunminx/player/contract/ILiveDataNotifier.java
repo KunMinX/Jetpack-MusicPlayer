@@ -33,12 +33,12 @@ public interface ILiveDataNotifier<
         M extends BaseMusicItem<A>,
         A extends BaseArtistItem> {
 
-  LiveData<ChangeMusic<B, M, A>> getChangeMusicEvent();
+  LiveData<ChangeMusic<B, M, A>> getChangeMusicResult();
 
-  LiveData<PlayingMusic<B, M, A>> getPlayingMusicEvent();
+  LiveData<PlayingMusic<B, M, A>> getPlayingMusicResult();
 
-  LiveData<Boolean> getPauseEvent();
+  LiveData<Boolean> getPauseResult();
 
-  LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeEvent();
+  LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeResult();
 
 }

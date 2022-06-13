@@ -160,24 +160,24 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
 
   public LiveData<ChangeMusic<DefaultAlbum,
           DefaultAlbum.DefaultMusic,
-          DefaultAlbum.DefaultArtist>> getChangeMusicEvent() {
-    return mController.getChangeMusicEvent();
+          DefaultAlbum.DefaultArtist>> getChangeMusicResult() {
+    return mController.getChangeMusicResult();
   }
 
   public LiveData<PlayingMusic<DefaultAlbum,
           DefaultAlbum.DefaultMusic,
-          DefaultAlbum.DefaultArtist>> getPlayingMusicEvent() {
-    return mController.getPlayingMusicEvent();
+          DefaultAlbum.DefaultArtist>> getPlayingMusicResult() {
+    return mController.getPlayingMusicResult();
   }
 
-  public LiveData<Boolean> getPauseEvent() {
-    return mController.getPauseEvent();
+  public LiveData<Boolean> getPauseResult() {
+    return mController.getPauseResult();
   }
 
 
   @Override
-  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeEvent() {
-    return mController.getPlayModeEvent();
+  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeResult() {
+    return mController.getPlayModeResult();
   }
 
   @Override
