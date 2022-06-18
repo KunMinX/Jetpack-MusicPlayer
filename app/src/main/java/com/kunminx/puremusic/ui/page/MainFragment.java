@@ -35,6 +35,7 @@ import com.kunminx.puremusic.domain.request.MusicRequester;
 import com.kunminx.puremusic.player.PlayerManager;
 import com.kunminx.puremusic.ui.page.adapter.PlaylistAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,11 +73,11 @@ public class MainFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    PlayerManager.getInstance().getChangeMusicEvent().observe(getViewLifecycleOwner(), changeMusic -> {
+    PlayerManager.getInstance().getChangeMusicResult().observe(getViewLifecycleOwner(), changeMusic -> {
       mAdapter.notifyDataSetChanged();
     });
 
-    mMusicRequester.getFreeMusicsEvent().observe(getViewLifecycleOwner(), dataResult -> {
+    mMusicRequester.getFreeMusicsResult().observe(getViewLifecycleOwner(), dataResult -> {
       if (!dataResult.getResponseStatus().isSuccess()) return;
 
       TestAlbum musicAlbum = dataResult.getResult();
@@ -105,7 +106,7 @@ public class MainFragment extends BaseFragment {
   public static class MainViewModel extends ViewModel {
     public final State<Boolean> initTabAndPage = new State<>(true);
     public final State<String> pageAssetPath = new State<>("summary.html");
-    public final State<List<TestAlbum.TestMusic>> list = new State<>();
+    public final State<List<TestAlbum.TestMusic>> list = new State<>(new ArrayList<>());
   }
 
 }

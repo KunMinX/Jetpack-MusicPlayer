@@ -20,8 +20,8 @@ package com.kunminx.puremusic.domain.request;
 import androidx.lifecycle.ViewModel;
 
 import com.kunminx.architecture.data.response.DataResult;
-import com.kunminx.architecture.domain.message.Event;
-import com.kunminx.architecture.domain.message.MutableEvent;
+import com.kunminx.architecture.domain.message.MutableResult;
+import com.kunminx.architecture.domain.message.Result;
 import com.kunminx.puremusic.data.bean.TestAlbum;
 import com.kunminx.puremusic.data.repository.DataRepository;
 
@@ -30,13 +30,13 @@ import com.kunminx.puremusic.data.repository.DataRepository;
  */
 public class MusicRequester extends ViewModel {
 
-  private final MutableEvent<DataResult<TestAlbum>> mFreeMusicsEvent = new MutableEvent<>();
+  private final MutableResult<DataResult<TestAlbum>> mFreeMusicsResult = new MutableResult<>();
 
-  public Event<DataResult<TestAlbum>> getFreeMusicsEvent() {
-    return mFreeMusicsEvent;
+  public Result<DataResult<TestAlbum>> getFreeMusicsResult() {
+    return mFreeMusicsResult;
   }
 
   public void requestFreeMusics() {
-    DataRepository.getInstance().getFreeMusic(mFreeMusicsEvent::setValue);
+    DataRepository.getInstance().getFreeMusic(mFreeMusicsResult::setValue);
   }
 }

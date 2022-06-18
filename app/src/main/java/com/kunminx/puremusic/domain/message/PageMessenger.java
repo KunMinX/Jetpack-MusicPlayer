@@ -18,36 +18,36 @@ package com.kunminx.puremusic.domain.message;
 
 import androidx.lifecycle.ViewModel;
 
-import com.kunminx.architecture.domain.message.Event;
-import com.kunminx.architecture.domain.message.MutableEvent;
+import com.kunminx.architecture.domain.message.MutableResult;
+import com.kunminx.architecture.domain.message.Result;
 
 /**
  * Create by KunMinX at 19/10/16
  */
 public class PageMessenger extends ViewModel {
 
-  private final MutableEvent<Boolean> toCloseSlidePanelIfExpanded = new MutableEvent<>();
+  private final MutableResult<Boolean> toCloseSlidePanelIfExpanded = new MutableResult<>();
 
-  private final MutableEvent<Boolean> toCloseActivityIfAllowed = new MutableEvent<>();
+  private final MutableResult<Boolean> toCloseActivityIfAllowed = new MutableResult<>();
 
-  private final MutableEvent<Boolean> toOpenOrCloseDrawer = new MutableEvent<>();
+  private final MutableResult<Boolean> toOpenOrCloseDrawer = new MutableResult<>();
 
-  private final MutableEvent<Boolean> toAddSlideListener =
-          new MutableEvent.Builder<Boolean>().setAllowNullValue(false).create();
+  private final MutableResult<Boolean> toAddSlideListener =
+          new MutableResult.Builder<Boolean>().setAllowNullValue(false).create();
 
-  public Event<Boolean> isToAddSlideListener() {
+  public Result<Boolean> isToAddSlideListener() {
     return toAddSlideListener;
   }
 
-  public Event<Boolean> isToCloseSlidePanelIfExpanded() {
+  public Result<Boolean> isToCloseSlidePanelIfExpanded() {
     return toCloseSlidePanelIfExpanded;
   }
 
-  public Event<Boolean> isToCloseActivityIfAllowed() {
+  public Result<Boolean> isToCloseActivityIfAllowed() {
     return toCloseActivityIfAllowed;
   }
 
-  public Event<Boolean> isToOpenOrCloseDrawer() {
+  public Result<Boolean> isToOpenOrCloseDrawer() {
     return toOpenOrCloseDrawer;
   }
 

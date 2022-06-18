@@ -22,26 +22,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.kunminx.architecture.domain.message.Event;
-import com.kunminx.architecture.domain.message.MutableEvent;
+import com.kunminx.architecture.domain.message.Result;
+import com.kunminx.architecture.domain.message.MutableResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO tip 1：通过 Lifecycle 来解决抽屉侧滑禁用与否的判断的一致性问题，
- * <p>
- * 每个需要注册和监听生命周期来判断的视图控制器，无需在各自内部手动书写解绑等操作。
- * 如这么说无体会，详见《为你还原一个真实的 Jetpack Lifecycle》
- * https://xiaozhuanlan.com/topic/3684721950
- * <p>
- * TODO tip 2：与此同时，作为用于 "跨页面通信" 单例，本类也承担 "唯一可信源" 职责，
- * 所有对 Drawer 状态协调相关的请求都交由本单例处理，并统一分发给所有订阅者页面。
- * <p>
- * 如这么说无体会，详见《吃透 LiveData 本质，享用可靠消息鉴权机制》解析。
- * https://xiaozhuanlan.com/topic/6017825943
- * <p>
- * <p>
  * Create by KunMinX at 19/11/3
  */
 public class DrawerCoordinateManager implements DefaultLifecycleObserver {
@@ -61,9 +48,9 @@ public class DrawerCoordinateManager implements DefaultLifecycleObserver {
     return tagOfSecondaryPages.size() == 0;
   }
 
-  private final MutableEvent<Boolean> enableSwipeDrawer = new MutableEvent<>();
+  private final MutableResult<Boolean> enableSwipeDrawer = new MutableResult<>();
 
-  public Event<Boolean> isEnableSwipeDrawer() {
+  public Result<Boolean> isEnableSwipeDrawer() {
     return enableSwipeDrawer;
   }
 
