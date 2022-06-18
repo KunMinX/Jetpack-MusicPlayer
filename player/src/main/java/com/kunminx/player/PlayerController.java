@@ -41,287 +41,292 @@ public class PlayerController<
         M extends BaseMusicItem<A>,
         A extends BaseArtistItem> {
 
-  private final PlayingInfoManager<B, M, A> mPlayingInfoManager = new PlayingInfoManager<>();
-  private boolean mIsPaused;
-  private boolean mIsChangingPlayingMusic;
+    private final PlayingInfoManager<B, M, A> mPlayingInfoManager = new PlayingInfoManager<>();
+    private boolean mIsPaused;
+    private boolean mIsChangingPlayingMusic;
 
-  private ICacheProxy mICacheProxy;
+    private ICacheProxy mICacheProxy;
 
-  private final MutableLiveData<ChangeMusic<B, M, A>> changeMusicLiveData = new MutableLiveData<>();
-  private final MutableLiveData<PlayingMusic<B, M, A>> playingMusicLiveData = new MutableLiveData<>();
-  private final MutableLiveData<Boolean> pauseLiveData = new MutableLiveData<>();
-  private final MutableLiveData<Enum<PlayingInfoManager.RepeatMode>> playModeLiveData = new MutableLiveData<>();
+    private final MutableLiveData<ChangeMusic<B, M, A>> changeMusicLiveData = new MutableLiveData<>();
+    private final MutableLiveData<PlayingMusic<B, M, A>> playingMusicLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> pauseLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Enum<PlayingInfoManager.RepeatMode>> playModeLiveData = new MutableLiveData<>();
 
-  private IServiceNotifier mIServiceNotifier;
+    private IServiceNotifier mIServiceNotifier;
 
-  private final PlayingMusic<B, M, A> mCurrentPlay = new PlayingMusic<>("00:00", "00:00");
-  private final ChangeMusic<B, M, A> mChangeMusic = new ChangeMusic<>();
+    private final PlayingMusic<B, M, A> mCurrentPlay = new PlayingMusic<>("00:00", "00:00");
+    private final ChangeMusic<B, M, A> mChangeMusic = new ChangeMusic<>();
 
-  public void init(Context context, List<String> extraFormatList,
-                   IServiceNotifier iServiceNotifier,
-                   ICacheProxy iCacheProxy) {
+    public void init(Context context, List<String> extraFormatList,
+                     IServiceNotifier iServiceNotifier,
+                     ICacheProxy iCacheProxy) {
 
-    mIServiceNotifier = iServiceNotifier;
-    mICacheProxy = iCacheProxy;
+        mIServiceNotifier = iServiceNotifier;
+        mICacheProxy = iCacheProxy;
 
-    MediaPlayerHelper.getInstance().initAssetManager(context);
+        MediaPlayerHelper.getInstance().initAssetManager(context);
 
-    if (extraFormatList != null) {
-      MediaPlayerHelper.getInstance().getFormatList().addAll(extraFormatList);
-    }
-  }
-
-  public boolean isInit() {
-    return mPlayingInfoManager.isInit();
-  }
-
-  public void loadAlbum(B musicAlbum) {
-    setAlbum(musicAlbum, 0);
-  }
-
-  private void setAlbum(B musicAlbum, int albumIndex) {
-    mPlayingInfoManager.setMusicAlbum(musicAlbum);
-    mPlayingInfoManager.setAlbumIndex(albumIndex);
-    setChangingPlayingMusic(true);
-  }
-
-  public void loadAlbum(B musicAlbum, int albumIndex) {
-    setAlbum(musicAlbum, albumIndex);
-    playAudio();
-  }
-
-  public boolean isPlaying() {
-    return MediaPlayerHelper.getInstance().getMediaPlayer().isPlaying();
-  }
-
-  public boolean isPaused() {
-    return mIsPaused;
-  }
-
-  /**
-   * @param albumIndex 从 album 进来的一定是 album 列表的 index
-   */
-  public void playAudio(int albumIndex) {
-    if (isPlaying() && albumIndex == mPlayingInfoManager.getAlbumIndex()) {
-      return;
+        if (extraFormatList != null) {
+            MediaPlayerHelper.getInstance().getFormatList().addAll(extraFormatList);
+        }
     }
 
-    mPlayingInfoManager.setAlbumIndex(albumIndex);
-    setChangingPlayingMusic(true);
-    playAudio();
-  }
-
-
-  public void playAudio() {
-    if (mIsChangingPlayingMusic) {
-      MediaPlayerHelper.getInstance().getMediaPlayer().stop();
-      getUrlAndPlay();
-    } else if (mIsPaused) {
-      resumeAudio();
+    public boolean isInit() {
+        return mPlayingInfoManager.isInit();
     }
-  }
 
-  private void getUrlAndPlay() {
-    String url = null;
-    M freeMusic = null;
-    freeMusic = mPlayingInfoManager.getCurrentPlayingMusic();
-    url = freeMusic.getUrl();
-
-    if (TextUtils.isEmpty(url)) {
-      pauseAudio();
-    } else {
-      //涉及到网络请求，因而使用时 请在外部自行判断网络连接状态
-      if ((url.contains("http:") || url.contains("ftp:") || url.contains("https:"))) {
-        MediaPlayerHelper.getInstance().play(mICacheProxy.getCacheUrl(url));
-        afterPlay();
-      } else if (url.contains("storage")) {
-        MediaPlayerHelper.getInstance().play(url);
-        afterPlay();
-      } else {
-        MediaPlayerHelper.getInstance().playAsset(url);
-        afterPlay();
-      }
+    public void loadAlbum(B musicAlbum) {
+        setAlbum(musicAlbum, 0);
     }
-  }
 
-  private void afterPlay() {
-    setChangingPlayingMusic(false);
-    bindProgressListener();
-    mIsPaused = false;
-    pauseLiveData.postValue(false);
-    if (mIServiceNotifier != null) {
-      mIServiceNotifier.notifyService(true);
+    private void setAlbum(B musicAlbum, int albumIndex) {
+        mPlayingInfoManager.setMusicAlbum(musicAlbum);
+        mPlayingInfoManager.setAlbumIndex(albumIndex);
+        setChangingPlayingMusic(true);
     }
-  }
 
-  private void bindProgressListener() {
-    MediaPlayerHelper.getInstance().setProgressInterval(1000).setMediaPlayerHelperCallBack(
-            (state, mediaPlayerHelper, args) -> {
-              if (state == MediaPlayerHelper.CallBackState.PROGRESS) {
-                int position = mediaPlayerHelper.getMediaPlayer().getCurrentPosition();
-                int duration = mediaPlayerHelper.getMediaPlayer().getDuration();
-                mCurrentPlay.setNowTime(calculateTime(position / 1000));
-                mCurrentPlay.setAllTime(calculateTime(duration / 1000));
-                mCurrentPlay.setDuration(duration);
-                mCurrentPlay.setPlayerPosition(position);
-                playingMusicLiveData.postValue(mCurrentPlay);
-                if (mCurrentPlay.getAllTime().equals(mCurrentPlay.getNowTime())
-                        //容许两秒内的误差，有的内容它就是会差那么 1 秒
-                        || duration / 1000 - position / 1000 < 2) {
-                  if (getRepeatMode() == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) {
-                    playAgain();
-                  } else {
-                    playNext();
-                  }
-                }
-              }
-            });
-  }
-
-  public void requestLastPlayingInfo() {
-    playingMusicLiveData.postValue(mCurrentPlay);
-    changeMusicLiveData.postValue(mChangeMusic);
-    pauseLiveData.postValue(mIsPaused);
-  }
-
-  public void setSeek(int progress) {
-    MediaPlayerHelper.getInstance().getMediaPlayer().seekTo(progress);
-  }
-
-  public String getTrackTime(int progress) {
-    return calculateTime(progress / 1000);
-  }
-
-  private String calculateTime(int time) {
-    int minute;
-    int second;
-    if (time >= 60) {
-      minute = time / 60;
-      second = time % 60;
-      return (minute < 10 ? "0" + minute : "" + minute) + (second < 10 ? ":0" + second : ":" + second);
-    } else {
-      second = time;
-      if (second < 10) {
-        return "00:0" + second;
-      }
-      return "00:" + second;
+    public void loadAlbum(B musicAlbum, int albumIndex) {
+        setAlbum(musicAlbum, albumIndex);
+        playAudio();
     }
-  }
 
-
-  public void playNext() {
-    mPlayingInfoManager.countNextIndex();
-    setChangingPlayingMusic(true);
-    playAudio();
-  }
-
-
-  public void playPrevious() {
-    mPlayingInfoManager.countPreviousIndex();
-    setChangingPlayingMusic(true);
-    playAudio();
-  }
-
-
-  public void playAgain() {
-    setChangingPlayingMusic(true);
-    playAudio();
-  }
-
-
-  public void pauseAudio() {
-    MediaPlayerHelper.getInstance().getMediaPlayer().pause();
-    mIsPaused = true;
-    pauseLiveData.postValue(true);
-    if (mIServiceNotifier != null) {
-      mIServiceNotifier.notifyService(true);
+    public boolean isPlaying() {
+        return MediaPlayerHelper.getInstance().getMediaPlayer().isPlaying();
     }
-  }
 
-
-  public void resumeAudio() {
-    MediaPlayerHelper.getInstance().getMediaPlayer().start();
-    mIsPaused = false;
-    pauseLiveData.postValue(false);
-    if (mIServiceNotifier != null) {
-      mIServiceNotifier.notifyService(true);
+    public boolean isPaused() {
+        return mIsPaused;
     }
-  }
 
+    /**
+     * @param albumIndex 从 album 进来的一定是 album 列表的 index
+     */
+    public void playAudio(int albumIndex) {
+        if (isPlaying() && albumIndex == mPlayingInfoManager.getAlbumIndex()) {
+            return;
+        }
 
-  public void clear() {
-    MediaPlayerHelper.getInstance().getMediaPlayer().stop();
-    MediaPlayerHelper.getInstance().getMediaPlayer().reset();
-    pauseLiveData.postValue(true);
-    //这里设为true是因为可能通知栏清除后，还可能在页面中点击播放
-    resetIsChangingPlayingChapter();
-    MediaPlayerHelper.getInstance().setProgressInterval(1000).setMediaPlayerHelperCallBack(null);
-    if (mIServiceNotifier != null) {
-      mIServiceNotifier.notifyService(false);
+        mPlayingInfoManager.setAlbumIndex(albumIndex);
+        setChangingPlayingMusic(true);
+        playAudio();
     }
-  }
 
-  public void resetIsChangingPlayingChapter() {
-    mIsChangingPlayingMusic = true;
-    setChangingPlayingMusic(true);
-  }
 
-  public void changeMode() {
-    playModeLiveData.postValue(mPlayingInfoManager.changeMode());
-  }
-
-  public B getAlbum() {
-    return mPlayingInfoManager.getMusicAlbum();
-  }
-
-  //播放列表展示用
-  public List<M> getAlbumMusics() {
-    return mPlayingInfoManager.getOriginPlayingList();
-  }
-
-  public void setChangingPlayingMusic(boolean changingPlayingMusic) {
-    mIsChangingPlayingMusic = changingPlayingMusic;
-    if (mIsChangingPlayingMusic) {
-      mChangeMusic.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
-      changeMusicLiveData.postValue(mChangeMusic);
-      mCurrentPlay.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
+    public void playAudio() {
+        if (mIsChangingPlayingMusic) {
+            MediaPlayerHelper.getInstance().getMediaPlayer().stop();
+            getUrlAndPlay();
+        } else if (mIsPaused) {
+            resumeAudio();
+        }
     }
-  }
 
-  public int getAlbumIndex() {
-    return mPlayingInfoManager.getAlbumIndex();
-  }
+    private void getUrlAndPlay() {
+        String url = null;
+        M freeMusic = null;
+        freeMusic = mPlayingInfoManager.getCurrentPlayingMusic();
+        url = freeMusic.getUrl();
 
-  public LiveData<ChangeMusic<B, M, A>> getChangeMusicResult() {
-    return changeMusicLiveData;
-  }
-
-  public LiveData<PlayingMusic<B, M, A>> getPlayingMusicResult() {
-    return playingMusicLiveData;
-  }
-
-  public LiveData<Boolean> getPauseResult() {
-    return pauseLiveData;
-  }
-
-  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeResult() {
-    return playModeLiveData;
-  }
-
-  public Enum<PlayingInfoManager.RepeatMode> getRepeatMode() {
-    return mPlayingInfoManager.getRepeatMode();
-  }
-
-  public void togglePlay() {
-    if (isPlaying()) {
-      pauseAudio();
-    } else {
-      playAudio();
+        if (TextUtils.isEmpty(url)) {
+            pauseAudio();
+        } else {
+            //涉及到网络请求，因而使用时 请在外部自行判断网络连接状态
+            if ((url.contains("http:") || url.contains("ftp:") || url.contains("https:"))) {
+                MediaPlayerHelper.getInstance().play(mICacheProxy.getCacheUrl(url));
+                afterPlay();
+            } else if (url.contains("storage")) {
+                MediaPlayerHelper.getInstance().play(url);
+                afterPlay();
+            } else {
+                MediaPlayerHelper.getInstance().playAsset(url);
+                afterPlay();
+            }
+        }
     }
-  }
 
-  public M getCurrentPlayingMusic() {
-    return mPlayingInfoManager.getCurrentPlayingMusic();
-  }
+    private void afterPlay() {
+        setChangingPlayingMusic(false);
+        bindProgressListener();
+        mIsPaused = false;
+        pauseLiveData.postValue(false);
+        if (mIServiceNotifier != null) {
+            mIServiceNotifier.notifyService(true);
+        }
+    }
+
+    private void bindProgressListener() {
+        MediaPlayerHelper.getInstance().setProgressInterval(1000).setMediaPlayerHelperCallBack(
+                (state, mediaPlayerHelper, args) -> {
+                    if (state == MediaPlayerHelper.CallBackState.PROGRESS) {
+                        int position = mediaPlayerHelper.getMediaPlayer().getCurrentPosition();
+                        int duration = mediaPlayerHelper.getMediaPlayer().getDuration();
+                        mCurrentPlay.setNowTime(calculateTime(position / 1000));
+                        mCurrentPlay.setAllTime(calculateTime(duration / 1000));
+                        mCurrentPlay.setDuration(duration);
+                        mCurrentPlay.setPlayerPosition(position);
+                        playingMusicLiveData.postValue(mCurrentPlay);
+                        if (mCurrentPlay.getAllTime().equals(mCurrentPlay.getNowTime())
+                                //容许两秒内的误差，有的内容它就是会差那么 1 秒
+                                || duration / 1000 - position / 1000 < 2) {
+                            if (getRepeatMode() == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) {
+                                playAgain();
+                            } else {
+                                playNext();
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void requestLastPlayingInfo() {
+        playingMusicLiveData.postValue(mCurrentPlay);
+        changeMusicLiveData.postValue(mChangeMusic);
+        pauseLiveData.postValue(mIsPaused);
+    }
+
+    public void setSeek(int progress) {
+        MediaPlayerHelper.getInstance().getMediaPlayer().seekTo(progress);
+    }
+
+    public String getTrackTime(int progress) {
+        return calculateTime(progress / 1000);
+    }
+
+    private String calculateTime(int time) {
+        int minute;
+        int second;
+        if (time >= 60) {
+            minute = time / 60;
+            second = time % 60;
+            return (minute < 10 ? "0" + minute : "" + minute) + (second < 10 ? ":0" + second : ":" + second);
+        } else {
+            second = time;
+            if (second < 10) {
+                return "00:0" + second;
+            }
+            return "00:" + second;
+        }
+    }
+
+
+    public void playNext() {
+        mPlayingInfoManager.countNextIndex();
+        setChangingPlayingMusic(true);
+        playAudio();
+    }
+
+
+    public void playPrevious() {
+        mPlayingInfoManager.countPreviousIndex();
+        setChangingPlayingMusic(true);
+        playAudio();
+    }
+
+
+    public void playAgain() {
+        setChangingPlayingMusic(true);
+        playAudio();
+    }
+
+
+    public void pauseAudio() {
+        MediaPlayerHelper.getInstance().getMediaPlayer().pause();
+        mIsPaused = true;
+        pauseLiveData.postValue(true);
+        if (mIServiceNotifier != null) {
+            mIServiceNotifier.notifyService(true);
+        }
+    }
+
+
+    public void resumeAudio() {
+        MediaPlayerHelper.getInstance().getMediaPlayer().start();
+        mIsPaused = false;
+        pauseLiveData.postValue(false);
+        if (mIServiceNotifier != null) {
+            mIServiceNotifier.notifyService(true);
+        }
+    }
+
+
+    public void clear() {
+        MediaPlayerHelper.getInstance().getMediaPlayer().stop();
+        MediaPlayerHelper.getInstance().getMediaPlayer().reset();
+        pauseLiveData.postValue(true);
+        //这里设为true是因为可能通知栏清除后，还可能在页面中点击播放
+        resetIsChangingPlayingChapter();
+        MediaPlayerHelper.getInstance().setProgressInterval(1000).setMediaPlayerHelperCallBack(null);
+        if (mIServiceNotifier != null) {
+            mIServiceNotifier.notifyService(false);
+        }
+    }
+
+    public void resetIsChangingPlayingChapter() {
+        mIsChangingPlayingMusic = true;
+        setChangingPlayingMusic(true);
+    }
+
+    public void changeMode() {
+        playModeLiveData.postValue(mPlayingInfoManager.changeMode());
+    }
+
+    public B getAlbum() {
+        return mPlayingInfoManager.getMusicAlbum();
+    }
+
+    //播放列表展示用
+    public List<M> getAlbumMusics() {
+        return mPlayingInfoManager.getOriginPlayingList();
+    }
+
+    public void setChangingPlayingMusic(boolean changingPlayingMusic) {
+        mIsChangingPlayingMusic = changingPlayingMusic;
+        if (mIsChangingPlayingMusic) {
+            mChangeMusic.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
+            changeMusicLiveData.postValue(mChangeMusic);
+            mCurrentPlay.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
+            // 重置播放时间和进度数据
+            mCurrentPlay.setNowTime("00:00");
+            mCurrentPlay.setAllTime("00:00");
+            mCurrentPlay.setPlayerPosition(0);
+            mCurrentPlay.setDuration(0);
+        }
+    }
+
+    public int getAlbumIndex() {
+        return mPlayingInfoManager.getAlbumIndex();
+    }
+
+    public LiveData<ChangeMusic<B, M, A>> getChangeMusicEvent() {
+        return changeMusicLiveData;
+    }
+
+    public LiveData<PlayingMusic<B, M, A>> getPlayingMusicEvent() {
+        return playingMusicLiveData;
+    }
+
+    public LiveData<Boolean> getPauseEvent() {
+        return pauseLiveData;
+    }
+
+    public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeEvent() {
+        return playModeLiveData;
+    }
+
+    public Enum<PlayingInfoManager.RepeatMode> getRepeatMode() {
+        return mPlayingInfoManager.getRepeatMode();
+    }
+
+    public void togglePlay() {
+        if (isPlaying()) {
+            pauseAudio();
+        } else {
+            playAudio();
+        }
+    }
+
+    public M getCurrentPlayingMusic() {
+        return mPlayingInfoManager.getCurrentPlayingMusic();
+    }
 
 }
