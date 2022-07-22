@@ -17,16 +17,21 @@
 apply plugin: "com.android.library"
 
 android {
-    compileSdk appTargetSdk
+    compileSdkVersion appTargetSdk
     defaultConfig {
-        minSdk appMinSdk
-        targetSdk appTargetSdk
+        minSdkVersion appMinSdk
+        targetSdkVersion appTargetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
         dataBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -39,7 +44,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
 
     api "androidx.appcompat:appcompat:1.4.2"
-    api "androidx.navigation:navigation-runtime:$navigationVersion"
+    api "androidx.navigation:navigation-runtime:2.5.0"
 
     api 'com.kunminx.arch:unpeek-livedata:7.6.0'
     api 'com.kunminx.arch:smooth-navigation:4.0.0-beta1'
