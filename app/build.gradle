@@ -43,12 +43,6 @@ android {
 }
 
 dependencies {
-    configurations {
-        all {
-            exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
-        }
-    }
-
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     implementation project(":architecture")
     implementation "org.jetbrains:annotations:23.0.0"
@@ -62,7 +56,7 @@ dependencies {
     implementation "com.google.android.material:material:1.6.1"
     implementation "androidx.recyclerview:recyclerview:1.2.1"
 
-    implementation "com.kunminx.arch:binding-recyclerview:3.9.0-beta1"
+    implementation 'com.github.KunMinX.Strict-DataBinding:binding_recyclerview:5.3.0'
     
     implementation "org.slf4j:slf4j-android:1.7.36"
     implementation "com.github.bumptech.glide:glide:4.13.2"
