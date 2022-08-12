@@ -24,8 +24,6 @@ import com.kunminx.player.bean.base.BaseMusicItem;
 import java.io.Serializable;
 
 /**
- * provide play info of playing music
- * <p>
  * Create by KunMinX at 18/9/24
  */
 public class PlayingMusic<

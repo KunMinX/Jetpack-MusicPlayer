@@ -19,21 +19,17 @@ package com.kunminx.puremusic.player;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.lifecycle.LiveData;
-
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.kunminx.player.PlayerController;
 import com.kunminx.player.PlayingInfoManager;
-import com.kunminx.player.bean.dto.ChangeMusic;
-import com.kunminx.player.bean.dto.PlayingMusic;
 import com.kunminx.player.contract.ICacheProxy;
 import com.kunminx.player.contract.IPlayController;
 import com.kunminx.player.contract.IServiceNotifier;
+import com.kunminx.player.domain.PlayerInfoDispatcher;
 import com.kunminx.puremusic.data.bean.TestAlbum;
 import com.kunminx.puremusic.player.helper.PlayerFileNameGenerator;
 import com.kunminx.puremusic.player.notification.PlayerService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -164,6 +160,11 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
   }
 
   @Override
+  public PlayerInfoDispatcher getDispatcher() {
+    return mController.getDispatcher();
+  }
+
+  @Override
   public TestAlbum getAlbum() {
     return mController.getAlbum();
   }
@@ -181,23 +182,6 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
   @Override
   public int getAlbumIndex() {
     return mController.getAlbumIndex();
-  }
-
-  public LiveData<ChangeMusic<TestAlbum, TestAlbum.TestMusic, TestAlbum.TestArtist>> getChangeMusicResult() {
-    return mController.getChangeMusicResult();
-  }
-
-  public LiveData<PlayingMusic<TestAlbum, TestAlbum.TestMusic, TestAlbum.TestArtist>> getPlayingMusicResult() {
-    return mController.getPlayingMusicResult();
-  }
-
-  public LiveData<Boolean> getPauseResult() {
-    return mController.getPauseResult();
-  }
-
-  @Override
-  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeResult() {
-    return mController.getPlayModeResult();
   }
 
   @Override

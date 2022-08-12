@@ -2,10 +2,10 @@ apply plugin: 'io.codearte.nexus-staging'
 
 buildscript {
     ext {
-        appTargetSdk = 31
+        appTargetSdk = 32
         appMinSdk = 23
-        appVersionCode = 30700
-        appVersionName = "3.7.0"
+        appVersionCode = 40000
+        appVersionName = "4.0.0"
         lifecycleVersion = "2.4.1"
         navigationVersion = "2.4.2"
     }

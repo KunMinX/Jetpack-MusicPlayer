@@ -79,9 +79,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation "androidx.appcompat:appcompat:1.5.0"
     api('com.github.KunMinX:MVI-Dispatcher:6.1.0-beta') {
         exclude group: 'com.kunminx.arch', module: 'unpeek-livedata'
     }
     implementation 'com.google.android.exoplayer:exoplayer:2.18.1'
-    implementation "androidx.lifecycle:lifecycle-livedata:2.4.1"
 }

@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModel;
 import com.kunminx.architecture.ui.page.BaseFragment;
 import com.kunminx.architecture.ui.page.DataBindingConfig;
 import com.kunminx.architecture.ui.page.State;
+import com.kunminx.player.domain.PlayerEvent;
 import com.kunminx.puremusic.BR;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.TestAlbum;
@@ -73,8 +74,10 @@ public class MainFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    PlayerManager.getInstance().getChangeMusicResult().observe(getViewLifecycleOwner(), changeMusic -> {
-      mAdapter.notifyDataSetChanged();
+    PlayerManager.getInstance().getDispatcher().output(this, playerEvent -> {
+      if (playerEvent.eventId == PlayerEvent.EVENT_CHANGE_MUSIC) {
+        mAdapter.notifyDataSetChanged();
+      }
     });
 
     mMusicRequester.getFreeMusicsResult().observe(getViewLifecycleOwner(), dataResult -> {

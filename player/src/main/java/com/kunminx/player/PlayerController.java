@@ -21,9 +21,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.kunminx.player.bean.base.BaseAlbumItem;
@@ -33,6 +30,8 @@ import com.kunminx.player.bean.dto.ChangeMusic;
 import com.kunminx.player.bean.dto.PlayingMusic;
 import com.kunminx.player.contract.ICacheProxy;
 import com.kunminx.player.contract.IServiceNotifier;
+import com.kunminx.player.domain.PlayerEvent;
+import com.kunminx.player.domain.PlayerInfoDispatcher;
 
 import java.util.List;
 
@@ -48,19 +47,15 @@ public class PlayerController<
   private boolean mIsChangingPlayingMusic;
 
   private ICacheProxy mICacheProxy;
-
-  private final MutableLiveData<ChangeMusic<B, M, A>> changeMusicLiveData = new MutableLiveData<>();
-  private final MutableLiveData<PlayingMusic<B, M, A>> playingMusicLiveData = new MutableLiveData<>();
-  private final MutableLiveData<Boolean> pauseLiveData = new MutableLiveData<>();
-  private final MutableLiveData<Enum<PlayingInfoManager.RepeatMode>> playModeLiveData = new MutableLiveData<>();
-
   private IServiceNotifier mIServiceNotifier;
+  private final PlayerInfoDispatcher mDispatcher = new PlayerInfoDispatcher();
 
   private final PlayingMusic<B, M, A> mCurrentPlay = new PlayingMusic<>("00:00", "00:00");
   private final ChangeMusic<B, M, A> mChangeMusic = new ChangeMusic<>();
 
   private ExoPlayer mPlayer;
-  private Handler mHandler = new Handler();
+  private final static Handler mHandler = new Handler();
+  private final Runnable mProgressAction = this::updateProgress;
 
   public void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy) {
     mIServiceNotifier = iServiceNotifier;
@@ -81,15 +76,13 @@ public class PlayerController<
     mCurrentPlay.setAllTime(calculateTime(mPlayer.getDuration() / 1000));
     mCurrentPlay.setDuration((int) mPlayer.getDuration());
     mCurrentPlay.setPlayerPosition((int) mPlayer.getCurrentPosition());
-    playingMusicLiveData.postValue(mCurrentPlay);
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PROGRESS).setPlayingMusic(mCurrentPlay));
     if (mCurrentPlay.getAllTime().equals(mCurrentPlay.getNowTime())) {
       if (getRepeatMode() == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) playAgain();
       else playNext();
     }
     mHandler.postDelayed(mProgressAction, 1000);
   }
-
-  private Runnable mProgressAction = () -> updateProgress();
 
   private void setAlbum(B musicAlbum, int albumIndex) {
     mPlayingInfoManager.setMusicAlbum(musicAlbum);
@@ -114,7 +107,6 @@ public class PlayerController<
     if (isPlaying() && albumIndex == mPlayingInfoManager.getAlbumIndex()) {
       return;
     }
-
     mPlayingInfoManager.setAlbumIndex(albumIndex);
     setChangingPlayingMusic(true);
     playAudio();
@@ -122,11 +114,8 @@ public class PlayerController<
 
 
   public void playAudio() {
-    if (mIsChangingPlayingMusic) {
-      getUrlAndPlay();
-    } else if (isPaused()) {
-      resumeAudio();
-    }
+    if (mIsChangingPlayingMusic) getUrlAndPlay();
+    else if (isPaused()) resumeAudio();
   }
 
   private void getUrlAndPlay() {
@@ -156,16 +145,14 @@ public class PlayerController<
   private void afterPlay() {
     setChangingPlayingMusic(false);
     mHandler.post(mProgressAction);
-    pauseLiveData.postValue(false);
-    if (mIServiceNotifier != null) {
-      mIServiceNotifier.notifyService(true);
-    }
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS).setStatus(false));
+    if (mIServiceNotifier != null) mIServiceNotifier.notifyService(true);
   }
 
   public void requestLastPlayingInfo() {
-    playingMusicLiveData.postValue(mCurrentPlay);
-    changeMusicLiveData.postValue(mChangeMusic);
-    pauseLiveData.postValue(isPaused());
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PROGRESS).setPlayingMusic(mCurrentPlay));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_CHANGE_MUSIC).setChangeMusic(mChangeMusic));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS).setStatus(isPaused()));
   }
 
   public void setSeek(int progress) {
@@ -186,9 +173,7 @@ public class PlayerController<
       return (minute < 10 ? "0" + minute : "" + minute) + (second < 10 ? ":0" + second : ":" + second);
     } else {
       second = time;
-      if (second < 10) {
-        return "00:0" + second;
-      }
+      if (second < 10) return "00:0" + second;
       return "00:" + second;
     }
   }
@@ -213,29 +198,23 @@ public class PlayerController<
   public void pauseAudio() {
     mPlayer.pause();
     mHandler.removeCallbacks(mProgressAction);
-    pauseLiveData.postValue(true);
-    if (mIServiceNotifier != null) {
-      mIServiceNotifier.notifyService(true);
-    }
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS).setStatus(true));
+    if (mIServiceNotifier != null) mIServiceNotifier.notifyService(true);
   }
 
   public void resumeAudio() {
     mPlayer.play();
     mHandler.post(mProgressAction);
-    pauseLiveData.postValue(false);
-    if (mIServiceNotifier != null) {
-      mIServiceNotifier.notifyService(true);
-    }
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS).setStatus(false));
+    if (mIServiceNotifier != null) mIServiceNotifier.notifyService(true);
   }
 
   public void clear() {
     mPlayer.stop();
     mPlayer.clearMediaItems();
-    pauseLiveData.postValue(true);
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS).setStatus(true));
     resetIsChangingPlayingChapter();
-    if (mIServiceNotifier != null) {
-      mIServiceNotifier.notifyService(false);
-    }
+    if (mIServiceNotifier != null) mIServiceNotifier.notifyService(false);
   }
 
   public void resetIsChangingPlayingChapter() {
@@ -244,7 +223,7 @@ public class PlayerController<
   }
 
   public void changeMode() {
-    playModeLiveData.postValue(mPlayingInfoManager.changeMode());
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_REPEAT_MODE).setRepeatMode(mPlayingInfoManager.changeMode()));
   }
 
   public B getAlbum() {
@@ -259,7 +238,7 @@ public class PlayerController<
     mIsChangingPlayingMusic = changingPlayingMusic;
     if (mIsChangingPlayingMusic) {
       mChangeMusic.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
-      changeMusicLiveData.postValue(mChangeMusic);
+      mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_CHANGE_MUSIC).setChangeMusic(mChangeMusic));
       mCurrentPlay.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
       mCurrentPlay.setNowTime("00:00");
       mCurrentPlay.setAllTime("00:00");
@@ -272,35 +251,20 @@ public class PlayerController<
     return mPlayingInfoManager.getAlbumIndex();
   }
 
-  public LiveData<ChangeMusic<B, M, A>> getChangeMusicResult() {
-    return changeMusicLiveData;
-  }
-
-  public LiveData<PlayingMusic<B, M, A>> getPlayingMusicResult() {
-    return playingMusicLiveData;
-  }
-
-  public LiveData<Boolean> getPauseResult() {
-    return pauseLiveData;
-  }
-
-  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeResult() {
-    return playModeLiveData;
-  }
-
   public Enum<PlayingInfoManager.RepeatMode> getRepeatMode() {
     return mPlayingInfoManager.getRepeatMode();
   }
 
   public void togglePlay() {
-    if (isPlaying()) {
-      pauseAudio();
-    } else {
-      playAudio();
-    }
+    if (isPlaying()) pauseAudio();
+    else playAudio();
   }
 
   public M getCurrentPlayingMusic() {
     return mPlayingInfoManager.getCurrentPlayingMusic();
+  }
+
+  public PlayerInfoDispatcher getDispatcher() {
+    return mDispatcher;
   }
 }

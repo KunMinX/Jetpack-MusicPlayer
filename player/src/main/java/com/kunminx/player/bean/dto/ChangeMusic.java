@@ -23,8 +23,6 @@ import com.kunminx.player.bean.base.BaseMusicItem;
 import java.io.Serializable;
 
 /**
- * provide music info when music changed
- * <p>
  * Create by KunMinX at 18/9/24
  */
 public class ChangeMusic<
@@ -69,7 +67,6 @@ public class ChangeMusic<
   }
 
   public void setBaseInfo(B musicAlbum, M music) {
-    //要用当前实际播放列表，因为不同模式存在不同播放列表
     this.title = music.getTitle();
     this.summary = musicAlbum.getSummary();
     this.albumId = musicAlbum.getAlbumId();

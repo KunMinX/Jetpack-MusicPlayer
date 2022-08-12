@@ -19,8 +19,6 @@ package com.kunminx.player.bean.base;
 import java.io.Serializable;
 
 /**
- * 音乐实体，music bean
- * <p>
  * Create by KunMinX at 18/9/24
  */
 public class BaseMusicItem<A extends BaseArtistItem> implements Serializable {

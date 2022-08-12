@@ -21,26 +21,27 @@ import android.content.Context;
 import com.kunminx.player.bean.base.BaseAlbumItem;
 import com.kunminx.player.bean.base.BaseArtistItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
+import com.kunminx.player.domain.PlayerInfoDispatcher;
 
 /**
  * Create by KunMinX at 18/9/24
  */
-public interface IPlayController<B extends BaseAlbumItem<M, A>, M extends BaseMusicItem<A>, A extends BaseArtistItem>
-        extends IPlayNotifier<B, M, A>, IPlayInfoManager<B, M, A> {
+public interface IPlayController<
+        B extends BaseAlbumItem<M, A>,
+        M extends BaseMusicItem<A>,
+        A extends BaseArtistItem>
+        extends IPlayInfoManager<B, M, A> {
 
-  //程序启动时就初始化
   void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy);
 
   void loadAlbum(B musicAlbum);
 
-  //切换专辑时。只在从新专辑进入播放页面时切换。
   void loadAlbum(B musicAlbum, int playIndex);
 
   void playAudio();
 
   void playAudio(int albumIndex);
 
-  //手动点击，和自动next，都调用这个
   void playNext();
 
   void playPrevious();
@@ -55,7 +56,6 @@ public interface IPlayController<B extends BaseAlbumItem<M, A>, M extends BaseMu
 
   void clear();
 
-  //切换循环模式
   void changeMode();
 
   boolean isPlaying();
@@ -68,4 +68,5 @@ public interface IPlayController<B extends BaseAlbumItem<M, A>, M extends BaseMu
 
   String getTrackTime(int progress);
 
+  PlayerInfoDispatcher getDispatcher();
 }

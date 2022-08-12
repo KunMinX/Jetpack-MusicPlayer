@@ -19,14 +19,11 @@ package com.kunminx.player;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
-
 import com.kunminx.player.bean.DefaultAlbum;
-import com.kunminx.player.bean.dto.ChangeMusic;
-import com.kunminx.player.bean.dto.PlayingMusic;
 import com.kunminx.player.contract.ICacheProxy;
 import com.kunminx.player.contract.IPlayController;
 import com.kunminx.player.contract.IServiceNotifier;
+import com.kunminx.player.domain.PlayerInfoDispatcher;
 
 import java.util.List;
 
@@ -139,6 +136,11 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
   }
 
   @Override
+  public PlayerInfoDispatcher getDispatcher() {
+    return mController.getDispatcher();
+  }
+
+  @Override
   public DefaultAlbum getAlbum() {
     return mController.getAlbum();
   }
@@ -156,28 +158,6 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
   @Override
   public int getAlbumIndex() {
     return mController.getAlbumIndex();
-  }
-
-  public LiveData<ChangeMusic<DefaultAlbum,
-          DefaultAlbum.DefaultMusic,
-          DefaultAlbum.DefaultArtist>> getChangeMusicResult() {
-    return mController.getChangeMusicResult();
-  }
-
-  public LiveData<PlayingMusic<DefaultAlbum,
-          DefaultAlbum.DefaultMusic,
-          DefaultAlbum.DefaultArtist>> getPlayingMusicResult() {
-    return mController.getPlayingMusicResult();
-  }
-
-  public LiveData<Boolean> getPauseResult() {
-    return mController.getPauseResult();
-  }
-
-
-  @Override
-  public LiveData<Enum<PlayingInfoManager.RepeatMode>> getPlayModeResult() {
-    return mController.getPlayModeResult();
   }
 
   @Override
