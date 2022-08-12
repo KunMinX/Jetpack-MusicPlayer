@@ -20,6 +20,5 @@ package com.kunminx.player.contract;
  * Create by KunMinX at 19/11/3
  */
 public interface IServiceNotifier {
-
   void notifyService(boolean startOrStop);
 }

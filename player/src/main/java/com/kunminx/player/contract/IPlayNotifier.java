@@ -28,7 +28,7 @@ import com.kunminx.player.bean.dto.PlayingMusic;
 /**
  * Create by KunMinX at 19/11/1
  */
-public interface ILiveDataNotifier<
+public interface IPlayNotifier<
         B extends BaseAlbumItem<M, A>,
         M extends BaseMusicItem<A>,
         A extends BaseArtistItem> {

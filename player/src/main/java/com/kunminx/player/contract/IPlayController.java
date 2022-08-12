@@ -26,7 +26,7 @@ import com.kunminx.player.bean.base.BaseMusicItem;
  * Create by KunMinX at 18/9/24
  */
 public interface IPlayController<B extends BaseAlbumItem<M, A>, M extends BaseMusicItem<A>, A extends BaseArtistItem>
-        extends ILiveDataNotifier<B, M, A>, IPlayInfoManager<B, M, A> {
+        extends IPlayNotifier<B, M, A>, IPlayInfoManager<B, M, A> {
 
   //程序启动时就初始化
   void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy);

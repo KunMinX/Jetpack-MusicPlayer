@@ -68,12 +68,7 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
             .maxCacheSize(2147483648L) // 2GB
             .build();
 
-    //添加额外的音乐格式
-    List<String> extraFormats = new ArrayList<>();
-    extraFormats.add(".flac");
-    extraFormats.add(".ape");
-
-    mController.init(context1, extraFormats, startOrStop -> {
+    mController.init(context1, startOrStop -> {
       Intent intent = new Intent(context1, PlayerService.class);
       if (startOrStop) {
         context1.startService(intent);

@@ -29,13 +29,8 @@ import java.util.List;
  */
 public class PlayingInfoManager<B extends BaseAlbumItem<M, A>, M extends BaseMusicItem<A>, A extends BaseArtistItem> {
 
-  //index of current playing which maybe Shuffled
   private int mPlayIndex = 0;
-
-  //index of current playing which user see in the list
   private int mAlbumIndex = 0;
-
-  //循环模式
   private Enum<RepeatMode> mRepeatMode;
 
   public enum RepeatMode {
@@ -44,13 +39,8 @@ public class PlayingInfoManager<B extends BaseAlbumItem<M, A>, M extends BaseMus
     RANDOM
   }
 
-  //原始列表
   private final List<M> mOriginPlayingList = new ArrayList<>();
-
-  //随机播放列表
   private final List<M> mShufflePlayingList = new ArrayList<>();
-
-  //专辑详情
   private B mMusicAlbum;
 
   boolean isInit() {

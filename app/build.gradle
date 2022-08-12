@@ -3,7 +3,7 @@ apply plugin: "com.android.application"
 android {
     compileSdkVersion appTargetSdk
     defaultConfig {
-        applicationId "com.kunminx.puremusic"
+        applicationId "com.kunminx.player"
         minSdkVersion appMinSdk
         targetSdkVersion appTargetSdk
         versionCode appVersionCode

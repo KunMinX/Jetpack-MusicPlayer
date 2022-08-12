@@ -50,7 +50,7 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
 
   @Override
   public void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy) {
-    mController.init(context.getApplicationContext(), null, iServiceNotifier, iCacheProxy);
+    mController.init(context.getApplicationContext(), iServiceNotifier, iCacheProxy);
   }
 
   @Override
