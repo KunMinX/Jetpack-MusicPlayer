@@ -18,8 +18,8 @@ package com.kunminx.puremusic.domain.message;
 
 import androidx.lifecycle.ViewModel;
 
-import com.kunminx.architecture.domain.message.MutableResult;
-import com.kunminx.architecture.domain.message.Result;
+import com.kunminx.architecture.domain.result.MutableResult;
+import com.kunminx.architecture.domain.result.Result;
 
 /**
  * Create by KunMinX at 19/10/16
@@ -32,8 +32,7 @@ public class PageMessenger extends ViewModel {
 
   private final MutableResult<Boolean> toOpenOrCloseDrawer = new MutableResult<>();
 
-  private final MutableResult<Boolean> toAddSlideListener =
-          new MutableResult.Builder<Boolean>().setAllowNullValue(false).create();
+  private final MutableResult<Boolean> toAddSlideListener = new MutableResult<>();
 
   public Result<Boolean> isToAddSlideListener() {
     return toAddSlideListener;

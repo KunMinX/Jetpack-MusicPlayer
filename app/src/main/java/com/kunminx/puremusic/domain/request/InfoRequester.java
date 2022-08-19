@@ -16,12 +16,11 @@
 
 package com.kunminx.puremusic.domain.request;
 
-
 import androidx.lifecycle.ViewModel;
 
 import com.kunminx.architecture.data.response.DataResult;
-import com.kunminx.architecture.domain.message.Result;
-import com.kunminx.architecture.domain.message.MutableResult;
+import com.kunminx.architecture.domain.result.MutableResult;
+import com.kunminx.architecture.domain.result.Result;
 import com.kunminx.puremusic.data.bean.LibraryInfo;
 import com.kunminx.puremusic.data.repository.DataRepository;
 

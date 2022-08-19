@@ -50,7 +50,7 @@ If you are thinking about [**how to choose the right architecture for your proje
 1. Add a dependency on the library in build.gradle.
 
 ```groovy
-implementation 'com.kunminx.player:player:4.0.0'
+implementation 'com.kunminx.player:player:4.0.2'
 ```
 
 Tip: 鉴于 Jcenter 的关闭，我们已将仓库迁移至 Maven Central，请自行在根目录 build.gradle 添加 `mavenCentral()`。
