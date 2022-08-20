@@ -80,6 +80,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "androidx.appcompat:appcompat:1.5.0"
-    implementation "com.github.KunMinX:MVI-Dispatcher:7.0.2-beta"
+    implementation "com.github.KunMinX:MVI-Dispatcher:7.0.3-beta"
     implementation "com.google.android.exoplayer:exoplayer:2.18.1"
 }
