@@ -76,7 +76,7 @@ public class PlayerController<
     mCurrentPlay.setAllTime(calculateTime(mPlayer.getDuration() / 1000));
     mCurrentPlay.setDuration((int) mPlayer.getDuration());
     mCurrentPlay.setPlayerPosition((int) mPlayer.getCurrentPosition());
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PROGRESS).setPlayingMusic(mCurrentPlay));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PROGRESS, mCurrentPlay));
     if (mCurrentPlay.getAllTime().equals(mCurrentPlay.getNowTime())) {
       if (getRepeatMode() == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) playAgain();
       else playNext();
@@ -112,7 +112,6 @@ public class PlayerController<
     playAudio();
   }
 
-
   public void playAudio() {
     if (mIsChangingPlayingMusic) getUrlAndPlay();
     else if (isPaused()) resumeAudio();
@@ -145,14 +144,14 @@ public class PlayerController<
   private void afterPlay() {
     setChangingPlayingMusic(false);
     mHandler.post(mProgressAction);
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS).setStatus(false));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS, false));
     if (mIServiceNotifier != null) mIServiceNotifier.notifyService(true);
   }
 
   public void requestLastPlayingInfo() {
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PROGRESS).setPlayingMusic(mCurrentPlay));
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_CHANGE_MUSIC).setChangeMusic(mChangeMusic));
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS).setStatus(isPaused()));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PROGRESS, mCurrentPlay));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_CHANGE_MUSIC, mChangeMusic));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS, isPaused()));
   }
 
   public void setSeek(int progress) {
@@ -198,21 +197,21 @@ public class PlayerController<
   public void pauseAudio() {
     mPlayer.pause();
     mHandler.removeCallbacks(mProgressAction);
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS).setStatus(true));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS, true));
     if (mIServiceNotifier != null) mIServiceNotifier.notifyService(true);
   }
 
   public void resumeAudio() {
     mPlayer.play();
     mHandler.post(mProgressAction);
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS).setStatus(false));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS, false));
     if (mIServiceNotifier != null) mIServiceNotifier.notifyService(true);
   }
 
   public void clear() {
     mPlayer.stop();
     mPlayer.clearMediaItems();
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS).setStatus(true));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS, true));
     resetIsChangingPlayingChapter();
     if (mIServiceNotifier != null) mIServiceNotifier.notifyService(false);
   }
@@ -223,7 +222,7 @@ public class PlayerController<
   }
 
   public void changeMode() {
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_REPEAT_MODE).setRepeatMode(mPlayingInfoManager.changeMode()));
+    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_REPEAT_MODE, mPlayingInfoManager.changeMode()));
   }
 
   public B getAlbum() {
@@ -238,7 +237,7 @@ public class PlayerController<
     mIsChangingPlayingMusic = changingPlayingMusic;
     if (mIsChangingPlayingMusic) {
       mChangeMusic.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
-      mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_CHANGE_MUSIC).setChangeMusic(mChangeMusic));
+      mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_CHANGE_MUSIC, mChangeMusic));
       mCurrentPlay.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
       mCurrentPlay.setNowTime("00:00");
       mCurrentPlay.setAllTime("00:00");
