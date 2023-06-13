@@ -1,6 +1,6 @@
 &nbsp;
 
-### 由来
+## 由来
 
 Jetpack-MusicPlayer 是一款基于 Jetpack MVVM 架构音乐播放控制组件，它是因 [“Jetpack-MVVM-Best-Practice”](https://github.com/KunMinX/Jetpack-MVVM-Best-Practice) 这项目需求而存在。
 
@@ -12,14 +12,14 @@ Jetpack-MusicPlayer 使用十分简单，依托于 设计模式原则 及 Java �
 
 &nbsp;
 
-|                          PureMusic                           |                      LiveData Dispatch                       |                       PlayMode Switch                        |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                          PureMusic                           |                                   Dispatcher                                   |                       PlayMode Switch                        |
+| :----------------------------------------------------------: |:------------------------------------------------------------------------------:| :----------------------------------------------------------: |
 | ![](https://upload-images.jianshu.io/upload_images/57036-eeaa9ea7399d90d5.gif) | ![](https://upload-images.jianshu.io/upload_images/57036-a9b1831b428993b0.gif) | ![](https://upload-images.jianshu.io/upload_images/57036-466fe782f7170a44.gif) |
 
 
 &nbsp;
 
-### 目标
+## 目标
 
 Jetpack-MusicPlayer 目标是：**一行代码即可接入 音乐播放控制组件**。
 
