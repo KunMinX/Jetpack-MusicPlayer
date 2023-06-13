@@ -1,24 +1,12 @@
-## 真香警告：即使不用云音乐听曲，也请务必收藏好该库！
-
-## 公告：
-
-我们就本项目 "被卖课" 一事，在掘金发表一期专访 [《开源项目被人拿去做课程卖了 1000 多万是什么体验》](https://juejin.im/post/5ecb4950518825431a669897)
-
-本项目系我为方便开发者们 **无痛理解 Google 开源 Jetpack MVVM 中每个架构组件的 存在缘由、职责边界**，而 **精心设计的高频应用场景**，
-
-与此同时，本项目是作为 [《重学安卓》](https://xiaozhuanlan.com/topic/6017825943)专栏 Jetpack MVVM 系列文章 “配套项目” 而存在，**文章内容和项目代码设计均涉及本人对 Jetpack MVVM 独家理解，本人对此享有著作权**。
-
-任何组织或个人，未经与作者本人沟通，不得将本项目代码设计和本人对 Jetpack MVVM 独家理解用于 "**打包贩卖、引流、出书 和 卖课**" 等商业用途。
-
 &nbsp;
 
 ### 由来
 
 Jetpack-MusicPlayer 是一款基于 Jetpack MVVM 架构音乐播放控制组件，它是因 [“Jetpack-MVVM-Best-Practice”](https://github.com/KunMinX/Jetpack-MVVM-Best-Practice) 这项目需求而存在。
 
-最初寻遍 GitHub 也未找到合适开源库，于是决定另起炉灶，自己编写 **高度解耦、轻松配置、可通过 Maven 仓库远程依赖** 的真正第三方库。
+最初寻遍 GitHub 也未找到合适开源库，于是另起炉灶，自己编写 **高度解耦、轻松配置、可通过 Maven 仓库远程依赖** 的真正第三方库。
 
-Jetpack-MusicPlayer 使用十分简单，依托于 设计模式原则 及 Java 泛型特性，使用者无需知道内部实现细节，**仅通过继承** Album、Music、Artist **基类 即可完成 业务实体类 定制和扩展**。
+Jetpack-MusicPlayer 使用十分简单，依托于 设计模式原则 及 Java 泛型特性，使用者无需知道内部实现细节，**仅通过继承** Album、Music、Artist **基类 即可完成 “业务实体类” 定制和扩展**。
 
 此外，在不设置自定义配置情况下，Jetpack-MusicPlayer 最少只需 **一行代码即可运行起来**。
 
@@ -51,10 +39,6 @@ Jetpack-MusicPlayer 目标是：**一行代码即可接入 音乐播放控制组
 
 &nbsp;
 
-# Download
-
-[![](https://upload-images.jianshu.io/upload_images/57036-f9dbd7810d38ae95.png)](https://www.coolapk.com/apk/247826) [![](https://upload-images.jianshu.io/upload_images/57036-6cf24d0c9efe8362.png)](https://www.coolapk.com/apk/247826)
-
 &nbsp;
 
 ### 简单使用：
@@ -67,9 +51,9 @@ Jetpack-MusicPlayer 目标是：**一行代码即可接入 音乐播放控制组
 implementation 'com.kunminx.player:player:4.1.0'
 ```
 
-提示：鉴于 Jcenter 关闭，我们已将仓库迁移至 Maven Central，请自行在根目录 build.gradle 添加 `mavenCentral()`。
+提示：本库托管于 Maven Central，请自行在根目录 build.gradle 添加 `mavenCentral()`。
 
-2.依据默认专辑实体类 `DefaultAlbum` 结构准备一串数据。
+2.依据默认专辑实体类 `DefaultAlbum` 结构准备一串数据。此处以 JSON 为例：
 
 ```java
 // DefaultAlbum 包含 DefaultMusic 和 DefaultArtist 两个子类：
@@ -77,33 +61,27 @@ implementation 'com.kunminx.player:player:4.1.0'
 ```
 
 ```java
-//创建专辑实例
-DefaultAlbum album = new DefaultAlbum("001", "Cute", "BenSound");
-
-//为专辑添加作者
-List<DefaultArtist> artists = new ArrayList<>();
-artists.addArtists(new DefaultArtist("Linda"));
-album.setArtist(artists);
-
-//为专辑添加封面
-album.setCoverImg("https://images.io/055ef18.png");
-
-//创建音乐实例
-List<DefaultMusic> musics = new ArrayList<>();
-
-DefaultMusic music = new DefaultMusic("001", "Tomorrow", artists);
-music.setCoverImg("https://images.io/055ef19.png");
-music.setUrl("https://bensound.com/sunny.mp3");
-musics.add(music);
-
-DefaultMusic music1 = new DefaultMusic("002", "Sunny", artists);
-music1.setCoverImg("https://images.io/055ef20.png");
-music1.setUrl("https://bensound.com/cute.mp3");
-musics.add(music1);
-
-//将音乐添加到专辑
-album.setMusics(musics);
-
+{
+  "albumId": "JAY_008",
+  "title": "依然范特西",
+  "summary": "Still Fantasy",
+  "artist": {
+    "name": "Jay"
+  },
+  "coverImg": "https://...57036-570ed96eb055ef17.png",
+  "musics": [
+    {
+      "musicId": "JAY_008_001",
+      "title": "本草纲目",
+      "artist": {
+        "name": "Jay"
+      },
+      "coverImg": "https://.../57036-570ed96eb055ef17.png",
+      "url": "bencaogangmu.mp3"
+    },
+    ...
+  ]
+}
 ```
 
 3.在 Application 中初始化 多媒体播放控制组件。
@@ -119,48 +97,13 @@ DefaultPlayerManager.getInstance().init(this);
 DefaultPlayerManager.getInstance().loadAlbum(album);
 ```
 
+&nbsp;
 
+**温馨提示：**
 
-### 2.播放控制
+1.实际开发中，项目数据或与本库数据 “结构上存在差异”，故通常做法是，从后端拿到和解析项目 JSON 数据，并对该数据进行遍历。在遍历过程中，实例化并装载 “本库实体类对象” 到列表中，以获本库所能使用的列表数据。（具体可参见 CustomJsonSampleFragment 示例）
 
-5.在 “视图控制器” 中发送请求，并接收来自 “唯一可信源” 统一分发结果响应。
-
-5.1.在 “视图控制器” 任意处发送请求，例如此处请求 “播放下一首”
-
-```java
-DefaultPlayerManager.getInstance().playNext();
-```
-
-5.2.在 “视图控制器” 订阅通知处，收听来自 “唯一可信源” 推送结果响应。
-
-5.2.1.例如此处响应 “播放按钮状态” 推送。
-
-```java
-DefaultPlayerManager.getInstance().pauseLiveData().observe(this, aBoolean -> {
-    mPlayerViewModel.isPlaying.set(!aBoolean);
-});
-```
-
-5.2.2.此处响应 “当前歌曲详细信息” 推送
-
-```java
-DefaultPlayerManager.getInstance().changeMusicLiveData().observe(this, changeMusic -> {
-    mPlayerViewModel.title.set(changeMusic.getTitle());
-    mPlayerViewModel.artist.set(changeMusic.getSummary());
-    mPlayerViewModel.coverImg.set(changeMusic.getImg());
-});
-```
-
-5.2.3.此处响应 “当前歌曲播放进度” 推送
-
-```java
-DefaultPlayerManager.getInstance().playingMusicLiveData().observe(this, playingMusic -> {
-    mPlayerViewModel.maxSeekDuration.set(playingMusic.getDuration());
-    mPlayerViewModel.currentSeekPosition.set(playingMusic.getPlayerPosition());
-});
-```
-
-注意：如使用 JSON，请在 ProGuard Rules 中为该实体类目录配置混淆白名单：
+2.注意：如后端直接使用本库实体类读写 JSON 数据，请在 ProGuard Rules 中为该实体类配置混淆白名单：
 
 ```java
 -keep class com.kunminx.player.bean.** {*;}
@@ -168,9 +111,11 @@ DefaultPlayerManager.getInstance().playingMusicLiveData().observe(this, playingM
 
 &nbsp;
 
-个性化配置详见 [Wiki](https://github.com/KunMinX/Jetpack-MusicPlayer/wiki/%E4%B8%AA%E6%80%A7%E5%8C%96%E9%85%8D%E7%BD%AE)
+## 更多
 
+个性化配置详见 [Wiki](https://github.com/KunMinX/Jetpack-MusicPlayer/wiki/%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
 
+&nbsp;
 
 # Thanks to
 
@@ -178,7 +123,7 @@ DefaultPlayerManager.getInstance().playingMusicLiveData().observe(this, playingM
 
 [AndroidX](https://developer.android.google.cn/jetpack/androidx)
 
-[HDMediaPlayer](https://github.com/yinhaide/HDMediaPlayer)
+[ExoPlayer](https://github.com/google/ExoPlayer)
 
 [AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)
 
