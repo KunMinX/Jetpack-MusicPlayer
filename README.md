@@ -43,8 +43,6 @@ Jetpack-MusicPlayer 目标是：**一行代码即可接入 音乐播放控制组
 
 ### 简单使用：
 
-### 1.初始化装载数据
-
 1.在 build.gradle 中添加依赖。
 
 ```groovy
