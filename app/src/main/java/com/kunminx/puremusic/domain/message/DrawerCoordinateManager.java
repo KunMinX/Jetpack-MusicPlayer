@@ -22,8 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.kunminx.architecture.domain.result.MutableResult;
-import com.kunminx.architecture.domain.result.Result;
+import com.kunminx.architecture.domain.message.MutableResult;
+import com.kunminx.architecture.domain.message.Result;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,36 +55,20 @@ public class DrawerCoordinateManager implements DefaultLifecycleObserver {
   }
 
   public void requestToUpdateDrawerMode(boolean pageOpened, String pageName) {
-    if (pageOpened) {
-      tagOfSecondaryPages.add(pageName);
-    } else {
-      tagOfSecondaryPages.remove(pageName);
-    }
+    if (pageOpened) tagOfSecondaryPages.add(pageName);
+    else tagOfSecondaryPages.remove(pageName);
     enableSwipeDrawer.setValue(isNoneSecondaryPage());
   }
 
-  //TODO tip 3：让 NetworkStateManager 可观察页面生命周期，
-  // 从而在进入或离开目标页面时，自动在此登记和处理抽屉的禁用和解禁，避免一系列不可预期问题。
-
-  // 关于 Lifecycle 组件的存在意义，可详见《为你还原一个真实的 Jetpack Lifecycle》解析
-  // https://xiaozhuanlan.com/topic/3684721950
-
   @Override
   public void onCreate(@NonNull LifecycleOwner owner) {
-
     tagOfSecondaryPages.add(owner.getClass().getSimpleName());
-
     enableSwipeDrawer.setValue(isNoneSecondaryPage());
-
   }
 
   @Override
   public void onDestroy(@NonNull LifecycleOwner owner) {
-
     tagOfSecondaryPages.remove(owner.getClass().getSimpleName());
-
     enableSwipeDrawer.setValue(isNoneSecondaryPage());
-
   }
-
 }

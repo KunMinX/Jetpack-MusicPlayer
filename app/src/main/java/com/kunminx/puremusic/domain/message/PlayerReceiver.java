@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.player.notification;
+package com.kunminx.puremusic.domain.message;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.view.KeyEvent;
 
-import com.kunminx.puremusic.player.PlayerManager;
+import com.kunminx.puremusic.domain.proxy.PlayerManager;
+import com.kunminx.puremusic.ui.widget.PlayerService;
 
 import java.util.Objects;
 
@@ -31,16 +32,10 @@ public class PlayerReceiver extends BroadcastReceiver {
   public void onReceive(Context context, Intent intent) {
 
     if (Objects.equals(intent.getAction(), Intent.ACTION_MEDIA_BUTTON)) {
-      if (intent.getExtras() == null) {
-        return;
-      }
+      if (intent.getExtras() == null) return;
       KeyEvent keyEvent = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
-      if (keyEvent == null) {
-        return;
-      }
-      if (keyEvent.getAction() != KeyEvent.ACTION_DOWN) {
-        return;
-      }
+      if (keyEvent == null) return;
+      if (keyEvent.getAction() != KeyEvent.ACTION_DOWN) return;
 
       switch (keyEvent.getKeyCode()) {
         case KeyEvent.KEYCODE_HEADSETHOOK:
@@ -70,7 +65,7 @@ public class PlayerReceiver extends BroadcastReceiver {
       if (Objects.requireNonNull(intent.getAction()).equals(PlayerService.NOTIFY_PLAY)) {
         PlayerManager.getInstance().playAudio();
       } else if (intent.getAction().equals(PlayerService.NOTIFY_PAUSE)
-              || intent.getAction().equals(android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
+        || intent.getAction().equals(android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
         PlayerManager.getInstance().pauseAudio();
       } else if (intent.getAction().equals(PlayerService.NOTIFY_NEXT)) {
         PlayerManager.getInstance().playNext();

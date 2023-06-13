@@ -24,9 +24,9 @@
             name="click"
             type="com.kunminx.puremusic.ui.page.MainFragment.ClickProxy" />
 
-        <variable
-            name="vm"
-            type="com.kunminx.puremusic.ui.page.MainFragment.MainViewModel" />
+    <variable
+      name="vm"
+      type="com.kunminx.puremusic.ui.page.MainFragment.MainStates" />
 
         <variable
             name="adapter"

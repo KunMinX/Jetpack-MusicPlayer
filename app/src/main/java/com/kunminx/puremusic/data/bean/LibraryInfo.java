@@ -20,7 +20,6 @@ package com.kunminx.puremusic.data.bean;
  * Create by KunMinX at 19/11/2
  */
 public class LibraryInfo {
-
   private final String title;
   private final String summary;
   private final String url;

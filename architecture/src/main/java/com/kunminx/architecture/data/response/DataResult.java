@@ -31,6 +31,11 @@ public class DataResult<T> {
     mResponseStatus = responseStatus;
   }
 
+  public DataResult(T entity) {
+    mEntity = entity;
+    mResponseStatus = new ResponseStatus();
+  }
+
   public T getResult() {
     return mEntity;
   }
@@ -43,3 +48,4 @@ public class DataResult<T> {
     void onResult(DataResult<T> dataResult);
   }
 }
+

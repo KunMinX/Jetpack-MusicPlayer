@@ -24,42 +24,29 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.kunminx.architecture.BaseApplication;
-
+import com.kunminx.architecture.ui.scope.ViewModelScope;
 
 /**
  * Create by KunMinX at 19/7/11
  */
 public abstract class BaseFragment extends DataBindingFragment {
 
-  private ViewModelProvider mFragmentProvider;
-  private ViewModelProvider mActivityProvider;
-  private ViewModelProvider mApplicationProvider;
+  private final ViewModelScope mViewModelScope = new ViewModelScope();
 
   protected <T extends ViewModel> T getFragmentScopeViewModel(@NonNull Class<T> modelClass) {
-    if (mFragmentProvider == null) {
-      mFragmentProvider = new ViewModelProvider(this);
-    }
-    return mFragmentProvider.get(modelClass);
+    return mViewModelScope.getFragmentScopeViewModel(this, modelClass);
   }
 
   protected <T extends ViewModel> T getActivityScopeViewModel(@NonNull Class<T> modelClass) {
-    if (mActivityProvider == null) {
-      mActivityProvider = new ViewModelProvider(mActivity);
-    }
-    return mActivityProvider.get(modelClass);
+    return mViewModelScope.getActivityScopeViewModel(mActivity, modelClass);
   }
 
-    protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
-        if (mApplicationProvider == null) {
-            mApplicationProvider = new ViewModelProvider((BaseApplication) mActivity.getApplicationContext());
-        }
-        return mApplicationProvider.get(modelClass);
-    }
+  protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
+    return mViewModelScope.getApplicationScopeViewModel(modelClass);
+  }
 
   protected NavController nav() {
     return NavHostFragment.findNavController(this);
@@ -76,8 +63,8 @@ public abstract class BaseFragment extends DataBindingFragment {
     startActivity(intent);
   }
 
-    protected Context getApplicationContext() {
-        return mActivity.getApplicationContext();
-    }
+  protected Context getApplicationContext() {
+    return mActivity.getApplicationContext();
+  }
 
 }

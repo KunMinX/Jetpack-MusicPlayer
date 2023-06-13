@@ -17,5 +17,5 @@
 #-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
-# hide the original artist file name.
+# hide the original source file name.
 #-renamesourcefileattribute SourceFile

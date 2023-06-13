@@ -16,18 +16,28 @@
 
 package com.kunminx.puremusic.domain.request;
 
+import android.annotation.SuppressLint;
+
 import androidx.lifecycle.ViewModel;
 
 import com.kunminx.architecture.data.response.DataResult;
-import com.kunminx.architecture.domain.result.MutableResult;
-import com.kunminx.architecture.domain.result.Result;
+import com.kunminx.architecture.domain.message.MutableResult;
+import com.kunminx.architecture.domain.message.Result;
+import com.kunminx.architecture.domain.request.Requester;
 import com.kunminx.puremusic.data.bean.TestAlbum;
 import com.kunminx.puremusic.data.repository.DataRepository;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Create by KunMinX at 19/10/29
  */
-public class MusicRequester extends ViewModel {
+public class MusicRequester extends Requester {
 
   private final MutableResult<DataResult<TestAlbum>> mFreeMusicsResult = new MutableResult<>();
 
@@ -35,7 +45,11 @@ public class MusicRequester extends ViewModel {
     return mFreeMusicsResult;
   }
 
+  @SuppressLint("CheckResult")
   public void requestFreeMusics() {
-    DataRepository.getInstance().getFreeMusic(mFreeMusicsResult::setValue);
+    DataRepository.getInstance().getFreeMusic()
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(mFreeMusicsResult::setValue);
   }
 }

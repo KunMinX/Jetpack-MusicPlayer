@@ -27,7 +27,7 @@ public class UseCaseThreadPoolScheduler implements UseCaseScheduler {
    */
   public UseCaseThreadPoolScheduler() {
     mThreadPoolExecutor = new ThreadPoolExecutor(FIXED_POOL_SIZE, FIXED_POOL_SIZE, TIMEOUT,
-            TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+      TimeUnit.SECONDS, new LinkedBlockingQueue<>());
   }
 
   @Override
@@ -47,7 +47,7 @@ public class UseCaseThreadPoolScheduler implements UseCaseScheduler {
 
   @Override
   public <V extends UseCase.ResponseValue> void onError(
-          final UseCase.UseCaseCallback<V> useCaseCallback) {
+    final UseCase.UseCaseCallback<V> useCaseCallback) {
     mHandler.post(useCaseCallback::onError);
   }
 

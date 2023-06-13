@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.player.notification;
+package com.kunminx.puremusic.ui.widget;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -26,6 +26,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.IBinder;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -38,9 +39,9 @@ import com.kunminx.architecture.utils.ImageUtils;
 import com.kunminx.puremusic.MainActivity;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.TestAlbum;
-import com.kunminx.puremusic.data.config.Configs;
+import com.kunminx.puremusic.data.config.Const;
 import com.kunminx.puremusic.domain.usecase.DownloadUseCase;
-import com.kunminx.puremusic.player.PlayerManager;
+import com.kunminx.puremusic.domain.proxy.PlayerManager;
 
 import java.io.File;
 
@@ -57,7 +58,6 @@ public class PlayerService extends Service {
   private static final String GROUP_ID = "group_001";
   private static final String CHANNEL_ID = "channel_001";
   private DownloadUseCase mDownloadUseCase;
-
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
@@ -78,36 +78,37 @@ public class PlayerService extends Service {
       String summary = album.getSummary();
 
       RemoteViews simpleContentView = new RemoteViews(
-              getApplicationContext().getPackageName(), R.layout.notify_player_small);
+        getApplicationContext().getPackageName(), R.layout.notify_player_small);
 
       RemoteViews expandedView;
       expandedView = new RemoteViews(
-              getApplicationContext().getPackageName(), R.layout.notify_player_big);
+        getApplicationContext().getPackageName(), R.layout.notify_player_big);
 
       Intent intent = new Intent(getApplicationContext(), MainActivity.class);
       intent.setAction("showPlayer");
-      PendingIntent contentIntent = PendingIntent.getActivity(
-              this, 0, intent, 0);
+
+      PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent,
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? PendingIntent.FLAG_MUTABLE : 0);
 
       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
         NotificationManager notificationManager = (NotificationManager)
-                getSystemService(Context.NOTIFICATION_SERVICE);
+          getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationChannelGroup playGroup = new NotificationChannelGroup(GROUP_ID, getString(R.string.play));
         notificationManager.createNotificationChannelGroup(playGroup);
 
         NotificationChannel playChannel = new NotificationChannel(CHANNEL_ID,
-                getString(R.string.notify_of_play), NotificationManager.IMPORTANCE_DEFAULT);
+          getString(R.string.notify_of_play), NotificationManager.IMPORTANCE_DEFAULT);
         playChannel.setGroup(GROUP_ID);
         notificationManager.createNotificationChannel(playChannel);
       }
 
       Notification notification = new NotificationCompat.Builder(
-              getApplicationContext(), CHANNEL_ID)
-              .setSmallIcon(R.drawable.ic_player)
-              .setContentIntent(contentIntent)
-              .setOnlyAlertOnce(true)
-              .setContentTitle(title).build();
+        getApplicationContext(), CHANNEL_ID)
+        .setSmallIcon(R.drawable.ic_player)
+        .setContentIntent(contentIntent)
+        .setOnlyAlertOnce(true)
+        .setContentTitle(title).build();
 
       notification.contentView = simpleContentView;
       notification.bigContentView = expandedView;
@@ -134,7 +135,7 @@ public class PlayerService extends Service {
       notification.bigContentView.setTextViewText(R.id.player_author_name, summary);
       notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
-      String coverPath = Configs.COVER_PATH + File.separator + testMusic.getMusicId() + ".jpg";
+      String coverPath = Const.COVER_PATH + File.separator + testMusic.getMusicId() + ".jpg";
       Bitmap bitmap = ImageUtils.getBitmap(coverPath);
 
       if (bitmap != null) {
@@ -155,26 +156,24 @@ public class PlayerService extends Service {
 
   @SuppressLint("UnspecifiedImmutableFlag")
   public void setListeners(RemoteViews view) {
+    int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+      ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
+      : PendingIntent.FLAG_UPDATE_CURRENT;
     try {
       PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-              0, new Intent(NOTIFY_PREVIOUS).setPackage(getPackageName()),
-              PendingIntent.FLAG_UPDATE_CURRENT);
+        0, new Intent(NOTIFY_PREVIOUS).setPackage(getPackageName()), flags);
       view.setOnClickPendingIntent(R.id.player_previous, pendingIntent);
       pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-              0, new Intent(NOTIFY_CLOSE).setPackage(getPackageName()),
-              PendingIntent.FLAG_UPDATE_CURRENT);
+        0, new Intent(NOTIFY_CLOSE).setPackage(getPackageName()), flags);
       view.setOnClickPendingIntent(R.id.player_close, pendingIntent);
       pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-              0, new Intent(NOTIFY_PAUSE).setPackage(getPackageName()),
-              PendingIntent.FLAG_UPDATE_CURRENT);
+        0, new Intent(NOTIFY_PAUSE).setPackage(getPackageName()), flags);
       view.setOnClickPendingIntent(R.id.player_pause, pendingIntent);
       pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-              0, new Intent(NOTIFY_NEXT).setPackage(getPackageName()),
-              PendingIntent.FLAG_UPDATE_CURRENT);
+        0, new Intent(NOTIFY_NEXT).setPackage(getPackageName()), flags);
       view.setOnClickPendingIntent(R.id.player_next, pendingIntent);
       pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-              0, new Intent(NOTIFY_PLAY).setPackage(getPackageName()),
-              PendingIntent.FLAG_UPDATE_CURRENT);
+        0, new Intent(NOTIFY_PLAY).setPackage(getPackageName()), flags);
       view.setOnClickPendingIntent(R.id.player_play, pendingIntent);
     } catch (Exception e) {
       e.printStackTrace();
@@ -187,8 +186,8 @@ public class PlayerService extends Service {
     }
 
     UseCaseHandler.getInstance().execute(mDownloadUseCase,
-            new DownloadUseCase.RequestValues(coverUrl, musicId + ".jpg"),
-            response -> startService(new Intent(getApplicationContext(), PlayerService.class)));
+      new DownloadUseCase.RequestValues(coverUrl, musicId + ".jpg"),
+      response -> startService(new Intent(getApplicationContext(), PlayerService.class)));
   }
 
   @Override

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.player;
+package com.kunminx.puremusic.domain.proxy;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,8 +27,9 @@ import com.kunminx.player.contract.IPlayController;
 import com.kunminx.player.contract.IServiceNotifier;
 import com.kunminx.player.domain.PlayerInfoDispatcher;
 import com.kunminx.puremusic.data.bean.TestAlbum;
-import com.kunminx.puremusic.player.helper.PlayerFileNameGenerator;
-import com.kunminx.puremusic.player.notification.PlayerService;
+import com.kunminx.puremusic.ui.widget.PlayerService;
+
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 import java.util.List;
 
@@ -49,34 +50,40 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     return sManager;
   }
 
-  private HttpProxyCacheServer mProxy;
+  private boolean mIsInit;
 
   public void init(Context context) {
-    init(context, null, null);
+    if (!mIsInit) {
+      init(context, null, null);
+      mIsInit = true;
+    }
   }
 
   @Override
   public void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy) {
     Context context1 = context.getApplicationContext();
 
-    mProxy = new HttpProxyCacheServer.Builder(context1)
-            .fileNameGenerator(new PlayerFileNameGenerator())
-            .maxCacheSize(2147483648L) // 2GB
-            .build();
+    HttpProxyCacheServer proxy = new HttpProxyCacheServer.Builder(context1)
+      .fileNameGenerator(url -> {
+        String[] split = url.split("/");
+        return split[split.length - 1];
+      })
+      .maxCacheSize(2147483648L)
+      .build();
 
     mController.init(context1, startOrStop -> {
       Intent intent = new Intent(context1, PlayerService.class);
-      if (startOrStop) {
-        context1.startService(intent);
-      } else {
-        context1.stopService(intent);
-      }
-    }, url -> mProxy.getProxyUrl(url));
+      if (startOrStop) context1.startService(intent);
+      else context1.stopService(intent);
+    }, proxy::getProxyUrl);
   }
 
   @Override
   public void loadAlbum(TestAlbum musicAlbum) {
-    mController.loadAlbum(musicAlbum);
+    TestAlbum album = mController.getAlbum();
+    if (album == null || !album.getAlbumId().equals(musicAlbum.getAlbumId())) {
+      mController.loadAlbum(musicAlbum);
+    }
   }
 
   @Override
@@ -197,5 +204,19 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
   @Override
   public TestAlbum.TestMusic getCurrentPlayingMusic() {
     return mController.getCurrentPlayingMusic();
+  }
+
+  public MaterialDrawableBuilder.IconValue getModeIcon(Enum<PlayingInfoManager.RepeatMode> mode) {
+    if (mode == PlayingInfoManager.RepeatMode.LIST_CYCLE) {
+      return MaterialDrawableBuilder.IconValue.REPEAT;
+    } else if (mode == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) {
+      return MaterialDrawableBuilder.IconValue.REPEAT_ONCE;
+    } else {
+      return MaterialDrawableBuilder.IconValue.SHUFFLE;
+    }
+  }
+
+  public MaterialDrawableBuilder.IconValue getModeIcon() {
+    return getModeIcon(getRepeatMode());
   }
 }

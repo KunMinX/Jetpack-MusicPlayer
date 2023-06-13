@@ -43,7 +43,7 @@ import java.util.Set;
 public final class Utils {
 
   private static final String PERMISSION_ACTIVITY_CLASS_NAME =
-          "com.blankj.utilcode.util.PermissionUtils$PermissionActivity";
+    "com.blankj.utilcode.util.PermissionUtils$PermissionActivity";
 
   private static final ActivityLifecycleImpl ACTIVITY_LIFECYCLE = new ActivityLifecycleImpl();
 
@@ -151,7 +151,7 @@ public final class Utils {
         return;
       }
       InputMethodManager imm =
-              (InputMethodManager) Utils.getApp().getSystemService(Context.INPUT_METHOD_SERVICE);
+        (InputMethodManager) Utils.getApp().getSystemService(Context.INPUT_METHOD_SERVICE);
       if (imm == null) {
         return;
       }
@@ -311,7 +311,7 @@ public final class Utils {
 
     private void consumeOnActivityDestroyedListener(Activity activity) {
       Iterator<Map.Entry<Activity, Set<OnActivityDestroyedListener>>> iterator
-              = mDestroyedListenerMap.entrySet().iterator();
+        = mDestroyedListenerMap.entrySet().iterator();
       while (iterator.hasNext()) {
         Map.Entry<Activity, Set<OnActivityDestroyedListener>> entry = iterator.next();
         if (entry.getKey() == activity) {

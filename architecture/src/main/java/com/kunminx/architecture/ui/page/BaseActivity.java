@@ -27,22 +27,19 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.kunminx.architecture.BaseApplication;
 import com.kunminx.architecture.data.response.manager.NetworkStateManager;
+import com.kunminx.architecture.ui.scope.ViewModelScope;
 import com.kunminx.architecture.utils.AdaptScreenUtils;
 import com.kunminx.architecture.utils.BarUtils;
 import com.kunminx.architecture.utils.ScreenUtils;
-
 
 /**
  * Create by KunMinX at 19/8/1
  */
 public abstract class BaseActivity extends DataBindingActivity {
 
-  private ViewModelProvider mActivityProvider;
-  private ViewModelProvider mApplicationProvider;
+  private final ViewModelScope mViewModelScope = new ViewModelScope();
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,21 +50,14 @@ public abstract class BaseActivity extends DataBindingActivity {
     super.onCreate(savedInstanceState);
 
     getLifecycle().addObserver(NetworkStateManager.getInstance());
-
   }
 
   protected <T extends ViewModel> T getActivityScopeViewModel(@NonNull Class<T> modelClass) {
-    if (mActivityProvider == null) {
-      mActivityProvider = new ViewModelProvider(this);
-    }
-    return mActivityProvider.get(modelClass);
+    return mViewModelScope.getActivityScopeViewModel(this, modelClass);
   }
 
   protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
-    if (mApplicationProvider == null) {
-      mApplicationProvider = new ViewModelProvider((BaseApplication) this.getApplicationContext());
-    }
-    return mApplicationProvider.get(modelClass);
+    return mViewModelScope.getApplicationScopeViewModel(modelClass);
   }
 
   @Override
@@ -89,5 +79,4 @@ public abstract class BaseActivity extends DataBindingActivity {
     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
     startActivity(intent);
   }
-
 }
