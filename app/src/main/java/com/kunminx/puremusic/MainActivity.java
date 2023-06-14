@@ -32,6 +32,8 @@ import com.kunminx.puremusic.domain.message.DrawerCoordinateManager;
 import com.kunminx.puremusic.domain.message.PageMessenger;
 import com.kunminx.puremusic.domain.proxy.PlayerManager;
 
+import java.util.Objects;
+
 /**
  * Create by KunMinX at 19/10/16
  */
@@ -50,7 +52,7 @@ public class MainActivity extends BaseActivity {
   @Override
   protected DataBindingConfig getDataBindingConfig() {
     return new DataBindingConfig(R.layout.activity_main, BR.vm, mStates)
-      .addBindingParam(BR.listener, new ListenerHandler());
+            .addBindingParam(BR.listener, new ListenerHandler());
   }
 
   @Override
@@ -61,7 +63,7 @@ public class MainActivity extends BaseActivity {
       switch (messages.eventId) {
         case Messages.EVENT_CLOSE_ACTIVITY_IF_ALLOWED:
           NavController nav = Navigation.findNavController(this, R.id.main_fragment_host);
-          if (nav.getCurrentDestination() != null && nav.getCurrentDestination().getId() != R.id.mainFragment) {
+          if (Objects.requireNonNull(nav.getCurrentDestination()).getId() != R.id.mainFragment) {
             nav.navigateUp();
           } else if (Boolean.TRUE.equals(mStates.isDrawerOpened.get())) {
             mStates.openDrawer.set(false);

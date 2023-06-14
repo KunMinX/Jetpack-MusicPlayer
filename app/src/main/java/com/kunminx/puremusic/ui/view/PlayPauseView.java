@@ -138,5 +138,4 @@ public class PlayPauseView extends FrameLayout {
     mAnimatorSet.setDuration(PLAY_PAUSE_ANIMATION_DURATION);
     pausePlayAnim.start();
   }
-
 }
