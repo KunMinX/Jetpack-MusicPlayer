@@ -99,7 +99,7 @@ DefaultPlayerManager.getInstance().loadAlbum(album);
 
 **温馨提示：**
 
-1.实际开发中，项目数据或与本库数据 “结构上存在差异”，故通常做法是，从后端拿到和解析项目 JSON 数据，并对该数据进行遍历。在遍历过程中，实例化并装载 “本库实体类对象” 到列表中，以获本库所能使用的列表数据。（具体可参见 CustomJsonSampleFragment 示例）
+1.实际开发中，项目数据或与本库数据 “结构上存在差异”，故通常做法是，从后端拿到和解析项目 JSON 数据，并对该数据进行遍历。在遍历过程中，实例化并装载 “本库实体类对象” 到列表中，以获本库所能使用的列表数据。
 
 2.注意：如后端直接使用本库实体类读写 JSON 数据，请在 ProGuard Rules 中为该实体类配置混淆白名单：
 
@@ -111,7 +111,7 @@ DefaultPlayerManager.getInstance().loadAlbum(album);
 
 ## 更多
 
-个性化配置详见 [Wiki](https://github.com/KunMinX/Jetpack-MusicPlayer/wiki/%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
+"播放控制" 及 "个性化配置" 等，详见 [Wiki](https://github.com/KunMinX/Jetpack-MusicPlayer/wiki/%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
 
 &nbsp;
 
