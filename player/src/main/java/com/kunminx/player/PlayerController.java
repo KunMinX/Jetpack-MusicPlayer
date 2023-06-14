@@ -48,7 +48,7 @@ public class PlayerController<
 
   private ICacheProxy mICacheProxy;
   private IServiceNotifier mIServiceNotifier;
-  private final PlayerInfoDispatcher mDispatcher = new PlayerInfoDispatcher();
+  private final PlayerInfoDispatcher<B, M, A> mDispatcher = new PlayerInfoDispatcher<>();
 
   private final PlayingMusic<B, M, A> mCurrentPlay = new PlayingMusic<>("00:00", "00:00");
   private final ChangeMusic<B, M, A> mChangeMusic = new ChangeMusic<>();
@@ -76,7 +76,7 @@ public class PlayerController<
     mCurrentPlay.setAllTime(calculateTime(mPlayer.getDuration() / 1000));
     mCurrentPlay.setDuration((int) mPlayer.getDuration());
     mCurrentPlay.setPlayerPosition((int) mPlayer.getCurrentPosition());
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PROGRESS, mCurrentPlay));
+    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_PROGRESS, mCurrentPlay));
     if (mCurrentPlay.getAllTime().equals(mCurrentPlay.getNowTime())) {
       if (getRepeatMode() == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) playAgain();
       else playNext();
@@ -144,14 +144,14 @@ public class PlayerController<
   private void afterPlay() {
     setChangingPlayingMusic(false);
     mHandler.post(mProgressAction);
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS, false));
+    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_PLAY_STATUS, false));
     if (mIServiceNotifier != null) mIServiceNotifier.notifyService(true);
   }
 
   public void requestLastPlayingInfo() {
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PROGRESS, mCurrentPlay));
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_CHANGE_MUSIC, mChangeMusic));
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS, isPaused()));
+    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_PROGRESS, mCurrentPlay));
+    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_CHANGE_MUSIC, mChangeMusic));
+    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_PLAY_STATUS, isPaused()));
   }
 
   public void setSeek(int progress) {
@@ -197,21 +197,21 @@ public class PlayerController<
   public void pauseAudio() {
     mPlayer.pause();
     mHandler.removeCallbacks(mProgressAction);
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS, true));
+    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_PLAY_STATUS, true));
     if (mIServiceNotifier != null) mIServiceNotifier.notifyService(true);
   }
 
   public void resumeAudio() {
     mPlayer.play();
     mHandler.post(mProgressAction);
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS, false));
+    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_PLAY_STATUS, false));
     if (mIServiceNotifier != null) mIServiceNotifier.notifyService(true);
   }
 
   public void clear() {
     mPlayer.stop();
     mPlayer.clearMediaItems();
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_PLAY_STATUS, true));
+    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_PLAY_STATUS, true));
     resetIsChangingPlayingChapter();
     if (mIServiceNotifier != null) mIServiceNotifier.notifyService(false);
   }
@@ -222,7 +222,7 @@ public class PlayerController<
   }
 
   public void changeMode() {
-    mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_REPEAT_MODE, mPlayingInfoManager.changeMode()));
+    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_REPEAT_MODE, mPlayingInfoManager.changeMode()));
   }
 
   public B getAlbum() {
@@ -237,7 +237,7 @@ public class PlayerController<
     mIsChangingPlayingMusic = changingPlayingMusic;
     if (mIsChangingPlayingMusic) {
       mChangeMusic.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
-      mDispatcher.input(new PlayerEvent(PlayerEvent.EVENT_CHANGE_MUSIC, mChangeMusic));
+      mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_CHANGE_MUSIC, mChangeMusic));
       mCurrentPlay.setBaseInfo(mPlayingInfoManager.getMusicAlbum(), getCurrentPlayingMusic());
       mCurrentPlay.setNowTime("00:00");
       mCurrentPlay.setAllTime("00:00");
@@ -263,7 +263,7 @@ public class PlayerController<
     return mPlayingInfoManager.getCurrentPlayingMusic();
   }
 
-  public PlayerInfoDispatcher getDispatcher() {
+  public PlayerInfoDispatcher<B, M, A> getDispatcher() {
     return mDispatcher;
   }
 }

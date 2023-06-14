@@ -136,7 +136,7 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
   }
 
   @Override
-  public PlayerInfoDispatcher getDispatcher() {
+  public PlayerInfoDispatcher<DefaultAlbum, DefaultAlbum.DefaultMusic, DefaultAlbum.DefaultArtist> getDispatcher() {
     return mController.getDispatcher();
   }
 

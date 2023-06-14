@@ -68,5 +68,5 @@ public interface IPlayController<
 
   String getTrackTime(int progress);
 
-  PlayerInfoDispatcher getDispatcher();
+  PlayerInfoDispatcher<B, M, A> getDispatcher();
 }
