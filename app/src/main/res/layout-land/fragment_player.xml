@@ -32,6 +32,9 @@
       name="vm"
       type="com.kunminx.puremusic.ui.page.PlayerFragment.PlayerStates" />
 
+    <variable
+        name="player"
+        type="com.kunminx.puremusic.domain.proxy.PlayerManager" />
   </data>
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
