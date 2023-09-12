@@ -65,9 +65,10 @@ public class PlayerFragment extends BaseFragment {
   @Override
   protected DataBindingConfig getDataBindingConfig() {
     return new DataBindingConfig(R.layout.fragment_player, BR.vm, mStates)
-      .addBindingParam(BR.panelVm, mAnimatorStates)
-      .addBindingParam(BR.click, new ClickProxy())
-      .addBindingParam(BR.listener, new ListenerHandler());
+            .addBindingParam(BR.panelVm, mAnimatorStates)
+            .addBindingParam(BR.player, PlayerManager.getInstance())
+            .addBindingParam(BR.click, new ClickProxy())
+            .addBindingParam(BR.listener, new ListenerHandler());
   }
 
   @Override
@@ -83,11 +84,11 @@ public class PlayerFragment extends BaseFragment {
             sliding.addPanelSlideListener(new DefaultInterface.PanelSlideListener() {
               @Override
               public void onPanelStateChanged(
-                View view, SlidingUpPanelLayout.PanelState panelState,
-                SlidingUpPanelLayout.PanelState panelState1) {
+                      View view, SlidingUpPanelLayout.PanelState panelState,
+                      SlidingUpPanelLayout.PanelState panelState1) {
                 DrawerCoordinateManager.getInstance().requestToUpdateDrawerMode(
-                  panelState1 == SlidingUpPanelLayout.PanelState.EXPANDED,
-                  this.getClass().getSimpleName()
+                        panelState1 == SlidingUpPanelLayout.PanelState.EXPANDED,
+                        this.getClass().getSimpleName()
                 );
               }
             });
@@ -115,10 +116,6 @@ public class PlayerFragment extends BaseFragment {
           mStates.artist.set(playerEvent.changeMusic.getSummary());
           mStates.coverImg.set(playerEvent.changeMusic.getImg());
           if (mListener != null) view.post(mListener::calculateTitleAndArtist);
-          break;
-        case PlayerEvent.EVENT_PROGRESS:
-          mStates.maxSeekDuration.set(playerEvent.playingMusic.getDuration());
-          mStates.currentSeekPosition.set(playerEvent.playingMusic.getPlayerPosition());
           break;
         case PlayerEvent.EVENT_PLAY_STATUS:
           mStates.isPlaying.set(!playerEvent.toPause);
@@ -166,8 +163,6 @@ public class PlayerFragment extends BaseFragment {
     public final State<String> artist = new State<>(Utils.getApp().getString(R.string.app_name));
     public final State<String> coverImg = new State<>("");
     public final State<Drawable> placeHolder = new State<>(Res.getDrawable(R.drawable.bg_album_default));
-    public final State<Integer> maxSeekDuration = new State<>(0);
-    public final State<Integer> currentSeekPosition = new State<>(0);
     public final State<Boolean> isPlaying = new State<>(false, true);
     public final State<MaterialDrawableBuilder.IconValue> playModeIcon = new State<>(PlayerManager.getInstance().getModeIcon());
   }

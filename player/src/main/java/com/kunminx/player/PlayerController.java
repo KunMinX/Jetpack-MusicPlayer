@@ -23,6 +23,7 @@ import android.text.TextUtils;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.kunminx.architecture.ui.state.State;
 import com.kunminx.player.bean.base.BaseAlbumItem;
 import com.kunminx.player.bean.base.BaseArtistItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
@@ -49,6 +50,8 @@ public class PlayerController<
   private ICacheProxy mICacheProxy;
   private IServiceNotifier mIServiceNotifier;
   private final PlayerInfoDispatcher<B, M, A> mDispatcher = new PlayerInfoDispatcher<>();
+  public final State<Integer> mCurrentPositionState = new State<>(0);
+  public final State<Integer> mDurationState = new State<>(0);
 
   private final PlayingMusic<B, M, A> mCurrentPlay = new PlayingMusic<>("00:00", "00:00");
   private final ChangeMusic<B, M, A> mChangeMusic = new ChangeMusic<>();
@@ -57,10 +60,15 @@ public class PlayerController<
   private final static Handler mHandler = new Handler();
   private final Runnable mProgressAction = this::updateProgress;
 
-  public void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy) {
+  public void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy, int dispatcherQueueLength) {
     mIServiceNotifier = iServiceNotifier;
     mICacheProxy = iCacheProxy;
     mPlayer = new ExoPlayer.Builder(context).build();
+    mDispatcher.initQueueMaxLength(dispatcherQueueLength);
+  }
+
+  public void init(Context context, IServiceNotifier iServiceNotifier, ICacheProxy iCacheProxy) {
+    init(context, iServiceNotifier, iCacheProxy, 10);
   }
 
   public boolean isInit() {
@@ -76,7 +84,8 @@ public class PlayerController<
     mCurrentPlay.setAllTime(calculateTime(mPlayer.getDuration() / 1000));
     mCurrentPlay.setDuration((int) mPlayer.getDuration());
     mCurrentPlay.setPlayerPosition((int) mPlayer.getCurrentPosition());
-    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_PROGRESS, mCurrentPlay));
+    mCurrentPositionState.set(mCurrentPlay.getPlayerPosition());
+    mDurationState.set(mCurrentPlay.getDuration());
     if (mCurrentPlay.getAllTime().equals(mCurrentPlay.getNowTime())) {
       if (getRepeatMode() == PlayingInfoManager.RepeatMode.SINGLE_CYCLE) playAgain();
       else playNext();
@@ -149,7 +158,8 @@ public class PlayerController<
   }
 
   public void requestLastPlayingInfo() {
-    mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_PROGRESS, mCurrentPlay));
+    mCurrentPositionState.set(mCurrentPlay.getPlayerPosition());
+    mDurationState.set(mCurrentPlay.getDuration());
     mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_CHANGE_MUSIC, mChangeMusic));
     mDispatcher.input(new PlayerEvent<>(PlayerEvent.EVENT_PLAY_STATUS, isPaused()));
   }
@@ -266,4 +276,5 @@ public class PlayerController<
   public PlayerInfoDispatcher<B, M, A> getDispatcher() {
     return mDispatcher;
   }
+
 }

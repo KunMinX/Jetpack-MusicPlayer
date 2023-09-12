@@ -18,6 +18,7 @@ package com.kunminx.player.contract;
 
 import android.content.Context;
 
+import com.kunminx.architecture.ui.state.State;
 import com.kunminx.player.bean.base.BaseAlbumItem;
 import com.kunminx.player.bean.base.BaseArtistItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
@@ -69,4 +70,8 @@ public interface IPlayController<
   String getTrackTime(int progress);
 
   PlayerInfoDispatcher<B, M, A> getDispatcher();
+
+  State<Integer> getCurrentPositionState();
+
+  State<Integer> getDurationState();
 }

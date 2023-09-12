@@ -12,6 +12,18 @@ public class PlayerInfoDispatcher<
         B extends BaseAlbumItem<M, A>,
         M extends BaseMusicItem<A>,
         A extends BaseArtistItem> extends MviDispatcher<PlayerEvent<B, M, A>> {
+
+  private int mLength = 10;
+
+  public void initQueueMaxLength(int length) {
+    mLength = length;
+  }
+
+  @Override
+  protected int initQueueMaxLength() {
+    return mLength;
+  }
+
   @Override
   protected void onHandle(PlayerEvent<B, M, A> event) {
     sendResult(event);

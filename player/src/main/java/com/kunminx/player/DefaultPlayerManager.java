@@ -19,6 +19,7 @@ package com.kunminx.player;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import com.kunminx.architecture.ui.state.State;
 import com.kunminx.player.bean.DefaultAlbum;
 import com.kunminx.player.contract.ICacheProxy;
 import com.kunminx.player.contract.IPlayController;
@@ -138,6 +139,16 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
   @Override
   public PlayerInfoDispatcher<DefaultAlbum, DefaultAlbum.DefaultMusic, DefaultAlbum.DefaultArtist> getDispatcher() {
     return mController.getDispatcher();
+  }
+
+  @Override
+  public State<Integer> getCurrentPositionState() {
+    return mController.mCurrentPositionState;
+  }
+
+  @Override
+  public State<Integer> getDurationState() {
+    return mController.mDurationState;
   }
 
   @Override
