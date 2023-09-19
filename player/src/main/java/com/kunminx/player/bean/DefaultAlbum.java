@@ -20,6 +20,8 @@ import com.kunminx.player.bean.base.BaseAlbumItem;
 import com.kunminx.player.bean.base.BaseArtistItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
 
+import java.util.List;
+
 /**
  * Create by KunMinX at 19/11/1
  */
@@ -27,11 +29,20 @@ public class DefaultAlbum extends BaseAlbumItem<
         DefaultAlbum.DefaultMusic,
         DefaultAlbum.DefaultArtist> {
 
+  public DefaultAlbum(String albumId, String title, String summary, DefaultArtist artist, String coverImg, List<DefaultMusic> musics) {
+    super(albumId, title, summary, artist, coverImg, musics);
+  }
   public static class DefaultMusic extends BaseMusicItem<DefaultArtist> {
 
+    public DefaultMusic(String musicId, String coverImg, String url, String title, DefaultArtist artist) {
+      super(musicId, coverImg, url, title, artist);
+    }
   }
 
   public static class DefaultArtist extends BaseArtistItem {
 
+    public DefaultArtist(String name) {
+      super(name);
+    }
   }
 }

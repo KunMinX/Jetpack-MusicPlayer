@@ -16,7 +16,7 @@
 
 package com.kunminx.player.contract;
 
-import com.kunminx.player.PlayingInfoManager;
+import com.kunminx.player.domain.PlayingInfoManager;
 import com.kunminx.player.bean.base.BaseAlbumItem;
 import com.kunminx.player.bean.base.BaseArtistItem;
 import com.kunminx.player.bean.base.BaseMusicItem;
@@ -39,6 +39,4 @@ public interface IPlayInfoManager<B extends BaseAlbumItem<M, A>, M extends BaseM
   Enum<PlayingInfoManager.RepeatMode> getRepeatMode();
 
   M getCurrentPlayingMusic();
-
-  void requestLastPlayingInfo();
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kunminx.player;
+package com.kunminx.player.domain;
 
 import com.kunminx.player.bean.base.BaseAlbumItem;
 import com.kunminx.player.bean.base.BaseArtistItem;
@@ -29,8 +29,11 @@ import java.util.List;
  */
 public class PlayingInfoManager<B extends BaseAlbumItem<M, A>, M extends BaseMusicItem<A>, A extends BaseArtistItem> {
 
+  private B mMusicAlbum;
   private int mPlayIndex = 0;
   private int mAlbumIndex = 0;
+  private final List<M> mOriginPlayingList = new ArrayList<>();
+  private final List<M> mShufflePlayingList = new ArrayList<>();
   private Enum<RepeatMode> mRepeatMode;
 
   public enum RepeatMode {
@@ -38,10 +41,6 @@ public class PlayingInfoManager<B extends BaseAlbumItem<M, A>, M extends BaseMus
     LIST_CYCLE,
     RANDOM
   }
-
-  private final List<M> mOriginPlayingList = new ArrayList<>();
-  private final List<M> mShufflePlayingList = new ArrayList<>();
-  private B mMusicAlbum;
 
   boolean isInit() {
     return mMusicAlbum != null;
@@ -71,7 +70,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem<M, A>, M extends BaseMus
   void setMusicAlbum(B musicAlbum) {
     this.mMusicAlbum = musicAlbum;
     mOriginPlayingList.clear();
-    mOriginPlayingList.addAll(mMusicAlbum.getMusics());
+    mOriginPlayingList.addAll(mMusicAlbum.musics);
     fitShuffle();
   }
 

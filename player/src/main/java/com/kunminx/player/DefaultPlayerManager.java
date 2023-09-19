@@ -19,12 +19,15 @@ package com.kunminx.player;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.kunminx.architecture.ui.state.State;
+import androidx.lifecycle.LiveData;
+
 import com.kunminx.player.bean.DefaultAlbum;
 import com.kunminx.player.contract.ICacheProxy;
 import com.kunminx.player.contract.IPlayController;
 import com.kunminx.player.contract.IServiceNotifier;
-import com.kunminx.player.domain.PlayerInfoDispatcher;
+import com.kunminx.player.domain.MusicDTO;
+import com.kunminx.player.domain.PlayerController;
+import com.kunminx.player.domain.PlayingInfoManager;
 
 import java.util.List;
 
@@ -122,11 +125,6 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
   }
 
   @Override
-  public void requestLastPlayingInfo() {
-    mController.requestLastPlayingInfo();
-  }
-
-  @Override
   public void setSeek(int progress) {
     mController.setSeek(progress);
   }
@@ -137,18 +135,8 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
   }
 
   @Override
-  public PlayerInfoDispatcher<DefaultAlbum, DefaultAlbum.DefaultMusic, DefaultAlbum.DefaultArtist> getDispatcher() {
-    return mController.getDispatcher();
-  }
-
-  @Override
-  public State<Integer> getCurrentPositionState() {
-    return mController.mCurrentPositionState;
-  }
-
-  @Override
-  public State<Integer> getDurationState() {
-    return mController.mDurationState;
+  public LiveData<MusicDTO<DefaultAlbum, DefaultAlbum.DefaultMusic, DefaultAlbum.DefaultArtist>> getUiStates() {
+    return mController.getUiStates();
   }
 
   @Override
