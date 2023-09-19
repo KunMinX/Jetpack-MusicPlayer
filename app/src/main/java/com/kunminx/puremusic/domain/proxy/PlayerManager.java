@@ -66,12 +66,12 @@ public class PlayerManager implements IPlayController<TestAlbum, TestAlbum.TestM
     Context context1 = context.getApplicationContext();
 
     HttpProxyCacheServer proxy = new HttpProxyCacheServer.Builder(context1)
-            .fileNameGenerator(url -> {
-              String[] split = url.split("/");
-              return split[split.length - 1];
-            })
-            .maxCacheSize(2147483648L)
-            .build();
+      .fileNameGenerator(url -> {
+        String[] split = url.split("/");
+        return split[split.length - 1];
+      })
+      .maxCacheSize(2147483648L)
+      .build();
 
     mController.init(context1, startOrStop -> {
       Intent intent = new Intent(context1, PlayerService.class);

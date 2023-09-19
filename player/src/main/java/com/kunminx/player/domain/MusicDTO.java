@@ -41,7 +41,7 @@ public class MusicDTO<
   private String allTime = "00:00";
   private int duration;
   private int progress;
-  private boolean isPaused;
+  private boolean isPaused = true;
   private Enum<PlayingInfoManager.RepeatMode> repeatMode = PlayingInfoManager.RepeatMode.LIST_CYCLE;
 
   public MusicDTO() {
