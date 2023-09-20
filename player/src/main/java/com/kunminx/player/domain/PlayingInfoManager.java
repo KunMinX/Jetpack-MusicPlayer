@@ -34,7 +34,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem<M, A>, M extends BaseMus
   private int mAlbumIndex = 0;
   private final List<M> mOriginPlayingList = new ArrayList<>();
   private final List<M> mShufflePlayingList = new ArrayList<>();
-  private Enum<RepeatMode> mRepeatMode;
+  private Enum<RepeatMode> mRepeatMode = RepeatMode.LIST_CYCLE;
 
   public enum RepeatMode {
     SINGLE_CYCLE,

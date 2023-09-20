@@ -58,7 +58,6 @@ public class PlayerController<
     mIServiceNotifier = iServiceNotifier;
     mICacheProxy = iCacheProxy;
     mPlayer = new ExoPlayer.Builder(context).build();
-    mCurrentPlay.setRepeatMode(mPlayingInfoManager.getRepeatMode());
   }
 
   public boolean isInit() {
